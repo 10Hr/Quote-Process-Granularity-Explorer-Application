@@ -34,3 +34,4 @@ C:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.
 C:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.0-windows\ZSExplorer.pdb
 C:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.0-windows\ZSExplorer.genruntimeconfig.cache
 C:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.0-windows\ref\ZSExplorer.dll
+c:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.0-windows\ZSExplorer.sourcelink.json

@@ -34,7 +34,7 @@ namespace ZSExplorer
                         var boolArray = (Apache.Arrow.BooleanArray)arrowArray;
                         for (int i = 0; i < boolArray.Length; i++)
                         {
-                            boolColumn[i] = boolArray.GetBoolean(i);
+                            boolColumn[i] = boolArray.GetValue(i);
                         }
 
                              df.Columns.Add(boolColumn);
@@ -47,20 +47,9 @@ namespace ZSExplorer
                 }
 
                 return df;
-
-                 return DataFrame.FromArrowRecordBatch(recordBatch);
             }
         }
 
 
     }
-    
-    public class MarketDataRow
-{
-    public string Symbol { get; set; }
-    public DateTime DateTime { get; set; }
-    public string MMID { get; set; }
-    public string BidAsk { get; set; }
-    public double Price { get; set; }
-}
 }
