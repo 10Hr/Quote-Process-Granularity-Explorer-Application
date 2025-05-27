@@ -1,0 +1,32 @@
+<UserControl x:Class="ZSExplorer.TopPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ZSExplorer"
+             Height="40">
+    <Grid Background="{StaticResource PrimaryBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center" Margin="8,0,10,0">
+            <TextBlock Text="Add Contract: " 
+                       FontWeight="Bold" 
+                       FontSize="14" 
+                       Foreground="{StaticResource ButtonTextBrush}" 
+                       VerticalAlignment="Center" />
+            <TextBox Width="200" 
+                     Margin="8,0,0,0" 
+                     Height="26"
+                     VerticalContentAlignment="Center"
+                     Background="White" 
+                     BorderBrush="{StaticResource PrimaryPressedBrush}" 
+                     BorderThickness="1"/>
+            <Button x:Name="RefreshButton" Content="Refresh" Click="RefreshButton_Click" Margin="8,0,0,0" />
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,8,0">
+            <Button x:Name="AddKsTestButton" Content="Add KS Test" Click="AddKsTest_Click"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

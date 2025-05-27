@@ -7,80 +7,8 @@
         mc:Ignorable="d"
         Title="ZSExplorer" Height="600" Width="1000">
 
-    <Window.Resources>
-        <!-- Color Palette -->
-        <Color x:Key="PrimaryColor">#155E63</Color>
-        <Color x:Key="PrimaryHoverColor">#1E7E82</Color>
-        <Color x:Key="PrimaryPressedColor">#0F4B4E</Color>
-        <Color x:Key="SecondaryColor">#D4A537</Color>
-        <Color x:Key="ButtonTextColor">#F7F7F7</Color>
-
-        <!-- Brush Resources -->
-        <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}" />
-        <SolidColorBrush x:Key="PrimaryHoverBrush" Color="{StaticResource PrimaryHoverColor}" />
-        <SolidColorBrush x:Key="PrimaryPressedBrush" Color="{StaticResource PrimaryPressedColor}" />
-        <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource SecondaryColor}" />
-        <SolidColorBrush x:Key="ButtonTextBrush" Color="{StaticResource ButtonTextColor}" />
-
-        <!-- Button Style -->
-        <Style TargetType="Button">
-            <Setter Property="Background" Value="{StaticResource PrimaryBrush}" />
-            <Setter Property="Foreground" Value="{StaticResource ButtonTextBrush}" />
-            <Setter Property="BorderBrush" Value="{StaticResource PrimaryPressedBrush}" />
-            <Setter Property="BorderThickness" Value="2" />
-            <Setter Property="Padding" Value="8,4" />
-            <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="FontSize" Value="14" />
-            <Setter Property="Cursor" Value="Hand" />
-            <Setter Property="HorizontalAlignment" Value="Left" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border 
-                            Background="{TemplateBinding Background}" 
-                            BorderBrush="{TemplateBinding BorderBrush}" 
-                            BorderThickness="{TemplateBinding BorderThickness}" 
-                            CornerRadius="8"
-                            Padding="{TemplateBinding Padding}">
-                            <ContentPresenter 
-                                HorizontalAlignment="Center" 
-                                VerticalAlignment="Center" />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{StaticResource PrimaryHoverBrush}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource SecondaryBrush}" />
-                </Trigger>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="{StaticResource PrimaryPressedBrush}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource SecondaryBrush}" />
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Background" Value="#A9A9A9" />
-                    <Setter Property="BorderBrush" Value="#7F7F7F" />
-                    <Setter Property="Foreground" Value="#E0E0E0" />
-                    <Setter Property="Cursor" Value="Arrow" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-    </Window.Resources>
 
     <DockPanel>
-        <!-- Menu Bar
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_File">
-                <MenuItem Header="Open" Click="OpenMenuItem_Click"/>
-                <Separator />
-                <MenuItem Header="Exit" Click="ExitMenuItem_Click"/>
-            </MenuItem>
-            <MenuItem Header="_Help">
-                <MenuItem Header="About" Click="AboutMenuItem_Click"/>
-            </MenuItem>
-        </Menu> -->
 
     <Grid DockPanel.Dock="Top" Background="{StaticResource PrimaryBrush}"  Height="40">
          <Grid Width="Auto">
@@ -133,6 +61,7 @@
             <Border Grid.Column="0" Margin="10" BorderBrush="Gray" BorderThickness="2" CornerRadius="6" Padding="10">
                 <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -189,34 +118,27 @@
                             </StackPanel>
                         </StackPanel>
                     </Border>
+                    <Border Grid.Row="4" BorderBrush="LightGray" BorderThickness="1" CornerRadius="4" Padding="10">
+                        <Grid Grid.Column="1" Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <DataGrid x:Name="MarketDataGrid"
+                                    AutoGenerateColumns="True"
+                                    AutoGeneratingColumn="MarketDataGrid_AutoGeneratingColumn"
+                                    Grid.Row="1"
+                                    CanUserAddRows="False"/>
+                        </Grid>
+                    </Border>
                 </Grid>
             </Border>
 
             <!-- Right Panel -->
-            <Grid Grid.Column="1" Margin="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+            <ContentControl Name="RightPanelContainer" Grid.Column="1" Margin="10" />
 
-                <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,10">
-                    <TextBlock Text="Metric:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                    <ComboBox x:Name="MetricComboBox" Width="200">
-                        <ComboBoxItem Content="Mean"/>
-                        <ComboBoxItem Content="Median"/>
-                        <ComboBoxItem Content="Standard Deviation"/>
-                    </ComboBox>
-                    <Button Content="Run Analysis" Margin="10,0,0,0" />
-                </StackPanel>
-
-                <DataGrid x:Name="MarketDataGrid"
-                          AutoGenerateColumns="True"
-                          AutoGeneratingColumn="MarketDataGrid_AutoGeneratingColumn"
-                          Grid.Row="1"
-                          CanUserAddRows="False"/>
-            </Grid>
         </Grid>
-        <!-- <StackPanel x:Name="RightPanel" /> -->
     </DockPanel>
 
     

@@ -7,6 +7,8 @@ using System.IO;
 using Apache.Arrow.Ipc;
 using System.Windows.Controls;
 using System.Linq;
+using MathNet;
+using Accord.Statistics;
 
 namespace ZSExplorer;
 
@@ -117,7 +119,8 @@ public partial class MainWindow : Window
             }
 
 
-            // Bind to DataGrid
+
+            //Bind to DataGrid
             MarketDataGrid.ItemsSource = dataList;
         }
     }
@@ -135,7 +138,21 @@ public partial class MainWindow : Window
         e.Column.IsReadOnly = true;
     }
 
-    private void AddKsTest_Click(object sender, RoutedEventArgs e) { }
+    private void AddKsTest_Click(object sender, RoutedEventArgs e)
+    { 
+        //RightPanelContainer.Content = null;
+            
+        if (RightPanelContainer.Content == null)
+        {
+            RightPanelContainer.Content = new RightPanel(df);
+        }
+
+    }
+
+    public void RemoveKsTest()
+    { 
+        RightPanelContainer.Content = null;
+    }
 
 
     private void OpenMenuItem_Click(object sender, RoutedEventArgs e) { /* logic */ }
@@ -156,8 +173,8 @@ public partial class MainWindow : Window
 
     private void RunAnalysisButton_Click(object sender, RoutedEventArgs e)
     {
-        var selected = (MetricComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
-        MessageBox.Show($"Running analysis for: {selected}");
+        //var selected = (MetricComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
+        //MessageBox.Show($"Running analysis for: {selected}");
     }
 
 

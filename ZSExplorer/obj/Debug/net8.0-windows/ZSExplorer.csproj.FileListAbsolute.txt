@@ -1,5 +1,4 @@
 C:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.0-windows\ZSExplorer.csproj.AssemblyReference.cache
-C:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.0-windows\MainWindow.g.cs
 C:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.0-windows\App.g.cs
 C:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.0-windows\ZSExplorer_Content.g.cs
 C:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.0-windows\ZSExplorer_MarkupCompile.cache
@@ -22,7 +21,6 @@ C:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\bin\Debug\net8.
 C:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\bin\Debug\net8.0-windows\OxyPlot.Wpf.dll
 C:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\bin\Debug\net8.0-windows\OxyPlot.Wpf.Shared.dll
 C:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\bin\Debug\net8.0-windows\System.Numerics.Tensors.dll
-C:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.0-windows\MainWindow.baml
 C:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.0-windows\ZSExplorer.g.resources
 C:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.0-windows\ZSExplorer.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.0-windows\ZSExplorer.AssemblyInfoInputs.cache
@@ -35,3 +33,8 @@ C:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.
 C:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.0-windows\ZSExplorer.genruntimeconfig.cache
 C:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.0-windows\ref\ZSExplorer.dll
 c:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.0-windows\ZSExplorer.sourcelink.json
+c:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.0-windows\App.baml
+c:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.0-windows\MainWindow.g.cs
+c:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.0-windows\MainWindow.baml
+c:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.0-windows\View\RightPanel.g.cs
+c:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.0-windows\View\RightPanel.baml

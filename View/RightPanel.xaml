@@ -1,0 +1,28 @@
+<UserControl x:Class="ZSExplorer.RightPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ZSExplorer"
+             Margin="10">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,10">
+            <TextBlock Text="Metric:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <ComboBox x:Name="MetricComboBox" Width="200">
+                <ComboBoxItem Content="Mean"/>
+                <ComboBoxItem Content="Median"/>
+                <ComboBoxItem Content="Standard Deviation"/>
+            </ComboBox>
+            <Button Content="Run Analysis" Margin="10,0,0,0" />
+        </StackPanel>
+
+        <DataGrid x:Name="MarketDataGrid"
+                  AutoGenerateColumns="True"
+                  AutoGeneratingColumn="MarketDataGrid_AutoGeneratingColumn"
+                  Grid.Row="1"
+                  CanUserAddRows="False"/>
+    </Grid>
+</UserControl>

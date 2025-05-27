@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Height="Auto" Width="Auto" MinWidth="400">
     <Border CornerRadius="6" BorderBrush="DarkGray" BorderThickness="1" Background="White" Padding="10" Margin="0,0,0,20">
-        <StackPanel>
+        <!-- <StackPanel>
             <!-- Header Section -->
             <Grid Background="#FF2E86C1" Height="50" CornerRadius="6,6,0,0" Padding="10" >
                 <Grid.ColumnDefinitions>
@@ -143,6 +143,6 @@
                     </StackPanel>
                 </Border>
             </UniformGrid>
-        </StackPanel>
+        </StackPanel> -->
     </Border>
 </UserControl>
