@@ -83,6 +83,9 @@
                  TextChanged="MicrosecondInputBox_TextChanged"
                  Text="0"/>
     </StackPanel>
+    <StackPanel Orientation="Horizontal" Margin="10">
+        <CheckBox x:Name="BidOnlyCheckbox" Content="Use Bid Ask" Margin="5" />
+    </StackPanel>
 
     <TextBlock x:Name="TimeWindowValueText"
                FontWeight="SemiBold"
@@ -214,10 +217,19 @@
                             </Grid.RowDefinitions>
 
                             <DataGrid x:Name="MarkDataGrid" 
-                                    AutoGenerateColumns="True"
-                                    AutoGeneratingColumn="MarketDataGrid_AutoGeneratingColumn"
-                                    Grid.Row="1"
-                                    CanUserAddRows="False"/>
+                                AutoGenerateColumns="False" 
+                                AutoGeneratingColumn="MarketDataGrid_AutoGeneratingColumn"
+                                Grid.Row="1"
+                                CanUserAddRows="False">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Symbol" Binding="{Binding Symbol}" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="datetime" Binding="{Binding DateTime, StringFormat=MM/dd/yyyy HH:mm:ss.ffffff}" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="MMID" Binding="{Binding MMID}" IsReadOnly="True"/>
+                                    <DataGridCheckBoxColumn Header="BidAsk" Binding="{Binding BidAsk}" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="Price" Binding="{Binding Price}" IsReadOnly="True"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+
                         </Grid>
                         </StackPanel>
                     </Border>
