@@ -1,7 +1,6 @@
 using Apache.Arrow;
 using Apache.Arrow.Ipc;
 using Apache.Arrow.Types;
-using Microsoft.Data.Analysis;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -66,7 +65,7 @@ namespace ZSExplorer
                                 var timestampArray = array as TimestampArray;
                                 var timestampType = (TimestampType)field.DataType;
                                 var timestampValue = timestampArray.GetValue(row);
-                                // Arrow stores time since Unix epoch, in microseconds by default
+
                                 DateTime dt;
 
                                 switch (timestampType.Unit)
