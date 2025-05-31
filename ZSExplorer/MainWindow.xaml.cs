@@ -21,8 +21,14 @@ public partial class MainWindow : Window
 {
     bool fileLoaded;
 
-    ArrowData callData, putData;
+    public ArrowData callData, putData;
     long quoteCount;
+
+    HashSet<string> uniqueSymbols;
+    HashSet<string> uniqueExchanges;
+
+    List<MarketDataRow> callsItems;
+    List<MarketDataRow> putsItems;
 
     public MainWindow()
     {
@@ -91,12 +97,12 @@ public partial class MainWindow : Window
 
             // 3. Fill Data Grids | Unique Contract Count (unique "sybmol") | Exchange Count (unique "MMID")
 
-            var uniqueSymbols = new HashSet<string>();
-            var uniqueExchanges = new HashSet<string>();
+            uniqueSymbols = new HashSet<string>();
+            uniqueExchanges = new HashSet<string>();
 
-            List<MarketDataRow> callsItems = new List<MarketDataRow>();
-            List<MarketDataRow> putsItems = new List<MarketDataRow>();
-            
+            callsItems = new List<MarketDataRow>();
+            putsItems = new List<MarketDataRow>();
+
             for (int i = 0; i < putData.Symbol.Count; i++)
             {
                 uniqueSymbols.Add(putData.Symbol[i].ToString());
@@ -126,12 +132,13 @@ public partial class MainWindow : Window
                     Price = callData.Price[i]
                 });
             }
+            ContractSearchBox.ItemsSource = uniqueSymbols.OrderBy(s => s).ToList();
 
             UniqueContractCountText.Text = $"Unique Contract Count: {uniqueSymbols.Count}";
             ExchangeCountText.Text = $"Exchange Count: {uniqueExchanges.Count}";
 
-            PutsDataGrid.ItemsSource = putsItems;
-            CallsDataGrid.ItemsSource = callsItems;
+            //PutsDataGrid.ItemsSource = putsItems;
+            //CallsDataGrid.ItemsSource = callsItems;
 
         }
     }
@@ -142,6 +149,9 @@ public partial class MainWindow : Window
         AddKsTestButton.IsEnabled = fileLoaded;
         ExportAllResults.IsEnabled = fileLoaded;
         ExportECDFPlots.IsEnabled = fileLoaded;
+        ContractSearchBox.IsEnabled = fileLoaded;
+        AddKsTestButton.IsEnabled = false;
+
     }
 
     private void MarketDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
@@ -155,7 +165,7 @@ public partial class MainWindow : Window
 
         if (RightPanelContainer.Content == null)
         {
-            //RightPanelContainer.Content = new RightPanel(df);
+            RightPanelContainer.Content = new RightPanel(callsItems, (string)ContractSearchBox.SelectedItem);
         }
 
     }
@@ -230,15 +240,18 @@ public partial class MainWindow : Window
         //MessageBox.Show($"Running analysis for: {selected}");
     }
 
+    private void ContractSearchBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (ContractSearchBox.SelectedItem is string selectedSymbol)
+        {
+            StatusTextBlock.Text = $"Selected Contract: {selectedSymbol}";
+            AddKsTestButton.IsEnabled = fileLoaded && !string.IsNullOrWhiteSpace(selectedSymbol);
+        }
+        else
+        {
+            AddKsTestButton.IsEnabled = false;
+        }
+    }
 
-}
 
-
-public class MarketDataRow
-{
-    public string Symbol { get; set; }
-    public DateTime DateTime { get; set; }
-    public string MMID { get; set; }
-    public bool BidAsk { get; set; }
-    public long Price { get; set; }
 }

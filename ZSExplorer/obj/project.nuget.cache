@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "4L1yWAaSc5s=",
+  "dgSpecHash": "QJteKwuGYNs=",
   "success": true,
-  "projectFilePath": "c:\\Users\\tmccl\\Desktop\\ZeroPlusProject\\VSCODE VERSION\\ZSExplorer\\ZSExplorer.csproj",
+  "projectFilePath": "C:\\Users\\tmccl\\Desktop\\ZeroPlusProject\\VSCODE VERSION\\ZSExplorer\\ZSExplorer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\tmccl\\.nuget\\packages\\accord\\3.8.0\\accord.3.8.0.nupkg.sha512",
     "C:\\Users\\tmccl\\.nuget\\packages\\accord.math\\3.8.0\\accord.math.3.8.0.nupkg.sha512",

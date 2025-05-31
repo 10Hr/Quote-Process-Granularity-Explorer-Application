@@ -72,7 +72,8 @@
                 Minimum="0"
                 Maximum="100"
                 TickFrequency="1"
-                IsSnapToTickEnabled="True"
+                
+                IsMoveToPointEnabled="True"
                 ValueChanged="TimeWindowSlider_ValueChanged"
                 PreviewMouseDown="TimeWindowSlider_PreviewMouseDown"/>
         <TextBox x:Name="MicrosecondInputBox"
@@ -83,8 +84,20 @@
                  TextChanged="MicrosecondInputBox_TextChanged"
                  Text="0"/>
     </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Left">
+            <TextBlock x:Name="TimeLabel0" Text="0s" Width="60" />
+            <TextBlock x:Name="TimeLabel25" Text="..." Width="60" TextAlignment="Center" />
+            <TextBlock x:Name="TimeLabel50" Text="..." Width="60" TextAlignment="Center" />
+            <TextBlock x:Name="TimeLabel75" Text="..." Width="60" TextAlignment="Center" />
+            <TextBlock x:Name="TimeLabel100" Text="..." Width="60" TextAlignment="Right" />
+        </StackPanel>
     <StackPanel Orientation="Horizontal" Margin="10">
-        <CheckBox x:Name="BidOnlyCheckbox" Content="Use Bid Ask" Margin="5" />
+        <CheckBox 
+            x:Name="BidOnlyCheckbox" 
+            Content="Use Bid Ask" 
+            Margin="5" 
+            Checked="BidOnlyCheckbox_Checked"
+            Unchecked="BidOnlyCheckbox_Unchecked" />
     </StackPanel>
 
     <TextBlock x:Name="TimeWindowValueText"
@@ -208,31 +221,46 @@
                 </StackPanel>
             </UniformGrid>
 
-                    <Border Grid.Row="4" BorderBrush="LightGray" BorderThickness="1" CornerRadius="4" Padding="10">
-                        <StackPanel VerticalAlignment="Top">
-                        <Grid Grid.Column="1" Margin="10">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
+<Border Grid.Row="4" BorderBrush="LightGray" BorderThickness="1" CornerRadius="4" Padding="10">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
-                            <DataGrid x:Name="MarkDataGrid" 
-                                AutoGenerateColumns="False" 
-                                AutoGeneratingColumn="MarketDataGrid_AutoGeneratingColumn"
-                                Grid.Row="1"
-                                CanUserAddRows="False">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Symbol" Binding="{Binding Symbol}" IsReadOnly="True"/>
-                                    <DataGridTextColumn Header="datetime" Binding="{Binding DateTime, StringFormat=MM/dd/yyyy HH:mm:ss.ffffff}" IsReadOnly="True"/>
-                                    <DataGridTextColumn Header="MMID" Binding="{Binding MMID}" IsReadOnly="True"/>
-                                    <DataGridCheckBoxColumn Header="BidAsk" Binding="{Binding BidAsk}" IsReadOnly="True"/>
-                                    <DataGridTextColumn Header="Price" Binding="{Binding Price}" IsReadOnly="True"/>
-                                </DataGrid.Columns>
-                            </DataGrid>
+        <!-- Bid DataGrid -->
+        <!-- <DataGrid x:Name="BidDataGrid" 
+                  Grid.Column="0"
+                  AutoGenerateColumns="False"
+                  AutoGeneratingColumn="MarketDataGrid_AutoGeneratingColumn"
+                  CanUserAddRows="False"
+                  Margin="0,0,5,0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Symbol" Binding="{Binding Symbol}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="DateTime" Binding="{Binding DateTime, StringFormat=MM/dd/yyyy HH:mm:ss.ffffff}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="MMID" Binding="{Binding MMID}" IsReadOnly="True"/>
+                <DataGridCheckBoxColumn Header="BidAsk" Binding="{Binding BidAsk}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Price" Binding="{Binding Price}" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid> -->
 
-                        </Grid>
-                        </StackPanel>
-                    </Border>
+        <!-- Ask DataGrid -->
+        <!-- <DataGrid x:Name="AskDataGrid" 
+                  Grid.Column="1"
+                  AutoGenerateColumns="False"
+                  AutoGeneratingColumn="MarketDataGrid_AutoGeneratingColumn"
+                  CanUserAddRows="False"
+                  Margin="5,0,0,0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Symbol" Binding="{Binding Symbol}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="DateTime" Binding="{Binding DateTime, StringFormat=MM/dd/yyyy HH:mm:ss.ffffff}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="MMID" Binding="{Binding MMID}" IsReadOnly="True"/>
+                <DataGridCheckBoxColumn Header="BidAsk" Binding="{Binding BidAsk}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Price" Binding="{Binding Price}" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid> -->
+    </Grid>
+</Border>
 
 
 

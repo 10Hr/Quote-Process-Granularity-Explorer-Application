@@ -23,13 +23,23 @@
                            FontSize="14" 
                            Foreground="{StaticResource ButtonTextBrush}" 
                            VerticalAlignment="Center" />
-                <TextBox Width="200" 
+                <ComboBox x:Name="ContractSearchBox"
+                    Width="200"
+                    Margin="8,0,0,0"
+                    Height="26"
+                    IsEditable="False"
+                    IsTextSearchEnabled="True"
+                    StaysOpenOnEdit="True"
+                    IsEnabled="False"
+                    VerticalContentAlignment="Center"
+                    SelectionChanged="ContractSearchBox_SelectionChanged"/>
+                <!-- <TextBox Width="200" 
                          Margin="8,0,0,0" 
                          Height="26"
                          VerticalContentAlignment="Center"
                          Background="White" 
                          BorderBrush="{StaticResource PrimaryPressedBrush}" 
-                         BorderThickness="1"/>
+                         BorderThickness="1"/> -->
                 <Button x:Name="RefreshButton" Content="Refresh" Click="RefreshButton_Click" Margin="8,0,0,0" />
             </StackPanel>
 
