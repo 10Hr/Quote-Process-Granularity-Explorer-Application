@@ -172,7 +172,16 @@ public partial class MainWindow : Window
 
     public void RemoveKsTest()
     {
-        RightPanelContainer.Content = null;
+         var result = MessageBox.Show("Are you sure you want to remove the KS test and reset the panel?",
+                                 "Confirm Removal",
+                                 MessageBoxButton.YesNo,
+                                 MessageBoxImage.Question);
+
+    if (result == MessageBoxResult.Yes)
+    {
+        RightPanelContainer.Content = null;      
+    }
+
     }
 
 

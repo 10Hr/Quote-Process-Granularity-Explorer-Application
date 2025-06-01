@@ -15,6 +15,10 @@ using Accord.Statistics.Distributions.Univariate;
 using Accord.Statistics.Testing;
 using System.Windows.Input;
 using System.Windows.Media;
+using OxyPlot;
+using OxyPlot.Series;
+using OxyPlot.Axes;
+using OxyPlot.Legends;
 
 namespace ZSExplorer
 {
@@ -23,8 +27,8 @@ namespace ZSExplorer
        // DataFrame df;
 
 
-            //List<MarketDataRow> useBidList;
-            //List<MarketDataRow> useAskList;
+        private List<MarketDataRow> bidList;
+        private List<MarketDataRow> askList;
 
         List<MarketDataRow> data;
         private List<MarketDataRow> filteredContractData;
@@ -52,15 +56,34 @@ namespace ZSExplorer
             _ = RunCalculations();
         }
         
-        private async void BidOnlyCheckbox_Checked(object sender, RoutedEventArgs e)
+        private void BidOnlyCheckbox_Checked(object sender, RoutedEventArgs e)
         {
             _ = RunCalculations();
+            UpdateSliderRangeForBidAsk();
         }
+
 
         private void BidOnlyCheckbox_Unchecked(object sender, RoutedEventArgs e)
         {
             _ = RunCalculations();
+            UpdateSliderRangeForBidAsk();
         }
+
+
+        private void UpdateSliderRangeForBidAsk()
+        {
+            bool filterBid = BidOnlyCheckbox.IsChecked == true;
+
+            var selectedList = filterBid ? bidList : askList;
+
+            if (selectedList.Count > 1)
+            {
+                DateTime start = selectedList.First().DateTime;
+                DateTime end = selectedList.Last().DateTime;
+                SetupTimeSliderFromDateRange(start, end);
+            }
+        }
+
 
 
 
@@ -96,6 +119,9 @@ namespace ZSExplorer
                 SetupTimeSliderFromDateRange(start, end);
             }
 
+            bidList = filteredContractData.Where(row => row.BidAsk == true).ToList();
+            askList = filteredContractData.Where(row => row.BidAsk == false).ToList();
+
             StatusIndicator.Fill = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Green);
 
         }
@@ -107,8 +133,8 @@ namespace ZSExplorer
                 bool filterBid = BidOnlyCheckbox.IsChecked == true;
 
                 // Split list
-                var bidList = filteredContractData.Where(row => row.BidAsk == true).ToList();
-                var askList = filteredContractData.Where(row => row.BidAsk == false).ToList();
+                //bidList = filteredContractData.Where(row => row.BidAsk == true).ToList();
+                //askList = filteredContractData.Where(row => row.BidAsk == false).ToList();
 
                 Console.WriteLine($"Bid list count: {bidList.Count}, Ask list count: {askList.Count}");
 
@@ -161,7 +187,7 @@ namespace ZSExplorer
                 .Where(x => !double.IsNaN(x) && !double.IsInfinity(x))
                 .ToArray();
 
-               
+
 
                 StudentTDistributionZeroMean tDist = new StudentTDistributionZeroMean();
 
@@ -177,10 +203,8 @@ namespace ZSExplorer
                 .ToArray();
 
                 var tDistArr = new TDistribution(tDistResult.DegreesFreedom);
-                
-                Console.WriteLine($"Valid returns count: {string.Join(", ", tDistArr)}");
 
-                var ks = new KolmogorovSmirnovTest(normalizedReturns, tDistArr);
+                KolmogorovSmirnovTest ks = new KolmogorovSmirnovTest(normalizedReturns, tDistArr);
 
 
                 //Update sample statistics
@@ -192,277 +216,142 @@ namespace ZSExplorer
                 LocationParamText.Text = location.ToString("F6");
                 ScaleParamText.Text = std.ToString("F6");
                 DegreesFreedomText.Text = degreesFreedom.ToString("F2");
-                ConvergenceIterationsText.Text = "N/A"; // If not iterated, use N/A or replace with actual value if available
 
                 // Update KS test results
                 KsTestStatText.Text = $"Test Statistic: {ks.Statistic:F4}";
                 StatDecisionText.Text = $"Decision: {(ks.Significant ? "Reject H0 (Significant)" : "Fail to Reject H0")}";
-                PValueText.Text = $"P-value: {ks.PValue:E4}";
-                CriticalValueText.Text = "Critical value: -"; // MathNet doesn't expose critical value, can remove or leave as placeholder
-
-                // Optional: Fit diagnostics (if using iterative fitting later)
-                ConvIterationsText.Text = "N/A";
-                ErrorToleranceText.Text = "N/A";
-                FitQualityText.Text = "N/A";
-                FitStatusText.Text = "Completed";
-
+                PValueText.Text = $"P-value: {ks.PValue:E4} ";
+                
+                PlotEcdfWithTDistribution(normalizedReturns, tDistArr);
 
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error during calculations: {ex.Message}\n{ex.StackTrace}", "Calculation Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-}
+        }
 
-/*
-public async Task RunCalculations()
-{
-    try
-    {
+        public void PlotEcdfWithTDistribution(double[] normalizedReturns, TDistribution tDist)
+        {
+            var sortedReturns = normalizedReturns.OrderBy(x => x).ToArray();
+            int n = sortedReturns.Length;
 
-                return;
-        // Step 0: Read filter choice from checkboxes
-        //         bool filterBid = BidOnlyCheckbox.IsChecked == true;
+            var ecdfPoints = new List<DataPoint>();
+            var tCdfPoints = new List<DataPoint>();
 
-        // // Step 1: Get columns
-        // var dateCol = df.Columns["datetime"] as PrimitiveDataFrameColumn<DateTime>;
-        // var priceCol = df.Columns["Price"] as PrimitiveDataFrameColumn<long>;
-        // var bidAskCol = df.Columns["BidAsk"] as PrimitiveDataFrameColumn<bool>;
+            for (int i = 0; i < n; i++)
+            {
+                double x = sortedReturns[i];
+                double y = (i + 1.0) / n;
+                ecdfPoints.Add(new DataPoint(x, y));
+                tCdfPoints.Add(new DataPoint(x, tDist.DistributionFunction(x))); // normalized x, so no scaling needed
+            }
 
-        // if (dateCol == null || priceCol == null || bidAskCol == null)
-        //     throw new Exception("Missing required columns.");
+            var plotModel = new PlotModel
+            {
+                Title = "Empirical CDF vs Fitted t-Distribution",
+                IsLegendVisible = true
+            };
 
-        // // Step 2: Apply filter
-        // List<int> filteredIndices = new List<int>();
-        // for (int i = 0; i < df.Rows.Count; i++)
-        // {
-        //     bool bidAskValue = bidAskCol[i].GetValueOrDefault();
+            plotModel.Axes.Add(new LinearAxis
+            {
+                Position = AxisPosition.Bottom,
+                Title = "Normalized Log Return"
+            });
 
-        //     if ((!filterBid ) || // no filter selected, take all
-        //         (filterBid && !bidAskValue)) 
-        //     {
-        //         filteredIndices.Add(i);
-        //     }
-        // }
+            plotModel.Axes.Add(new LinearAxis
+            {
+                Position = AxisPosition.Left,
+                Title = "CDF",
+                Minimum = 0,
+                Maximum = 1
+            });
 
-        // if (filteredIndices.Count < 2)
-        //     throw new Exception("Not enough data after filtering.");
+            var ecdfSeries = new LineSeries
+            {
+                Title = "Empirical CDF",
+                StrokeThickness = 2,
+                Color = OxyColors.Blue
+            };
+            ecdfSeries.Points.AddRange(ecdfPoints);
 
-        // // Step 3: Calculate log returns on filtered data
-        // var logReturns = new DoubleDataFrameColumn("LogReturn");
-        // logReturns.Append(0); // first value has no return
+            var tCdfSeries = new LineSeries
+            {
+                Title = "Fitted t-Distribution CDF",
+                StrokeThickness = 2,
+                Color = OxyColors.Red
+            };
+            tCdfSeries.Points.AddRange(tCdfPoints);
 
-        // for (int j = 1; j < filteredIndices.Count; j++)
-        // {
-        //     int prevIdx = filteredIndices[j - 1];
-        //     int currIdx = filteredIndices[j];
+            plotModel.Series.Add(ecdfSeries);
+            plotModel.Series.Add(tCdfSeries);
 
-        //     long prevPrice = priceCol[prevIdx].GetValueOrDefault();
-        //     long currPrice = priceCol[currIdx].GetValueOrDefault();
-
-        //     if (prevPrice > 0 && currPrice > 0)
-        //     {
-        //         double logRet = Math.Log((double)currPrice / prevPrice);
-        //         logReturns.Append(logRet);
-        //     }
-        //     else
-        //     {
-        //         logReturns.Append(double.NaN);
-        //     }
-        // }
-
-        // // Pad rest of DataFrame with NaN (for alignment)
-        // while (logReturns.Length < df.Rows.Count)
-        // {
-        //     logReturns.Append(double.NaN);
-        // }
-
-        // // Step 4: Add to DataFrame (remove existing column first if needed)
-
-        // df.Columns.Add(logReturns);
-
-        // Step 5: Build display rows
-        // List<MarketDataRowLog> dataList = new List<MarketDataRowLog>();
-        // for (long i = 0; i < df.Rows.Count; i++)
-        // {
-        //     var row = new MarketDataRowLog
-        //     {
-        //         Symbol = (string)df.Columns["sybmol"][i],
-        //         DateTime = (DateTime)df.Columns["datetime"][i],
-        //         MMID = (string)df.Columns["MMID"][i],
-        //         BidAsk = (bool)df.Columns["BidAsk"][i],
-        //         Price = (long)df.Columns["Price"][i],
-        //         LogReturn = (double)df.Columns["LogReturn"][i]
-        //     };
-        //     dataList.Add(row);
-        // }
-
-        // MarkDataGrid.ItemsSource = dataList;
-    }
-    catch (Exception ex)
-    {
-        MessageBox.Show($"Error during calculations: {ex.Message}", "Calculation Error", MessageBoxButton.OK, MessageBoxImage.Error);
-    }
-}
-*/
-        //     public async Task RunCalculations()
-        //     {
-        //         try
-        //         {
-        //         //     // Step 1: Cast the column to its actual type
-        //         //     var dateCol = df.Columns["DateTime"] as PrimitiveDataFrameColumn<DateTime>;
-        //         //     var priceCol = df.Columns["Price"] as PrimitiveDataFrameColumn<long>;
-        //         //     HashSet<DateTime> uniqueDates = new HashSet<DateTime>();
-
-        //         //     // Step 2: Create new Double column
-        //         //     var logReturns = new DoubleDataFrameColumn("LogReturn");
-        //         //     logReturns.Append(0); // First value has no previous log return
-
-        //         //     for (int i = 0; i < dateCol.Length; i++)
-        //         //     {
-        //         //         if (!uniqueDates.Contains(dateCol[i].GetValueOrDefault()))
-        //         //         {
-
-        //         //             uniqueDates.Add(dateCol[i].GetValueOrDefault());
-        //         //             long prev = priceCol[i - 1].GetValueOrDefault();
-        //         //             long curr = priceCol[i].GetValueOrDefault();
-
-        //         //             double logReturn = Math.Log((double)curr) - Math.Log((double)prev);
-        //         //             logReturns.Append(logReturn);
-
-        //         //         }
-        //         //     }   
-        //         //     for (int i = 1; i < priceCol.Length; i++)
-        //         //         {
-
-        //         //             long prev = priceCol[i - 1].GetValueOrDefault();
-        //         //             long curr = priceCol[i].GetValueOrDefault();
-
-        //         //             if (prev > 0 && curr > 0)
-        //         //             {
-        //         //                 double logReturn = Math.Log((double)curr) - Math.Log((double)prev);
-        //         //                 logReturns.Append(logReturn);
-        //         //             }
-        //         //             else
-        //         //             {
-        //         //                 logReturns.Append(double.NaN); // Handle edge case
-        //         //             }
-        //         //         }
+            EcdfPlot.Model = plotModel;
+            EcdfPlot.InvalidatePlot(true);
+        }
 
 
-        //         //     // Step 3: Compute log returns
-        //         //     for (int i = 1; i < priceCol.Length; i++)
-        //         //     {
-
-        //         //         long prev = priceCol[i - 1].GetValueOrDefault();
-        //         //         long curr = priceCol[i].GetValueOrDefault();
-
-        //         //         if (prev > 0 && curr > 0)
-        //         //         {
-        //         //             double logReturn = Math.Log((double)curr) - Math.Log((double)prev);
-        //         //             logReturns.Append(logReturn);
-        //         //         }
-        //         //         else
-        //         //         {
-        //         //             logReturns.Append(double.NaN); // Handle edge case
-        //         //         }
-        //         //     }
-
-        //         //     // Step 4: Add to DataFrame
-        //         //     df.Columns.Add(logReturns);
-
-        //         List<MarketDataRowLog> dataList = new List<MarketDataRowLog>();
-        //         for (long i = 0; i < df.Rows.Count; i++)
-        //         {
-        //             // Create a new MarketDataRow for each row in the DataFrame
-        //             var row = new MarketDataRowLog
-        //             {
-        //                 Symbol = (string)df.Columns["sybmol"][i],
-        //                 DateTime = (DateTime)df.Columns["datetime"][i],
-        //                 MMID = (string)df.Columns["MMID"][i],
-        //                 BidAsk = (Boolean)df.Columns["BidAsk"][i],
-        //                 Price = (long)df.Columns["Price"][i],
-        //                 //LogReturn = (double)df.Columns["LogReturn"][i]
-        //             };
-        //             dataList.Add(row);
-        //         }
+        public void DrawEcdfPlot(double[] sortedReturns, TDistribution tDist, double location, double scale, double degreesFreedom)
+        {
 
 
+            // // Compute ECDF points
+            // var ecdfPoints = sortedReturns
+            //     .Select((x, i) => new DataPoint(x, (i + 1.0) / sortedReturns.Length))
+            //     .ToList();
 
-        //         //Bind to DataGrid
-        //         MarkDataGrid.ItemsSource = dataList;
+            // // Fitted t-distribution
+            // var tCdfPoints = sortedReturns
+            //     .Select(x => new DataPoint(x, tDist.DistributionFunction((x - location) / scale)))
+            //     .ToList();
+
+            // // Build OxyPlot model
+            // var plotModel = new PlotModel
+            // {
+            //     Title = "Empirical CDF vs Fitted t-Distribution",
+            //     IsLegendVisible = true
+            // };
+
+            // plotModel.Legends.Add(new Legend
+            // {
+            //     LegendPosition = LegendPosition.RightTop,
+            //     LegendPlacement = LegendPlacement.Outside
+            // });
+
+            // plotModel.Series.Add(new LineSeries
+            // {
+            //     Title = "Empirical CDF",
+            //     StrokeThickness = 2,
+            //     Color = OxyColors.Blue,
+            //     ItemsSource = ecdfPoints
+            // });
+
+            // plotModel.Series.Add(new LineSeries
+            // {
+            //     Title = "Fitted t-Distribution CDF",
+            //     StrokeThickness = 2,
+            //     Color = OxyColors.Red,
+            //     ItemsSource = tCdfPoints
+            // });
+
+            // plotModel.Axes.Add(new LinearAxis
+            // {
+            //     Position = AxisPosition.Bottom,
+            //     Title = "Log Return"
+            // });
+
+            // plotModel.Axes.Add(new LinearAxis
+            // {
+            //     Position = AxisPosition.Left,
+            //     Title = "CDF",
+            //     Minimum = 0,
+            //     Maximum = 1
+            // });
+
+            // EcdfPlot.Model = plotModel;
+        }
 
 
-        //         // MessageBox.Show($"{df.Columns["LogReturn"]} Log returns calculated and added to DataFrame.", "Calculation Complete", MessageBoxButton.OK, MessageBoxImage.Information);
-
-
-
-
-        //         // // Ensure the Price column exists and has enough data
-        //         // var priceColumn = df.Columns["Price"] as PrimitiveDataFrameColumn<long>;
-        //         // if (priceColumn == null || priceColumn.Length < 2)
-        //         //     return;
-
-        //         // // Convert price data to double
-        //         // List<double> prices = priceColumn
-        //         //     .Where(p => p.HasValue)
-        //         //     .Select(p => Convert.ToDouble(p.Value))
-        //         //     .ToList();
-
-        //         // if (prices.Count < 2)
-        //         //     return;
-
-        //         // // Calculate log returns
-        //         // List<double> returns = new List<double>();
-        //         // for (int i = 1; i < prices.Count; i++)
-        //         // {
-        //         //     if (prices[i - 1] > 0 && prices[i] > 0)
-        //         //     {
-        //         //         double ret = Math.Log(prices[i] / prices[i - 1]);
-        //         //         if (!double.IsNaN(ret) && !double.IsInfinity(ret))
-        //         //             returns.Add(ret);
-        //         //     }
-        //         // }
-
-        //         // if (returns.Count < 2)
-        //         //     return;
-
-        //         // // Sample statistics
-        //         // int sampleSize = returns.Count;
-        //         // double mean = returns.Average();
-        //         // double stdDev = Math.Sqrt(returns.Select(r => Math.Pow(r - mean, 2)).Average());
-
-        //         // UpdateSampleStatistics(sampleSize, mean, stdDev);
-
-        //         // // Fit Student's t-distribution using Accord.NET
-        //         // //var tDist = new Accord.Statistics.Distributions.Univariate.StudentTDistribution();
-        //         // var tDist = new MathNet.Numerics.Distributions.StudentT(0, 1, 10); // initial guess: mean=0, scale=1, dof=10
-
-        //         // tDist.Fit(returns.ToArray());
-        //         // // Fit the StudentT distribution to the returns data
-        //         // tDist.Fit(returns.ToArray());
-        //         // string location = tDist.Location.ToString("F4");
-        //         // string scale = tDist.Scale.ToString("F4");
-        //         // string degreesFreedom = tDist.DegreesOfFreedom.ToString("F2");
-
-        //         // UpdateFittedDistribution(location, scale, degreesFreedom, "20"); // placeholder for iterations
-
-        //         // // Kolmogorov–Smirnov Test
-        //         // var ksTest = new Accord.Statistics.Testing.KolmogorovSmirnovTest(returns.ToArray(), tDist);
-
-        //         // string testStat = ksTest.Statistic.ToString("F4");
-        //         // string decision = ksTest.Significant ? "Reject Null" : "Fail to Reject";
-        //         // string pValue = ksTest.PValue.ToString("F4");
-        //         // string criticalValue = ksTest.CriticalValue.ToString("F4");
-
-        //         // UpdateKsTestResults(testStat, decision, pValue, criticalValue);
-        //     }
-        //         catch (Exception ex)
-        //         {
-        //             MessageBox.Show($"Error during calculations: {ex.Message}", "Calculation Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        //         }
-        // }
-    
 
         private void UpdateSliderTimeLabels(List<MarketDataRow> filteredData, string unit, double totalUnits)
         {
@@ -617,15 +506,11 @@ private void TimeWindowSlider_PreviewMouseDown(object sender, MouseButtonEventAr
 
         public void UpdateConvergenceInfo(string iterations, string errorTolerance, string fitQuality, string status)
         {
-            ConvIterationsText.Text = iterations;
-            ErrorToleranceText.Text = errorTolerance;
-            FitQualityText.Text = fitQuality;
-            FitStatusText.Text = status;
+            // ConvIterationsText.Text = iterations;
+            // ErrorToleranceText.Text = errorTolerance;
+            // FitQualityText.Text = fitQuality;
+            // FitStatusText.Text = status;
         }
 
-        public void DrawEcdfPlot()
-        {
-            // TODO: Implement ECDF drawing on EcdfPlotCanvas
-        }
     }
 }

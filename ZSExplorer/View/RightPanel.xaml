@@ -3,6 +3,8 @@
             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            xmlns:oxy="http://oxyplot.org/wpf"
+
              xmlns:local="clr-namespace:ZSExplorer"
              MinWidth="350" MinHeight="600"
              Background="White">
@@ -55,98 +57,52 @@
                 <!-- Left column: Time window config & sample statistics -->
                 <StackPanel Grid.Column="0" Margin="0,0,10,0" VerticalAlignment="Top">
 
-                    <!-- Time Window Configuration-->
-                    <!-- <TextBlock Text="Time Window Configuration" FontWeight="Bold" Margin="0,0,0,6" />
-                    <Slider x:Name="TimeWindowSlider" Minimum="1" Maximum="100" Value="1" TickFrequency="1" IsSnapToTickEnabled="True" ValueChanged="TimeWindowSlider_ValueChanged" />
-                    <TextBlock x:Name="TimeWindowValueText" Text="1 (units)" HorizontalAlignment="Right" Margin="0,4,0,10" /> -->
+                <!-- Time Window Configuration -->
+                <StackPanel Orientation="Vertical" Margin="0,0,0,10">
+                    <TextBlock Text="📉 Log Return Time Window" FontWeight="Bold" FontSize="16" />
+                    <TextBlock Text="Return Calculation Window (Microseconds)" FontWeight="Bold" />
 
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,5,0,0">
+                        <Slider x:Name="TimeWindowSlider"
+                                Width="300"
+                                Minimum="0"
+                                Maximum="100"
+                                TickFrequency="1"
+                                
+                                IsMoveToPointEnabled="True"
+                                ValueChanged="TimeWindowSlider_ValueChanged"
+                                PreviewMouseDown="TimeWindowSlider_PreviewMouseDown"/>
+                        <TextBox x:Name="MicrosecondInputBox"
+                                Width="80"
+                                Margin="10,0,0,0"
+                                VerticalContentAlignment="Center"
+                                HorizontalContentAlignment="Center"
+                                TextChanged="MicrosecondInputBox_TextChanged"
+                                Text="0"/>
+                    </StackPanel>
 
-<!-- Time Window Configuration -->
-<StackPanel Orientation="Vertical" Margin="0,0,0,10">
-    <TextBlock Text="📉 Log Return Time Window" FontWeight="Bold" FontSize="16" />
-    <TextBlock Text="Return Calculation Window (Microseconds)" FontWeight="Bold" />
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Left">
+                        <TextBlock x:Name="TimeLabel0" Text="0s" Width="60" />
+                        <TextBlock x:Name="TimeLabel25" Text="..." Width="60" TextAlignment="Center" />
+                        <TextBlock x:Name="TimeLabel50" Text="..." Width="60" TextAlignment="Center" />
+                        <TextBlock x:Name="TimeLabel75" Text="..." Width="60" TextAlignment="Center" />
+                        <TextBlock x:Name="TimeLabel100" Text="..." Width="60" TextAlignment="Right" />
+                    </StackPanel>
+                    
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <CheckBox 
+                            x:Name="BidOnlyCheckbox" 
+                            Content="Use Bid Ask" 
+                            Margin="5" 
+                            Checked="BidOnlyCheckbox_Checked"
+                            Unchecked="BidOnlyCheckbox_Unchecked" />
+                    </StackPanel>
 
-    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,5,0,0">
-        <Slider x:Name="TimeWindowSlider"
-                Width="300"
-                Minimum="0"
-                Maximum="100"
-                TickFrequency="1"
-                
-                IsMoveToPointEnabled="True"
-                ValueChanged="TimeWindowSlider_ValueChanged"
-                PreviewMouseDown="TimeWindowSlider_PreviewMouseDown"/>
-        <TextBox x:Name="MicrosecondInputBox"
-                 Width="80"
-                 Margin="10,0,0,0"
-                 VerticalContentAlignment="Center"
-                 HorizontalContentAlignment="Center"
-                 TextChanged="MicrosecondInputBox_TextChanged"
-                 Text="0"/>
-    </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Left">
-            <TextBlock x:Name="TimeLabel0" Text="0s" Width="60" />
-            <TextBlock x:Name="TimeLabel25" Text="..." Width="60" TextAlignment="Center" />
-            <TextBlock x:Name="TimeLabel50" Text="..." Width="60" TextAlignment="Center" />
-            <TextBlock x:Name="TimeLabel75" Text="..." Width="60" TextAlignment="Center" />
-            <TextBlock x:Name="TimeLabel100" Text="..." Width="60" TextAlignment="Right" />
-        </StackPanel>
-    <StackPanel Orientation="Horizontal" Margin="10">
-        <CheckBox 
-            x:Name="BidOnlyCheckbox" 
-            Content="Use Bid Ask" 
-            Margin="5" 
-            Checked="BidOnlyCheckbox_Checked"
-            Unchecked="BidOnlyCheckbox_Unchecked" />
-    </StackPanel>
-
-    <TextBlock x:Name="TimeWindowValueText"
-               FontWeight="SemiBold"
-               Margin="0,5,0,0"
-               FontSize="12"/>
-</StackPanel>
-
-
-
-
-
-
-
-
-
-
-                    <!-- <StackPanel Margin="20" Orientation="Vertical">
-                        <TextBlock Text="📉 Log Return Time Window" FontWeight="Bold" FontSize="16" />
-                        
-                        <TextBlock Text="Return Calculation Window" Margin="0,10,0,2" />
-                        
-                        <Grid>
-                            <Slider x:Name="TimeWindowSlider"
-                                    Minimum="0"
-                                    Maximum="10"
-                                    TickFrequency="1"
-                                    IsSnapToTickEnabled="True"
-                                    ValueChanged="TimeWindowSlider_ValueChanged"
-                                    VerticalAlignment="Center" />
-                            
-                            <TextBlock x:Name="TimeWindowValueText"
-                                    Text="0 minutes"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Center"
-                                    Margin="0,0,10,0"
-                                    FontWeight="Bold"
-                                    Foreground="Blue" />
-                        </Grid>
-                        
-                        <Canvas x:Name="TimeSliderLabelsCanvas" Height="25" Margin="0,5" />
-                        
-                        <Border Background="#f8f8f8" Padding="10" CornerRadius="5" Margin="0,10,0,0" BorderBrush="#ddd" BorderThickness="1">
-                            <TextBlock Text="🧠 Calculation Method: Log returns computed from back pivot with forward-fill for missing data points"
-                                    TextWrapping="Wrap"
-                                    FontSize="12"
-                                    FontStyle="Italic" />
-                        </Border>
-                    </StackPanel> -->
+                    <TextBlock x:Name="TimeWindowValueText"
+                            FontWeight="SemiBold"
+                            Margin="0,5,0,0"
+                            FontSize="12"/>
+                </StackPanel>
 
                     <!-- Sample Statistics Grid -->
                     <TextBlock Text="Sample Statistics" FontWeight="Bold" Margin="0,0,0,6" />
@@ -176,20 +132,17 @@
 
                         <TextBlock Text="Degrees of Freedom:" />
                         <TextBlock x:Name="DegreesFreedomText" Text="-" />
-
-                        <TextBlock Text="Convergence Iterations:" />
-                        <TextBlock x:Name="ConvergenceIterationsText" Text="-" />
                     </UniformGrid>
 
                     <!-- KS Test Results -->
                     <Border BorderBrush="{StaticResource SecondaryBrush}" BorderThickness="1" CornerRadius="6" Padding="8" Background="#FFF9F2D6" >
                         <StackPanel>
+                            <TextBlock x:Name="InsufficientDataText" Foreground="Red" FontWeight="Bold" Margin="5"/>
                             <TextBlock Text="KS Test Results" FontWeight="Bold" Margin="0,0,0,6" />
 
                             <TextBlock x:Name="KsTestStatText" Text="Test Statistic: -" FontSize="18" FontWeight="Bold" />
                             <TextBlock x:Name="StatDecisionText" Text="Decision: -" FontWeight="Bold" Margin="0,2,0,6" />
                             <TextBlock x:Name="PValueText" Text="P-value: -" FontSize="12" />
-                            <TextBlock x:Name="CriticalValueText" Text="Critical value: -" FontSize="12" />
                         </StackPanel>
                     </Border>
 
@@ -197,74 +150,9 @@
             </Grid>
 
             <!-- ECDF Plot Area -->
-            <Border BorderBrush="{StaticResource PrimaryBrush}" BorderThickness="1" CornerRadius="6" Background="White" Height="180" Margin="0,0,0,10">
-                <Canvas x:Name="EcdfPlotCanvas" />
+            <Border BorderBrush="{StaticResource PrimaryBrush}" BorderThickness="1" CornerRadius="6" Background="White" Height="Auto" Margin="0,0,0,10">
+                <oxy:PlotView x:Name="EcdfPlot" Height="300" Margin="10"/>
             </Border>
-
-            <!-- Convergence Info -->
-            <UniformGrid Columns="4" Rows="1" HorizontalAlignment="Stretch" >
-                <StackPanel>
-                    <TextBlock Text="Iterations" FontWeight="Bold" />
-                    <TextBlock x:Name="ConvIterationsText" Text="-" />
-                </StackPanel>
-                <StackPanel>
-                    <TextBlock Text="Error Tolerance" FontWeight="Bold" />
-                    <TextBlock x:Name="ErrorToleranceText" Text="-" />
-                </StackPanel>
-                <StackPanel>
-                    <TextBlock Text="Fit Quality" FontWeight="Bold" />
-                    <TextBlock x:Name="FitQualityText" Text="-" />
-                </StackPanel>
-                <StackPanel>
-                    <TextBlock Text="Status" FontWeight="Bold" />
-                    <TextBlock x:Name="FitStatusText" Text="-" />
-                </StackPanel>
-            </UniformGrid>
-
-<Border Grid.Row="4" BorderBrush="LightGray" BorderThickness="1" CornerRadius="4" Padding="10">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-
-        <!-- Bid DataGrid -->
-        <!-- <DataGrid x:Name="BidDataGrid" 
-                  Grid.Column="0"
-                  AutoGenerateColumns="False"
-                  AutoGeneratingColumn="MarketDataGrid_AutoGeneratingColumn"
-                  CanUserAddRows="False"
-                  Margin="0,0,5,0">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Symbol" Binding="{Binding Symbol}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="DateTime" Binding="{Binding DateTime, StringFormat=MM/dd/yyyy HH:mm:ss.ffffff}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="MMID" Binding="{Binding MMID}" IsReadOnly="True"/>
-                <DataGridCheckBoxColumn Header="BidAsk" Binding="{Binding BidAsk}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Price" Binding="{Binding Price}" IsReadOnly="True"/>
-            </DataGrid.Columns>
-        </DataGrid> -->
-
-        <!-- Ask DataGrid -->
-        <!-- <DataGrid x:Name="AskDataGrid" 
-                  Grid.Column="1"
-                  AutoGenerateColumns="False"
-                  AutoGeneratingColumn="MarketDataGrid_AutoGeneratingColumn"
-                  CanUserAddRows="False"
-                  Margin="5,0,0,0">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Symbol" Binding="{Binding Symbol}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="DateTime" Binding="{Binding DateTime, StringFormat=MM/dd/yyyy HH:mm:ss.ffffff}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="MMID" Binding="{Binding MMID}" IsReadOnly="True"/>
-                <DataGridCheckBoxColumn Header="BidAsk" Binding="{Binding BidAsk}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Price" Binding="{Binding Price}" IsReadOnly="True"/>
-            </DataGrid.Columns>
-        </DataGrid> -->
-    </Grid>
-</Border>
-
-
-
-
         </StackPanel>
     </Border>
 </UserControl>
