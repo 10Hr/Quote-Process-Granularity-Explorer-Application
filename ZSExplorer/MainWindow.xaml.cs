@@ -180,7 +180,7 @@ public partial class MainWindow : Window
 
         if (RightPanelContainer.Content is not RightPanel panel)
         {
-            MessageBox.Show("No plots to export. Please run an analysis first.", "Export", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("No data to export. Please run an analysis first.", "Export", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
 
