@@ -62,7 +62,7 @@ ZSExplorer is a C# WPF desktop application designed for interactive analysis of 
 
 - **`AnalyzeAllCheckbox`**: When checked, instructs the analysis to consider **all calls or all puts together**, ignoring strike price differentiation. When unchecked, the analysis respects strike price groups, processing each strike separately but can is still split by bid ask.
 
-- **`TimeWindowSlider`**: This slider moves back and forth and is between the start and end date from the filtered dataset. Next to the slider is a text input that is the amount of minutes of data being included in the calculations.
+- **`TimeWindowSlider`**: This slider moves back and forth and is between the start and end date from the filtered dataset. Next to the slider is a text input that is the amount of seconds of data being included in the calculations.
 
 - `Sample Statistics`: Displays sample size, mean, and standard deviation.
 - `Statistical Test Results`: Displays fitted distribution parameters location, scale, and degrees of freedom. Also displays KS Test results test statistic, decision, and p-value.
@@ -121,12 +121,15 @@ While the top bar and left panel could have been extracted into separate `UserCo
 
 ## 🚀 Usage
 
-1. Run the application.
-2. Click **"Load Arrow File"** to select a `.arrow` option quote dataset.
-3. Use **Contract Search** to filter quotes by symbol and strike.
-4. Click **"Run KS Test"** to analyze log returns.
-5. Move slider or enter a value in text field to the right to change time window.
-6. View ECDF plot + summary, and optionally **export results** as image or markdown.
+1. Download zip file
+2. Extract to folder
+3. Open **/ZSExplorer** and open **ZSExplorer.exe**
+4. Run the application.
+5. Click **"Load Arrow File"** to select a `.arrow` option quote dataset.
+6. Use **Contract Search** to filter quotes by symbol and strike.
+7. Click **"Run KS Test"** to analyze log returns.
+8. Move slider or enter a value in text field to the right to change time window.
+9. View ECDF plot + summary, and optionally **export results** as image or markdown.
 
 ---
 
