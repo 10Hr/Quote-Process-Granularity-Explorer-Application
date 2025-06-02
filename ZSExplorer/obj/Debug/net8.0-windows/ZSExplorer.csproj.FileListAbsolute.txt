@@ -38,3 +38,15 @@ c:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.
 c:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.0-windows\MainWindow.baml
 c:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.0-windows\View\RightPanel.g.cs
 c:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.0-windows\View\RightPanel.baml
+c:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\bin\Debug\net8.0-windows\HarfBuzzSharp.dll
+c:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\bin\Debug\net8.0-windows\OxyPlot.SkiaSharp.dll
+c:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\bin\Debug\net8.0-windows\SkiaSharp.dll
+c:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\bin\Debug\net8.0-windows\SkiaSharp.HarfBuzz.dll
+c:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\bin\Debug\net8.0-windows\runtimes\osx\native\libHarfBuzzSharp.dylib
+c:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\bin\Debug\net8.0-windows\runtimes\win-arm64\native\libHarfBuzzSharp.dll
+c:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\bin\Debug\net8.0-windows\runtimes\win-x64\native\libHarfBuzzSharp.dll
+c:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\bin\Debug\net8.0-windows\runtimes\win-x86\native\libHarfBuzzSharp.dll
+c:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\bin\Debug\net8.0-windows\runtimes\osx\native\libSkiaSharp.dylib
+c:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\bin\Debug\net8.0-windows\runtimes\win-arm64\native\libSkiaSharp.dll
+c:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\bin\Debug\net8.0-windows\runtimes\win-x64\native\libSkiaSharp.dll
+c:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\bin\Debug\net8.0-windows\runtimes\win-x86\native\libSkiaSharp.dll

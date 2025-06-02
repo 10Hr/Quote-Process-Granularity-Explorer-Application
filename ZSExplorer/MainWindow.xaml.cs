@@ -8,6 +8,8 @@ using System.Windows.Controls;
 using System.Linq;
 using MathNet;
 using Accord.Statistics;
+using OxyPlot;
+using OxyPlot.SkiaSharp;
 
 namespace ZSExplorer;
 
@@ -165,7 +167,8 @@ public partial class MainWindow : Window
 
         if (RightPanelContainer.Content == null)
         {
-            RightPanelContainer.Content = new RightPanel(callsItems, (string)ContractSearchBox.SelectedItem);
+
+            RightPanelContainer.Content = new RightPanel(callsItems, putsItems, (string)ContractSearchBox.SelectedItem);
         }
 
     }
@@ -188,50 +191,141 @@ public partial class MainWindow : Window
     private void OpenMenuItem_Click(object sender, RoutedEventArgs e) { /* logic */ }
 
     private void ExportMarkdownButton_Click(object sender, RoutedEventArgs e)
+{
+    var saveFileDialog = new SaveFileDialog
     {
+        Filter = "Markdown Files (*.md)|*.md",
+        DefaultExt = "md",
+        FileName = "AllOptionsData.md"
+    };
 
-        // if (MarketDataGrid.ItemsSource is not IEnumerable<MarketDataRow> data)
-        // {
-        //     MessageBox.Show("No data to export.", "Export", MessageBoxButton.OK, MessageBoxImage.Warning);
-        //     return;
-        // }
+    if (saveFileDialog.ShowDialog() == true)
+    {
+        var sb = new StringBuilder();
 
-        // var sb = new StringBuilder();
+        sb.AppendLine("# Exported Option Quotes\n");
 
-        // // Write markdown table header
-        // sb.AppendLine("| Symbol | DateTime | MMID | BidAsk | Price |");
-        // sb.AppendLine("|--------|----------|------|--------|-------|");
+        // Add summary
+        sb.AppendLine($"- Export Date: {DateTime.Now:G}");
+        sb.AppendLine($"- Total Calls: {callsItems.Count}");
+        sb.AppendLine($"- Total Puts: {putsItems.Count}");
+        sb.AppendLine($"- Total Quotes: {callsItems.Count + putsItems.Count}\n");
 
-        // // Write each row
-        // foreach (var row in data)
-        // {
-        //     sb.AppendLine($"| {row.Symbol} | {row.DateTime.ToString("yyyy-MM-dd HH:mm:ss.ffffff")} | {row.MMID} | {row.BidAsk} | {row.Price} |");
+        // Markdown table header
+        sb.AppendLine("## Call Quotes");
+        sb.AppendLine("| Symbol | DateTime | MMID | BidAsk | Price |");
+        sb.AppendLine("|--------|---------------------------|------|--------|--------|");
 
-        // }
+        foreach (var row in callsItems)
+        {
+            sb.AppendLine($"| {row.Symbol} | {row.DateTime:yyyy-MM-dd HH:mm:ss.ffffff} | {row.MMID} | {row.BidAsk} | {row.Price} |");
+        }
 
-        // // Save file dialog
-        // var saveFileDialog = new SaveFileDialog
-        // {
-        //     Filter = "Markdown Files (*.md)|*.md",
-        //     DefaultExt = "md",
-        //     FileName = "MarketDataExport.md"
-        // };
+        sb.AppendLine("\n## Put Quotes");
+        sb.AppendLine("| Symbol | DateTime | MMID | BidAsk | Price |");
+        sb.AppendLine("|--------|---------------------------|------|--------|--------|");
 
-        // if (saveFileDialog.ShowDialog() == true)
-        // {
-        //     try
-        //     {
-        //         File.WriteAllText(saveFileDialog.FileName, sb.ToString());
-        //         MessageBox.Show("Export completed successfully.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         MessageBox.Show($"Failed to save file: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        //     }
-        // }
+        foreach (var row in putsItems)
+        {
+            sb.AppendLine($"| {row.Symbol} | {row.DateTime:yyyy-MM-dd HH:mm:ss.ffffff} | {row.MMID} | {row.BidAsk} | {row.Price} |");
+        }
+
+        try
+        {
+            File.WriteAllText(saveFileDialog.FileName, sb.ToString());
+            MessageBox.Show("Markdown export completed successfully.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Failed to save file: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+}
+
+
+    private void ExportPlotImagesButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (RightPanelContainer.Content is not RightPanel panel)
+        {
+            MessageBox.Show("No plots to export. Please run an analysis first.", "Export", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+
+        var saveFileDialog = new SaveFileDialog
+        {
+            Filter = "PNG Image (*.png)|*.png",
+            DefaultExt = "png",
+            FileName = "ECDFPlot.png"
+        };
+
+        if (saveFileDialog.ShowDialog() == true)
+        {
+            try
+            {
+                var plotModel = panel.ECDFPlotModel; 
+                plotModel.Background = OxyColors.White;
+                using var stream = File.Create(saveFileDialog.FileName);
+                var exporter = new PngExporter { Width = 600, Height = 400};
+                exporter.Export(plotModel, stream);
+
+                MessageBox.Show("Plot exported successfully.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to export plot: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
 
-    private void ExportPlotImagesButton_Click(object sender, RoutedEventArgs e) { /* logic */ }
+
+
+
+
+    //private void ExportMarkdownButton_Click(object sender, RoutedEventArgs e)
+    //{
+
+    // if (MarketDataGrid.ItemsSource is not IEnumerable<MarketDataRow> data)
+    // {
+    //     MessageBox.Show("No data to export.", "Export", MessageBoxButton.OK, MessageBoxImage.Warning);
+    //     return;
+    // }
+
+    // var sb = new StringBuilder();
+
+    // // Write markdown table header
+    // sb.AppendLine("| Symbol | DateTime | MMID | BidAsk | Price |");
+    // sb.AppendLine("|--------|----------|------|--------|-------|");
+
+    // // Write each row
+    // foreach (var row in data)
+    // {
+    //     sb.AppendLine($"| {row.Symbol} | {row.DateTime.ToString("yyyy-MM-dd HH:mm:ss.ffffff")} | {row.MMID} | {row.BidAsk} | {row.Price} |");
+
+    // }
+
+    // // Save file dialog
+    // var saveFileDialog = new SaveFileDialog
+    // {
+    //     Filter = "Markdown Files (*.md)|*.md",
+    //     DefaultExt = "md",
+    //     FileName = "MarketDataExport.md"
+    // };
+
+    // if (saveFileDialog.ShowDialog() == true)
+    // {
+    //     try
+    //     {
+    //         File.WriteAllText(saveFileDialog.FileName, sb.ToString());
+    //         MessageBox.Show("Export completed successfully.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         MessageBox.Show($"Failed to save file: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
+    //     }
+    // }
+    //}
+
+    //private void ExportPlotImagesButton_Click(object sender, RoutedEventArgs e) { /* logic */ }
     private void ExitMenuItem_Click(object sender, RoutedEventArgs e) => this.Close();
     private void AboutMenuItem_Click(object sender, RoutedEventArgs e)
     {

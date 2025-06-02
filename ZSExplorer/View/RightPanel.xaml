@@ -88,7 +88,7 @@
                         <TextBlock x:Name="TimeLabel75" Text="..." Width="60" TextAlignment="Center" />
                         <TextBlock x:Name="TimeLabel100" Text="..." Width="60" TextAlignment="Right" />
                     </StackPanel>
-                    
+
                     <StackPanel Orientation="Horizontal" Margin="10">
                         <CheckBox 
                             x:Name="BidOnlyCheckbox" 
@@ -96,6 +96,12 @@
                             Margin="5" 
                             Checked="BidOnlyCheckbox_Checked"
                             Unchecked="BidOnlyCheckbox_Unchecked" />
+                        <CheckBox 
+                            x:Name="AnalyzeAllCheckbox" 
+                            Content="Analyze All Call or Put Options" 
+                            Margin="5" 
+                            Checked="AnalyzeAllCheckbox_Checked" 
+                            Unchecked="AnalyzeAllCheckbox_Unchecked" />
                     </StackPanel>
 
                     <TextBlock x:Name="TimeWindowValueText"
@@ -151,7 +157,7 @@
 
             <!-- ECDF Plot Area -->
             <Border BorderBrush="{StaticResource PrimaryBrush}" BorderThickness="1" CornerRadius="6" Background="White" Height="Auto" Margin="0,0,0,10">
-                <oxy:PlotView x:Name="EcdfPlot" Height="300" Margin="10"/>
+                <oxy:PlotView x:Name="EcdfPlot" Height="500" Margin="10"/>
             </Border>
         </StackPanel>
     </Border>

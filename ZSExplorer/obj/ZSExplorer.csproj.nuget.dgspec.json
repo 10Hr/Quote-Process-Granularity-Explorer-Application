@@ -61,6 +61,10 @@
               "target": "Package",
               "version": "[0.22.2, )"
             },
+            "OxyPlot.SkiaSharp": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
             "OxyPlot.Wpf": {
               "target": "Package",
               "version": "[2.2.0, )"

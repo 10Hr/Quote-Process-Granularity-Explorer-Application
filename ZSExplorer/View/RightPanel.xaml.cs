@@ -24,27 +24,40 @@ namespace ZSExplorer
 {
     public partial class RightPanel : UserControl
     {
-       // DataFrame df;
-
-
         private List<MarketDataRow> bidList;
         private List<MarketDataRow> askList;
-
         List<MarketDataRow> data;
         private List<MarketDataRow> filteredContractData;
         string contractText;
         private int _maxMicroseconds;
-        private string _currentTimeUnit = "s";    // or "min"
-        private double _timeScale = 1.0;          // 1 for seconds, 60 for minutes
-
+        private string _currentTimeUnit = "s";
+        private double _timeScale = 1.0;          
         List<double> logReturn;
+        private bool analyzeAllOptions = false;
+
+        public PlotModel ECDFPlotModel => EcdfPlot.Model;
 
 
-
-        public RightPanel(List<MarketDataRow> data, string contractText)
+        public RightPanel(List<MarketDataRow> callData, List<MarketDataRow> putData, string contractText)
         {
             InitializeComponent();
-            this.data = data;
+
+            OptionInfo info = ParseOptionsSymbol.Parse(contractText);
+            Console.WriteLine($"Parsed Option Info: {info.Symbol}, Type: {info.OptionType}, Expiration: {info.ExpirationDate:MM-dd-yyyy}, Strike: {info.StrikePrice}");
+
+            if (info.OptionType == "Call")
+            {
+                this.data = callData;
+            }
+            else if (info.OptionType == "Put")
+            {
+                this.data = putData;
+            }
+            else
+            {
+                throw new ArgumentException("Invalid contract type. Expected 'Call' or 'Put'.");
+            }
+             
             this.contractText = contractText;
 
             this.Loaded += RightPanel_Loaded;
@@ -52,7 +65,9 @@ namespace ZSExplorer
 
         private async void RightPanel_Loaded(object sender, RoutedEventArgs e)
         {
-            await UpdateUIFromLists();
+            OptionInfo info = ParseOptionsSymbol.Parse(contractText);
+            await UpdateUIFromLists(info);
+            await Task.Delay(100); // Let UI elements fully initialize
             _ = RunCalculations();
         }
         
@@ -67,6 +82,18 @@ namespace ZSExplorer
         {
             _ = RunCalculations();
             UpdateSliderRangeForBidAsk();
+        }
+
+        private void AnalyzeAllCheckbox_Checked(object sender, RoutedEventArgs e)
+        {
+            analyzeAllOptions = true;
+            UpdateUIFromLists(); // re-run filtering logic
+        }
+
+        private void AnalyzeAllCheckbox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            analyzeAllOptions = false;
+            UpdateUIFromLists(); // re-run filtering logic
         }
 
 
@@ -86,30 +113,41 @@ namespace ZSExplorer
 
 
 
-
-        private async Task UpdateUIFromLists()
+        private async Task UpdateUIFromLists(OptionInfo info)
         {
-
-            OptionInfo info = ParseOptionsSymbol.Parse(contractText);
             ContractSymbolText.Text = info.Symbol;
-            OptionDetailsText.Text = $" Underlying: {info.Symbol} | Type: {info.OptionType} | Exp: {info.ExpirationDate:MM-dd-yyyy} | Strike: {info.StrikePrice}";
+            
+            if (analyzeAllOptions)
+            {
+                // Group all contracts by type (Call or Put)
+                filteredContractData = data
+                    .Where(row =>
+                    {
+                        var opt = ParseOptionsSymbol.Parse(row.Symbol);
+                        return opt.Symbol == info.Symbol && opt.OptionType == info.OptionType;
+                    })
+                    .OrderBy(row => row.DateTime)
+                    .ToList();
+
+                OptionDetailsText.Text = $"{info.Symbol} | All {info.OptionType}";
+            }
+            else
+            {
+                // Just analyze the specific strike contract
+                filteredContractData = data
+                    .Where(row => row.Symbol == contractText)
+                    .OrderBy(row => row.DateTime)
+                    .ToList();
+
+                OptionDetailsText.Text = $" Underlying: {info.Symbol} | Type: {info.OptionType} | Exp: {info.ExpirationDate:MM-dd-yyyy} | Strike: {info.StrikePrice}";
+            }
 
 
-            await Task.Delay(50);
 
-            filteredContractData = data
-                .Where(row => row.Symbol == contractText)
-                .OrderBy(row => row.DateTime)
-                .ToList();
+            Console.WriteLine($"Filtered {filteredContractData.Count} rows for contract: {contractText}");
 
             var startTime = filteredContractData[0].DateTime;
             var endTime = filteredContractData[filteredContractData.Count - 1].DateTime;
-
-            // Show in message box
-            // MessageBox.Show($"Contract '{contractText}'\nStart: {startTime:G}\nEnd: {endTime:G}'\nStartax: {startTimeax:G}\nEndax: {endTimeax:G}", 
-            //     "Filtered Contract Time Range", 
-            //     MessageBoxButton.OK, 
-            //     MessageBoxImage.Information);
 
             if (filteredContractData.Count > 1)
             {
@@ -122,23 +160,69 @@ namespace ZSExplorer
             bidList = filteredContractData.Where(row => row.BidAsk == true).ToList();
             askList = filteredContractData.Where(row => row.BidAsk == false).ToList();
 
-            StatusIndicator.Fill = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Green);
+            StatusIndicator.Fill = new SolidColorBrush(Colors.Green);
+
+        }
+        
+        private async Task UpdateUIFromLists()
+        {
+
+            OptionInfo info = ParseOptionsSymbol.Parse(contractText);
+            ContractSymbolText.Text = info.Symbol;
+
+            if (analyzeAllOptions)
+            {
+                // Group all contracts by type (Call or Put)
+                filteredContractData = data
+                    .Where(row =>
+                    {
+                        var opt = ParseOptionsSymbol.Parse(row.Symbol);
+                        return opt.Symbol == info.Symbol && opt.OptionType == info.OptionType;
+                    })
+                    .OrderBy(row => row.DateTime)
+                    .ToList();
+
+                OptionDetailsText.Text = $"{info.Symbol} | All {info.OptionType}";
+            }
+            else
+            {
+                // Just analyze the specific strike contract
+                filteredContractData = data
+                    .Where(row => row.Symbol == contractText)
+                    .OrderBy(row => row.DateTime)
+                    .ToList();
+
+                OptionDetailsText.Text = $" Underlying: {info.Symbol} | Type: {info.OptionType} | Exp: {info.ExpirationDate:MM-dd-yyyy} | Strike: {info.StrikePrice}";
+            }
+
+
+
+            Console.WriteLine($"Filtered {filteredContractData.Count} rows for contract: {contractText}");
+
+            var startTime = filteredContractData[0].DateTime;
+            var endTime = filteredContractData[filteredContractData.Count - 1].DateTime;
+
+            if (filteredContractData.Count > 1)
+            {
+                DateTime start = filteredContractData.First().DateTime;
+                DateTime end = filteredContractData.Last().DateTime;
+
+                SetupTimeSliderFromDateRange(start, end);
+            }
+
+            bidList = filteredContractData.Where(row => row.BidAsk == true).ToList();
+            askList = filteredContractData.Where(row => row.BidAsk == false).ToList();
+
+            StatusIndicator.Fill = new SolidColorBrush(Colors.Green);
 
         }
 
-    public async Task RunCalculations()
-    {
+        public async Task RunCalculations()
+        {
+            StatusIndicator.Fill = new SolidColorBrush(Colors.Red);
             try
             {
                 bool filterBid = BidOnlyCheckbox.IsChecked == true;
-
-                // Split list
-                //bidList = filteredContractData.Where(row => row.BidAsk == true).ToList();
-                //askList = filteredContractData.Where(row => row.BidAsk == false).ToList();
-
-                Console.WriteLine($"Bid list count: {bidList.Count}, Ask list count: {askList.Count}");
-
-                // Use full list by default
                 List<MarketDataRow> selectedList = filterBid ? bidList : askList;
 
                 // Time filtering based on slider
@@ -156,8 +240,7 @@ namespace ZSExplorer
                 }
 
 
-                var priceChangedRows = new List<MarketDataRow>();
-                priceChangedRows.Add(selectedList[0]); // always keep first row
+                var priceChangedRows = new List<MarketDataRow> { selectedList[0] };
                 for (int i = 1; i < selectedList.Count; i++)
                 {
                     if (selectedList[i].Price != selectedList[i - 1].Price)
@@ -182,12 +265,10 @@ namespace ZSExplorer
 
                 }
 
-                //var logReturnArray = logReturn.ToArray();
+                // Remove NaN and Infinity values
                 double[] validReturns = logReturn
                 .Where(x => !double.IsNaN(x) && !double.IsInfinity(x))
                 .ToArray();
-
-
 
                 StudentTDistributionZeroMean tDist = new StudentTDistributionZeroMean();
 
@@ -207,22 +288,24 @@ namespace ZSExplorer
                 KolmogorovSmirnovTest ks = new KolmogorovSmirnovTest(normalizedReturns, tDistArr);
 
 
-                //Update sample statistics
+                // Sample statistics
                 SampleSizeText.Text = validReturns.Length.ToString("N0");
                 MeanReturnText.Text = validReturns.Average().ToString("F6");
                 StdDevText.Text = MathNet.Numerics.Statistics.Statistics.StandardDeviation(validReturns).ToString("F6");
 
-                // Update fitted t-distribution parameters
+                // Fitted t-distribution parameters
                 LocationParamText.Text = location.ToString("F6");
                 ScaleParamText.Text = std.ToString("F6");
                 DegreesFreedomText.Text = degreesFreedom.ToString("F2");
 
-                // Update KS test results
-                KsTestStatText.Text = $"Test Statistic: {ks.Statistic:F4}";
-                StatDecisionText.Text = $"Decision: {(ks.Significant ? "Reject H0 (Significant)" : "Fail to Reject H0")}";
-                PValueText.Text = $"P-value: {ks.PValue:E4} ";
-                
+                // KS test results
+                string statistic = $"Test Statistic: {ks.Statistic:F4}";
+                string significance = $"Decision: {(ks.Significant ? "Reject H0 (Significant)" : "Fail to Reject H0")}";
+                string pValue = $"P-value: {ks.PValue:E4} ";
+
+                UpdateKsTestResults(statistic, significance, pValue);
                 PlotEcdfWithTDistribution(normalizedReturns, tDistArr);
+                StatusIndicator.Fill = new SolidColorBrush(Colors.Green);
 
             }
             catch (Exception ex)
@@ -252,6 +335,15 @@ namespace ZSExplorer
                 Title = "Empirical CDF vs Fitted t-Distribution",
                 IsLegendVisible = true
             };
+
+            plotModel.Legends.Add(new Legend
+            {
+                LegendPosition = LegendPosition.TopRight,
+                LegendPlacement = LegendPlacement.Outside,
+                LegendOrientation = LegendOrientation.Vertical,
+                LegendBorderThickness = 0,
+                LegendBackground = OxyColors.White
+            });
 
             plotModel.Axes.Add(new LinearAxis
             {
@@ -289,69 +381,6 @@ namespace ZSExplorer
             EcdfPlot.Model = plotModel;
             EcdfPlot.InvalidatePlot(true);
         }
-
-
-        public void DrawEcdfPlot(double[] sortedReturns, TDistribution tDist, double location, double scale, double degreesFreedom)
-        {
-
-
-            // // Compute ECDF points
-            // var ecdfPoints = sortedReturns
-            //     .Select((x, i) => new DataPoint(x, (i + 1.0) / sortedReturns.Length))
-            //     .ToList();
-
-            // // Fitted t-distribution
-            // var tCdfPoints = sortedReturns
-            //     .Select(x => new DataPoint(x, tDist.DistributionFunction((x - location) / scale)))
-            //     .ToList();
-
-            // // Build OxyPlot model
-            // var plotModel = new PlotModel
-            // {
-            //     Title = "Empirical CDF vs Fitted t-Distribution",
-            //     IsLegendVisible = true
-            // };
-
-            // plotModel.Legends.Add(new Legend
-            // {
-            //     LegendPosition = LegendPosition.RightTop,
-            //     LegendPlacement = LegendPlacement.Outside
-            // });
-
-            // plotModel.Series.Add(new LineSeries
-            // {
-            //     Title = "Empirical CDF",
-            //     StrokeThickness = 2,
-            //     Color = OxyColors.Blue,
-            //     ItemsSource = ecdfPoints
-            // });
-
-            // plotModel.Series.Add(new LineSeries
-            // {
-            //     Title = "Fitted t-Distribution CDF",
-            //     StrokeThickness = 2,
-            //     Color = OxyColors.Red,
-            //     ItemsSource = tCdfPoints
-            // });
-
-            // plotModel.Axes.Add(new LinearAxis
-            // {
-            //     Position = AxisPosition.Bottom,
-            //     Title = "Log Return"
-            // });
-
-            // plotModel.Axes.Add(new LinearAxis
-            // {
-            //     Position = AxisPosition.Left,
-            //     Title = "CDF",
-            //     Minimum = 0,
-            //     Maximum = 1
-            // });
-
-            // EcdfPlot.Model = plotModel;
-        }
-
-
 
         private void UpdateSliderTimeLabels(List<MarketDataRow> filteredData, string unit, double totalUnits)
         {
@@ -493,24 +522,13 @@ private void TimeWindowSlider_PreviewMouseDown(object sender, MouseButtonEventAr
             LocationParamText.Text = location;
             ScaleParamText.Text = scale;
             DegreesFreedomText.Text = degreesFreedom;
-            ConvergenceIterationsText.Text = convergenceIterations;
         }
 
-        public void UpdateKsTestResults(string testStatistic, string decision, string pValue, string criticalValue)
+        public void UpdateKsTestResults(string testStatistic, string decision, string pValue)
         {
             KsTestStatText.Text = testStatistic;
             StatDecisionText.Text = decision;
             PValueText.Text = pValue;
-            CriticalValueText.Text = criticalValue;
         }
-
-        public void UpdateConvergenceInfo(string iterations, string errorTolerance, string fitQuality, string status)
-        {
-            // ConvIterationsText.Text = iterations;
-            // ErrorToleranceText.Text = errorTolerance;
-            // FitQualityText.Text = fitQuality;
-            // FitStatusText.Text = status;
-        }
-
     }
 }

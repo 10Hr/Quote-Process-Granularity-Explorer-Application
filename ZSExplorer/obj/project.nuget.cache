@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "4L1yWAaSc5s=",
+  "dgSpecHash": "eA313JIT8LU=",
   "success": true,
   "projectFilePath": "c:\\Users\\tmccl\\Desktop\\ZeroPlusProject\\VSCODE VERSION\\ZSExplorer\\ZSExplorer.csproj",
   "expectedPackageFiles": [
@@ -8,12 +8,20 @@
     "C:\\Users\\tmccl\\.nuget\\packages\\accord.math\\3.8.0\\accord.math.3.8.0.nupkg.sha512",
     "C:\\Users\\tmccl\\.nuget\\packages\\accord.statistics\\3.8.0\\accord.statistics.3.8.0.nupkg.sha512",
     "C:\\Users\\tmccl\\.nuget\\packages\\apache.arrow\\20.0.0\\apache.arrow.20.0.0.nupkg.sha512",
+    "C:\\Users\\tmccl\\.nuget\\packages\\harfbuzzsharp\\7.3.0.2\\harfbuzzsharp.7.3.0.2.nupkg.sha512",
+    "C:\\Users\\tmccl\\.nuget\\packages\\harfbuzzsharp.nativeassets.macos\\7.3.0.2\\harfbuzzsharp.nativeassets.macos.7.3.0.2.nupkg.sha512",
+    "C:\\Users\\tmccl\\.nuget\\packages\\harfbuzzsharp.nativeassets.win32\\7.3.0.2\\harfbuzzsharp.nativeassets.win32.7.3.0.2.nupkg.sha512",
     "C:\\Users\\tmccl\\.nuget\\packages\\mathnet.numerics\\5.0.0\\mathnet.numerics.5.0.0.nupkg.sha512",
     "C:\\Users\\tmccl\\.nuget\\packages\\microsoft.data.analysis\\0.22.2\\microsoft.data.analysis.0.22.2.nupkg.sha512",
     "C:\\Users\\tmccl\\.nuget\\packages\\microsoft.ml.dataview\\4.0.2\\microsoft.ml.dataview.4.0.2.nupkg.sha512",
     "C:\\Users\\tmccl\\.nuget\\packages\\oxyplot.core\\2.2.0\\oxyplot.core.2.2.0.nupkg.sha512",
+    "C:\\Users\\tmccl\\.nuget\\packages\\oxyplot.skiasharp\\2.2.0\\oxyplot.skiasharp.2.2.0.nupkg.sha512",
     "C:\\Users\\tmccl\\.nuget\\packages\\oxyplot.wpf\\2.2.0\\oxyplot.wpf.2.2.0.nupkg.sha512",
     "C:\\Users\\tmccl\\.nuget\\packages\\oxyplot.wpf.shared\\2.2.0\\oxyplot.wpf.shared.2.2.0.nupkg.sha512",
+    "C:\\Users\\tmccl\\.nuget\\packages\\skiasharp\\2.88.8\\skiasharp.2.88.8.nupkg.sha512",
+    "C:\\Users\\tmccl\\.nuget\\packages\\skiasharp.harfbuzz\\2.88.8\\skiasharp.harfbuzz.2.88.8.nupkg.sha512",
+    "C:\\Users\\tmccl\\.nuget\\packages\\skiasharp.nativeassets.macos\\2.88.8\\skiasharp.nativeassets.macos.2.88.8.nupkg.sha512",
+    "C:\\Users\\tmccl\\.nuget\\packages\\skiasharp.nativeassets.win32\\2.88.8\\skiasharp.nativeassets.win32.2.88.8.nupkg.sha512",
     "C:\\Users\\tmccl\\.nuget\\packages\\system.collections.immutable\\8.0.0\\system.collections.immutable.8.0.0.nupkg.sha512",
     "C:\\Users\\tmccl\\.nuget\\packages\\system.memory\\4.6.0\\system.memory.4.6.0.nupkg.sha512",
     "C:\\Users\\tmccl\\.nuget\\packages\\system.numerics.tensors\\9.0.0\\system.numerics.tensors.9.0.0.nupkg.sha512"
