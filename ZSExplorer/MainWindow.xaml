@@ -8,8 +8,10 @@
         Title="ZSExplorer" Height="600" Width="1000">
 
 
+
     <DockPanel>
 
+        <!-- Top Panel -->
     <Grid DockPanel.Dock="Top" Background="{StaticResource PrimaryBrush}"  Height="40">
          <Grid Width="Auto">
             <Grid.ColumnDefinitions>
@@ -33,14 +35,6 @@
                     IsEnabled="False"
                     VerticalContentAlignment="Center"
                     SelectionChanged="ContractSearchBox_SelectionChanged"/>
-                <!-- <TextBox Width="200" 
-                         Margin="8,0,0,0" 
-                         Height="26"
-                         VerticalContentAlignment="Center"
-                         Background="White" 
-                         BorderBrush="{StaticResource PrimaryPressedBrush}" 
-                         BorderThickness="1"/> -->
-                <Button x:Name="RefreshButton" Content="Refresh" Click="RefreshButton_Click" Margin="8,0,0,0" />
             </StackPanel>
 
             <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,8,0">
@@ -48,10 +42,6 @@
             </StackPanel>
         </Grid>
     </Grid>
-
-
-
-
 
         <!-- Status Bar -->
         <StatusBar DockPanel.Dock="Bottom">

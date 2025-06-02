@@ -9,7 +9,7 @@ public class ParseOptionsSymbol
     // Example: AAPL240615C150 (AAPL, 2024-06-15, Call, Strike 150)
     public static OptionInfo Parse(string rawSymbol)
     {
-        // Remove leading period if present
+        // Remove leading period
         if (rawSymbol.StartsWith("."))
             rawSymbol = rawSymbol.Substring(1);
 
@@ -25,18 +25,5 @@ public class ParseOptionsSymbol
             OptionType = match.Groups[3].Value == "C" ? "Call" : "Put",
             StrikePrice = double.Parse(match.Groups[4].Value)
         };
-    }
-}
-
-public class OptionInfo
-{
-    public string Symbol { get; set; }
-    public DateTime ExpirationDate { get; set; }
-    public string OptionType { get; set; }
-    public double StrikePrice { get; set; }
-
-    public override string ToString()
-    {
-        return $"{Symbol} {ExpirationDate:MMddyy} {OptionType} {StrikePrice}";
     }
 }

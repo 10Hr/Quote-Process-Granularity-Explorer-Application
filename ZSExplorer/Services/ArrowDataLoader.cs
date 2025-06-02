@@ -1,10 +1,7 @@
 using Apache.Arrow;
 using Apache.Arrow.Ipc;
 using Apache.Arrow.Types;
-using System;
 using System.IO;
-using System.Threading.Tasks;
-using System.Windows;
 using ZSExplorer.Services;
 
 namespace ZSExplorer
@@ -107,13 +104,5 @@ namespace ZSExplorer
 
             return (calls, puts);
         }
-
-        private static DateTime ConvertTimestampToDateTime(long rawTimestamp, IArrowType dataType)
-        {
-            // Assumes timestamp is in microseconds. Adjust based on your actual Arrow type.
-            return DateTimeOffset.FromUnixTimeMilliseconds(rawTimestamp / 1000).UtcDateTime;
-        }
-
-
     }
 }

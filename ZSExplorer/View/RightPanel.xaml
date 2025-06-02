@@ -36,8 +36,10 @@
 
                     <!-- Right side: Status and Remove button -->
                     <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center">
+
                         <!-- Status indicator -->
                         <Ellipse x:Name="StatusIndicator" Width="14" Height="14" Fill="Red" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        
                         <!-- Remove button -->
                         <Button x:Name="RemoveButton" Content="Remove" Width="Auto" Height="24" FontWeight="Bold" 
                                 Foreground="White" Background="{StaticResource PrimaryPressedBrush}" 
@@ -125,7 +127,7 @@
                 </StackPanel>
 
                 <!-- Right column: Fitted distribution & KS test -->
-                <StackPanel Grid.Column="1" VerticalAlignment="Top">
+                <StackPanel x:Name="StatisticalTestResults" Grid.Column="1" VerticalAlignment="Top">
 
                     <!-- Fitted Distribution Parameters -->
                     <TextBlock Text="Fitted Distribution Parameters" FontWeight="Bold" Margin="0,0,0,6" />
@@ -145,7 +147,6 @@
                         <StackPanel>
                             <TextBlock x:Name="InsufficientDataText" Foreground="Red" FontWeight="Bold" Margin="5"/>
                             <TextBlock Text="KS Test Results" FontWeight="Bold" Margin="0,0,0,6" />
-
                             <TextBlock x:Name="KsTestStatText" Text="Test Statistic: -" FontSize="18" FontWeight="Bold" />
                             <TextBlock x:Name="StatDecisionText" Text="Decision: -" FontWeight="Bold" Margin="0,2,0,6" />
                             <TextBlock x:Name="PValueText" Text="P-value: -" FontSize="12" />

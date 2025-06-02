@@ -1,16 +1,6 @@
-using Microsoft.Win32;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Text;
-using System.IO;
-using Apache.Arrow.Ipc;
 using System.Windows.Controls;
-using System.Linq;
-using MathNet;
-using Accord.Statistics;
 using ZSExplorer.Services;
-using MathNet.Numerics;
-using MathNet.Numerics.Distributions;
 using Accord.Statistics.Distributions.Univariate;
 using Accord.Statistics.Testing;
 using System.Windows.Input;
@@ -34,8 +24,13 @@ namespace ZSExplorer
         private double _timeScale = 1.0;          
         List<double> logReturn;
         private bool analyzeAllOptions = false;
-
         public PlotModel ECDFPlotModel => EcdfPlot.Model;
+
+
+        public double[] ValidReturns { get; private set; }
+        public List<MarketDataRow> SelectedList { get; private set; }
+        public double KSTestStatistic { get; private set; }
+        public double KSTestPValue { get; private set; }
 
 
         public RightPanel(List<MarketDataRow> callData, List<MarketDataRow> putData, string contractText)
@@ -43,7 +38,6 @@ namespace ZSExplorer
             InitializeComponent();
 
             OptionInfo info = ParseOptionsSymbol.Parse(contractText);
-            Console.WriteLine($"Parsed Option Info: {info.Symbol}, Type: {info.OptionType}, Expiration: {info.ExpirationDate:MM-dd-yyyy}, Strike: {info.StrikePrice}");
 
             if (info.OptionType == "Call")
             {
@@ -57,7 +51,7 @@ namespace ZSExplorer
             {
                 throw new ArgumentException("Invalid contract type. Expected 'Call' or 'Put'.");
             }
-             
+
             this.contractText = contractText;
 
             this.Loaded += RightPanel_Loaded;
@@ -70,53 +64,34 @@ namespace ZSExplorer
             await Task.Delay(100); // Let UI elements fully initialize
             _ = RunCalculations();
         }
-        
-        private void BidOnlyCheckbox_Checked(object sender, RoutedEventArgs e)
-        {
-            _ = RunCalculations();
-            UpdateSliderRangeForBidAsk();
-        }
-
-
-        private void BidOnlyCheckbox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            _ = RunCalculations();
-            UpdateSliderRangeForBidAsk();
-        }
-
-        private void AnalyzeAllCheckbox_Checked(object sender, RoutedEventArgs e)
-        {
-            analyzeAllOptions = true;
-            UpdateUIFromLists(); // re-run filtering logic
-        }
-
-        private void AnalyzeAllCheckbox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            analyzeAllOptions = false;
-            UpdateUIFromLists(); // re-run filtering logic
-        }
 
 
         private void UpdateSliderRangeForBidAsk()
         {
             bool filterBid = BidOnlyCheckbox.IsChecked == true;
 
-            var selectedList = filterBid ? bidList : askList;
+            SelectedList = filterBid ? bidList : askList;
 
-            if (selectedList.Count > 1)
+            if (SelectedList.Count > 1)
             {
-                DateTime start = selectedList.First().DateTime;
-                DateTime end = selectedList.Last().DateTime;
+                DateTime start = SelectedList.First().DateTime;
+                DateTime end = SelectedList.Last().DateTime;
                 SetupTimeSliderFromDateRange(start, end);
             }
         }
 
+        public void UpdateKsTestResults(string testStatistic, string decision, string pValue)
+        {
+            KsTestStatText.Text = testStatistic;
+            StatDecisionText.Text = decision;
+            PValueText.Text = pValue;
+        }
 
 
         private async Task UpdateUIFromLists(OptionInfo info)
         {
             ContractSymbolText.Text = info.Symbol;
-            
+
             if (analyzeAllOptions)
             {
                 // Group all contracts by type (Call or Put)
@@ -133,7 +108,7 @@ namespace ZSExplorer
             }
             else
             {
-                // Just analyze the specific strike contract
+                // Just analyze the specific strike
                 filteredContractData = data
                     .Where(row => row.Symbol == contractText)
                     .OrderBy(row => row.DateTime)
@@ -141,10 +116,6 @@ namespace ZSExplorer
 
                 OptionDetailsText.Text = $" Underlying: {info.Symbol} | Type: {info.OptionType} | Exp: {info.ExpirationDate:MM-dd-yyyy} | Strike: {info.StrikePrice}";
             }
-
-
-
-            Console.WriteLine($"Filtered {filteredContractData.Count} rows for contract: {contractText}");
 
             var startTime = filteredContractData[0].DateTime;
             var endTime = filteredContractData[filteredContractData.Count - 1].DateTime;
@@ -195,10 +166,6 @@ namespace ZSExplorer
                 OptionDetailsText.Text = $" Underlying: {info.Symbol} | Type: {info.OptionType} | Exp: {info.ExpirationDate:MM-dd-yyyy} | Strike: {info.StrikePrice}";
             }
 
-
-
-            Console.WriteLine($"Filtered {filteredContractData.Count} rows for contract: {contractText}");
-
             var startTime = filteredContractData[0].DateTime;
             var endTime = filteredContractData[filteredContractData.Count - 1].DateTime;
 
@@ -223,7 +190,7 @@ namespace ZSExplorer
             try
             {
                 bool filterBid = BidOnlyCheckbox.IsChecked == true;
-                List<MarketDataRow> selectedList = filterBid ? bidList : askList;
+                SelectedList = filterBid ? bidList : askList;
 
                 // Time filtering based on slider
                 double sliderValue = TimeWindowSlider.Value;
@@ -231,31 +198,30 @@ namespace ZSExplorer
                 {
                     // Calculate cutoff time
                     TimeSpan timeWindow = TimeSpan.FromSeconds(sliderValue * _timeScale);
-                    DateTime endTime = selectedList.Last().DateTime;
+                    DateTime endTime = SelectedList.Last().DateTime;
                     DateTime cutoffTime = endTime - timeWindow;
 
-                    selectedList = selectedList
+                    SelectedList = SelectedList
                         .Where(row => row.DateTime >= cutoffTime)
                         .ToList();
                 }
 
-
-                var priceChangedRows = new List<MarketDataRow> { selectedList[0] };
-                for (int i = 1; i < selectedList.Count; i++)
+                var priceChangedRows = new List<MarketDataRow> { SelectedList[0] };
+                for (int i = 1; i < SelectedList.Count; i++)
                 {
-                    if (selectedList[i].Price != selectedList[i - 1].Price)
+                    if (SelectedList[i].Price != SelectedList[i - 1].Price)
                     {
-                        priceChangedRows.Add(selectedList[i]);
+                        priceChangedRows.Add(SelectedList[i]);
                     }
                 }
-                selectedList = priceChangedRows;
+                SelectedList = priceChangedRows;
 
                 // Compute log returns
                 logReturn = new List<double>();
-                for (int i = 1; i < selectedList.Count; i++)
+                for (int i = 1; i < SelectedList.Count; i++)
                 {
-                    var prev = selectedList[i - 1];
-                    var curr = selectedList[i];
+                    var prev = SelectedList[i - 1];
+                    var curr = SelectedList[i];
 
                     if (prev.Price > 0 && curr.Price > 0)
                     {
@@ -266,37 +232,41 @@ namespace ZSExplorer
                 }
 
                 // Remove NaN and Infinity values
-                double[] validReturns = logReturn
+                ValidReturns = logReturn
                 .Where(x => !double.IsNaN(x) && !double.IsInfinity(x))
                 .ToArray();
 
+                // Perform t-distribution fitting and KS test
                 StudentTDistributionZeroMean tDist = new StudentTDistributionZeroMean();
 
-                StudentTResult tDistResult = tDist.StudentT(validReturns);
+                StudentTResult tDistResult = tDist.StudentT(ValidReturns);
 
                 double location = tDistResult.Location;
                 double std = tDistResult.Scale;
                 double degreesFreedom = tDistResult.DegreesFreedom;
 
-                double[] normalizedReturns = validReturns
-                .Select(x => (x - location) / std)
+                var tDistArr = new TDistribution(degreesFreedom);
+
+                double[] standardizedReturns = ValidReturns
+                .Select(x => x / std)
                 .Where(x => !double.IsNaN(x) && !double.IsInfinity(x))
                 .ToArray();
 
-                var tDistArr = new TDistribution(tDistResult.DegreesFreedom);
-
-                KolmogorovSmirnovTest ks = new KolmogorovSmirnovTest(normalizedReturns, tDistArr);
+                KolmogorovSmirnovTest ks = new KolmogorovSmirnovTest(standardizedReturns, tDistArr);
 
 
                 // Sample statistics
-                SampleSizeText.Text = validReturns.Length.ToString("N0");
-                MeanReturnText.Text = validReturns.Average().ToString("F6");
-                StdDevText.Text = MathNet.Numerics.Statistics.Statistics.StandardDeviation(validReturns).ToString("F6");
+                SampleSizeText.Text = ValidReturns.Length.ToString("N0");
+                MeanReturnText.Text = ValidReturns.Average().ToString("F6");
+                StdDevText.Text = MathNet.Numerics.Statistics.Statistics.StandardDeviation(ValidReturns).ToString("F6");
 
                 // Fitted t-distribution parameters
                 LocationParamText.Text = location.ToString("F6");
                 ScaleParamText.Text = std.ToString("F6");
                 DegreesFreedomText.Text = degreesFreedom.ToString("F2");
+
+                KSTestStatistic = ks.Statistic;
+                KSTestPValue = ks.PValue;
 
                 // KS test results
                 string statistic = $"Test Statistic: {ks.Statistic:F4}";
@@ -304,19 +274,19 @@ namespace ZSExplorer
                 string pValue = $"P-value: {ks.PValue:E4} ";
 
                 UpdateKsTestResults(statistic, significance, pValue);
-                PlotEcdfWithTDistribution(normalizedReturns, tDistArr);
+                PlotEcdfWithTDistribution(standardizedReturns, tDistArr);
                 StatusIndicator.Fill = new SolidColorBrush(Colors.Green);
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error during calculations: {ex.Message}\n{ex.StackTrace}", "Calculation Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw new InvalidOperationException($"Error during calculations: {ex.Message}\n{ex.StackTrace}");
             }
         }
 
-        public void PlotEcdfWithTDistribution(double[] normalizedReturns, TDistribution tDist)
+        public void PlotEcdfWithTDistribution(double[] standardizedReturns, TDistribution tDist)
         {
-            var sortedReturns = normalizedReturns.OrderBy(x => x).ToArray();
+            var sortedReturns = standardizedReturns.OrderBy(x => x).ToArray();
             int n = sortedReturns.Length;
 
             var ecdfPoints = new List<DataPoint>();
@@ -327,7 +297,7 @@ namespace ZSExplorer
                 double x = sortedReturns[i];
                 double y = (i + 1.0) / n;
                 ecdfPoints.Add(new DataPoint(x, y));
-                tCdfPoints.Add(new DataPoint(x, tDist.DistributionFunction(x))); // normalized x, so no scaling needed
+                tCdfPoints.Add(new DataPoint(x, tDist.DistributionFunction(x)));
             }
 
             var plotModel = new PlotModel
@@ -348,7 +318,7 @@ namespace ZSExplorer
             plotModel.Axes.Add(new LinearAxis
             {
                 Position = AxisPosition.Bottom,
-                Title = "Normalized Log Return"
+                Title = "Standardized Log Return"
             });
 
             plotModel.Axes.Add(new LinearAxis
@@ -429,19 +399,43 @@ namespace ZSExplorer
             UpdateSliderTimeLabels(filteredContractData, unit, unitValue);
         }
 
-private void TimeWindowSlider_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-{
-    if (sender is Slider slider)
-    {
-        Point position = e.GetPosition(slider);
-        double relativeClick = position.X / slider.ActualWidth;
+        // ========= Event Handlers =========
+        private void BidOnlyCheckbox_Checked(object sender, RoutedEventArgs e)
+        {
+            _ = RunCalculations();
+            UpdateSliderRangeForBidAsk();
+        }
 
-        double newValue = slider.Minimum + (relativeClick * (slider.Maximum - slider.Minimum));
-        slider.Value = newValue;
 
-        //e.Handled = true; // prevent default behavior
-    }
-}
+        private void BidOnlyCheckbox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            _ = RunCalculations();
+            UpdateSliderRangeForBidAsk();
+        }
+
+        private void AnalyzeAllCheckbox_Checked(object sender, RoutedEventArgs e)
+        {
+            analyzeAllOptions = true;
+            UpdateUIFromLists(); 
+        }
+
+        private void AnalyzeAllCheckbox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            analyzeAllOptions = false;
+            UpdateUIFromLists();
+        }
+
+        private void TimeWindowSlider_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is Slider slider)
+            {
+                Point position = e.GetPosition(slider);
+                double relativeClick = position.X / slider.ActualWidth;
+
+                double newValue = slider.Minimum + (relativeClick * (slider.Maximum - slider.Minimum));
+                slider.Value = newValue;
+            }
+        }
 
         private void TimeWindowSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
@@ -473,62 +467,11 @@ private void TimeWindowSlider_PreviewMouseDown(object sender, MouseButtonEventAr
         public void RemoveKsTest(object sender, RoutedEventArgs e)
         {
             ((MainWindow)Application.Current.MainWindow).RemoveKsTest();
-            //df.Columns.Remove("LogReturn");
         }
 
-    private void MarketDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        private void MarketDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
             e.Column.IsReadOnly = true;
-        }
-
-        private void RemoveButton_Click(object sender, RoutedEventArgs e)
-        {
-            //OnRemoveClicked();
-        }
-
-        // Placeholder methods for logic you will implement
-
-        public void OnTimeWindowChanged(int newValue)
-        {
-            // TODO: Implement slider changed logic
-        }
-
-
-
-        public void UpdateStatusIndicator(bool isCalculating)
-        {
-            // TODO: Change StatusIndicator fill color accordingly
-        }
-
-        public void UpdateContractSymbol(string symbol)
-        {
-            ContractSymbolText.Text = symbol;
-        }
-
-        public void UpdateOptionDetails(string details)
-        {
-            OptionDetailsText.Text = details;
-        }
-
-        public void UpdateSampleStatistics(int sampleSize, double meanReturn, double stdDev)
-        {
-            SampleSizeText.Text = sampleSize.ToString();
-            MeanReturnText.Text = meanReturn.ToString("F4");
-            StdDevText.Text = stdDev.ToString("F4");
-        }
-
-        public void UpdateFittedDistribution(string location, string scale, string degreesFreedom, string convergenceIterations)
-        {
-            LocationParamText.Text = location;
-            ScaleParamText.Text = scale;
-            DegreesFreedomText.Text = degreesFreedom;
-        }
-
-        public void UpdateKsTestResults(string testStatistic, string decision, string pValue)
-        {
-            KsTestStatText.Text = testStatistic;
-            StatDecisionText.Text = decision;
-            PValueText.Text = pValue;
         }
     }
 }
