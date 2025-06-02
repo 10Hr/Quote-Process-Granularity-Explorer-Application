@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\tmccl\\Desktop\\ZeroPlusProject\\VSCODE VERSION\\ZSExplorer\\ZSExplorer.csproj": {}
+    "c:\\Users\\tmccl\\Desktop\\ZeroPlusProject\\VSCODE VERSION\\ZSExplorer\\ZSExplorer.csproj": {}
   },
   "projects": {
-    "C:\\Users\\tmccl\\Desktop\\ZeroPlusProject\\VSCODE VERSION\\ZSExplorer\\ZSExplorer.csproj": {
+    "c:\\Users\\tmccl\\Desktop\\ZeroPlusProject\\VSCODE VERSION\\ZSExplorer\\ZSExplorer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\tmccl\\Desktop\\ZeroPlusProject\\VSCODE VERSION\\ZSExplorer\\ZSExplorer.csproj",
+        "projectUniqueName": "c:\\Users\\tmccl\\Desktop\\ZeroPlusProject\\VSCODE VERSION\\ZSExplorer\\ZSExplorer.csproj",
         "projectName": "ZSExplorer",
-        "projectPath": "C:\\Users\\tmccl\\Desktop\\ZeroPlusProject\\VSCODE VERSION\\ZSExplorer\\ZSExplorer.csproj",
+        "projectPath": "c:\\Users\\tmccl\\Desktop\\ZeroPlusProject\\VSCODE VERSION\\ZSExplorer\\ZSExplorer.csproj",
         "packagesPath": "C:\\Users\\tmccl\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\tmccl\\Desktop\\ZeroPlusProject\\VSCODE VERSION\\ZSExplorer\\obj\\",
+        "outputPath": "c:\\Users\\tmccl\\Desktop\\ZeroPlusProject\\VSCODE VERSION\\ZSExplorer\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\tmccl\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -81,20 +81,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
-              "version": "[8.0.8, 8.0.8]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Runtime.win-x64",
-              "version": "[8.0.8, 8.0.8]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
-              "version": "[8.0.8, 8.0.8]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
@@ -104,11 +90,6 @@
             }
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
-        }
-      },
-      "runtimes": {
-        "win-x64": {
-          "#import": []
         }
       }
     }

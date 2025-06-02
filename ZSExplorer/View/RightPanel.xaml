@@ -39,7 +39,7 @@
 
                         <!-- Status indicator -->
                         <Ellipse x:Name="StatusIndicator" Width="14" Height="14" Fill="Red" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                        
+
                         <!-- Remove button -->
                         <Button x:Name="RemoveButton" Content="Remove" Width="Auto" Height="24" FontWeight="Bold" 
                                 Foreground="White" Background="{StaticResource PrimaryPressedBrush}" 
@@ -62,7 +62,7 @@
                 <!-- Time Window Configuration -->
                 <StackPanel Orientation="Vertical" Margin="0,0,0,10">
                     <TextBlock Text="📉 Log Return Time Window" FontWeight="Bold" FontSize="16" />
-                    <TextBlock Text="Return Calculation Window (Microseconds)" FontWeight="Bold" />
+                    <TextBlock Text="Return Calculation Window (Seconds)" FontWeight="Bold" />
 
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,5,0,0">
                         <Slider x:Name="TimeWindowSlider"

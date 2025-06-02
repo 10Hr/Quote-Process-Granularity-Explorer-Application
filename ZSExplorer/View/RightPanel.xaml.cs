@@ -318,7 +318,9 @@ namespace ZSExplorer
             plotModel.Axes.Add(new LinearAxis
             {
                 Position = AxisPosition.Bottom,
-                Title = "Standardized Log Return"
+                Title = "Standardized Log Return",
+                IsZoomEnabled = false,
+                IsPanEnabled = false
             });
 
             plotModel.Axes.Add(new LinearAxis
@@ -326,7 +328,9 @@ namespace ZSExplorer
                 Position = AxisPosition.Left,
                 Title = "CDF",
                 Minimum = 0,
-                Maximum = 1
+                Maximum = 1,
+                IsZoomEnabled = false,
+                IsPanEnabled = false
             });
 
             var ecdfSeries = new LineSeries
@@ -374,16 +378,16 @@ namespace ZSExplorer
             double unitValue;
             string unit;
 
-            if (totalSeconds < 300) // Less than 5 minutes
-            {
+            //if (totalSeconds < 300) // Less than 5 minutes
+            //{
                 unit = "s";
                 unitValue = totalSeconds;
-            }
-            else
-            {
-                unit = "min";
-                unitValue = totalSpan.TotalMinutes;
-            }
+           // }
+            // else
+            // {
+            //     unit = "min";
+            //     unitValue = totalSpan.TotalMinutes;
+            // }
 
             TimeWindowSlider.Minimum = 0;
             TimeWindowSlider.Maximum = unitValue;

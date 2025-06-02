@@ -114,8 +114,8 @@
                             <TextBlock Text="Export Options" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
 
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0">
-                                <Button x:Name="ExportAllResults" Content="Export All Results (Markdown)" Width="160" Height="30" Click="ExportMarkdownButton_Click" Margin="0,0,10,0"/>
-                                <Button x:Name="ExportECDFPlots" Content="Export ECDF Plots (PNG)" Width="140" Height="30" Click="ExportPlotImagesButton_Click"/>
+                                <Button x:Name="ExportAllResults" Content="Export All Results (md)" Width="Auto" Height="30" Click="ExportMarkdownButton_Click" Margin="0,0,10,0"/>
+                                <Button x:Name="ExportECDFPlots" Content="Export ECDF Plots (png)" Width="Auto" Height="30" Click="ExportPlotImagesButton_Click"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
