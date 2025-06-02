@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ZSExplorer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f569349ec078376fd2701a6f30c2aef40fe2e6f5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d44f8cd3a4398734360c25d89561a0886e3d689d")]
 [assembly: System.Reflection.AssemblyProductAttribute("ZSExplorer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ZSExplorer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
