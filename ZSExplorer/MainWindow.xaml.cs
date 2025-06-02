@@ -33,7 +33,6 @@ public partial class MainWindow : Window
     // ========= Update ToolBar Buttons =========
     private void UpdateToolbarButtonStates()
     {
-        RefreshButton.IsEnabled = fileLoaded;
         AddKsTestButton.IsEnabled = fileLoaded;
         ExportAllResults.IsEnabled = fileLoaded;
         ExportECDFPlots.IsEnabled = fileLoaded;
@@ -148,7 +147,7 @@ public partial class MainWindow : Window
 
         }
     }
-    
+
     private void MarketDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
     {
         e.Column.IsReadOnly = true;
