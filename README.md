@@ -127,7 +127,7 @@ While the top bar and left panel could have been extracted into separate `UserCo
 4. Run the application.
 5. Click **"Load Feather Data"** to select a `.arrow` option quote dataset.
 6. Use **Contract Search** dropdown to filter quotes by symbol and strike.
-7. Click **"Run KS Test"** to analyze log returns.
+7. Click **"Add KS Test"** to analyze log returns.
 8. Move slider or enter a value in text field to the right to change time window.
 9. View ECDF plot + summary, and optionally **export results** as image or markdown.
 
