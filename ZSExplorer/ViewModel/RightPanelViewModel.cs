@@ -33,7 +33,6 @@ public partial class RightPanelViewModel
         private string _currentTimeUnit = "s";
         private double _timeScale = 1.0;          
         // List<double> logReturn;
-        // private bool analyzeAllOptions = false;
         //public PlotModel ECDFPlotModel => EcdfPlot.Model;
 
         // public double[] ValidReturns { get; private set; }
@@ -52,23 +51,22 @@ public partial class RightPanelViewModel
         public string ContractSymbolText { get; set; } = "CONTRACT SYMBOL";
         public string OptionDetailsText { get; set; } = "Underlying | Expiration | Strike";
 
-        public string StatusIndicator { get; set; } = "Red"; 
+        public Brush StatusIndicatorBrush { get; set; } = Brushes.Red; 
         
         public bool AnalyzeAllOptions { get; set; } = false;
+        public bool UseBidPrices { get; set; } = false;
 
-        double TimeWindowSliderMinimum { get; set; } = 0.0;
-        double TimeWindowSliderMaximum { get; set; } = 100.0;
-        double TimeWindowSliderValue { get; set; } = 0.0;
+        public double TimeWindowSliderMinimum { get; set; } = 0.0;
+        public double TimeWindowSliderMaximum { get; set; } = 100.0;
+        public double TimeWindowSliderValue { get; set; } = 0.0;
 
-        string MicrosecondInputBoxText { get; set; } = "0";
-
-        string TimeWindowValueText { get; set; } = "0s";
-
-        string TimeLabel0Text { get; set; } = "0s";
-        string TimeLabel25Text { get; set; } = "...";
-        string TimeLabel50Text { get; set; } = "...";
-        string TimeLabel75Text { get; set; } = "...";
-        string TimeLabel100Text { get; set; } = "...";
+        public string MicrosecondInputBoxText { get; set; } = "0";
+        public string TimeWindowValueText { get; set; } = "0s";
+        public string TimeLabel0Text { get; set; } = "0s";
+        public string TimeLabel25Text { get; set; } = "...";
+        public string TimeLabel50Text { get; set; } = "...";
+        public string TimeLabel75Text { get; set; } = "...";
+        public string TimeLabel100Text { get; set; } = "...";
 
     // Constructors
 
@@ -85,7 +83,7 @@ public partial class RightPanelViewModel
         UpdateUIFromLists();
 
         //await Task.Delay(100); // Let UI elements fully initialize
-        RunCalculations();
+        //RunCalculations();
     }
 
     [Command]
@@ -101,62 +99,15 @@ public partial class RightPanelViewModel
             RequestClose?.Invoke();  
         }
     }
-
-
-    /*
-    private async Task UpdateUIFromLists(OptionInfo info)
-    {
-        ContractSymbolText = info.Symbol;
-
-        if (analyzeAllOptions)
-        {
-            // Group all contracts by type (Call or Put)
-            filteredContractData = data
-                .Where(row =>
-                {
-                    var opt = ParseOptionsSymbol.Parse(row.Symbol);
-                    return opt.Symbol == info.Symbol && opt.OptionType == info.OptionType;
-                })
-                .OrderBy(row => row.DateTime)
-                .ToList();
-
-            OptionDetailsText = $"{info.Symbol} | All {info.OptionType}";
-        }
-        else
-        {
-            // Just analyze the specific strike
-            filteredContractData = data
-                .Where(row => row.Symbol == contractText)
-                .OrderBy(row => row.DateTime)
-                .ToList();
-
-            OptionDetailsText = $" Underlying: {info.Symbol} | Type: {info.OptionType} | Exp: {info.ExpirationDate:MM-dd-yyyy} | Strike: {info.StrikePrice}";
-        }
-
-        var startTime = filteredContractData[0].DateTime;
-        var endTime = filteredContractData[filteredContractData.Count - 1].DateTime;
-
-        if (filteredContractData.Count > 1)
-        {
-            DateTime start = filteredContractData.First().DateTime;
-            DateTime end = filteredContractData.Last().DateTime;
-
-            //SetupTimeSliderFromDateRange(start, end);
-        }
-
-        bidList = filteredContractData.Where(row => row.BidAsk == true).ToList();
-        askList = filteredContractData.Where(row => row.BidAsk == false).ToList();
-
-        StatusIndicator = "Green";
-
-    }
-    */
     
-    [Command]
-    public void ToggleAnalyzeAll()
+    public void OnAnalyzeAllOptionsChanged()
     {
-        AnalyzeAllOptions = !AnalyzeAllOptions;
         UpdateUIFromLists();
+    }
+
+    public void OnUseBidPricesChanged()
+    {
+        RunCalculations();
     }
 
     private void UpdateUIFromLists()
@@ -166,15 +117,13 @@ public partial class RightPanelViewModel
         // Check if we have data
         if (Data == null || Data.Count == 0)
         {
-            StatusIndicator = "Red";
+            StatusIndicatorBrush = Brushes.Red;
             OptionDetailsText = $"ERROR: No data found. AnalyzeAll={AnalyzeAllOptions}, Contract={SelectedSymbol}, DataCount={Data?.Count ?? 0}";
             return;
         }
 
         if (AnalyzeAllOptions)
         {
-
-
             // Group all contracts by type (Call or Put)
             filteredContractData = Data
                 .Where(row =>
@@ -192,7 +141,7 @@ public partial class RightPanelViewModel
 
             if (string.IsNullOrEmpty(SelectedSymbol))
             {
-                StatusIndicator = "Red";
+                StatusIndicatorBrush = Brushes.Red;
                 OptionDetailsText = "ERROR: Contract symbol not set";
                 return;
             }
@@ -209,7 +158,7 @@ public partial class RightPanelViewModel
         // Check if data was processed and we have data
         if (filteredContractData == null || filteredContractData.Count == 0)
         {
-            StatusIndicator = "Red";
+            StatusIndicatorBrush = Brushes.Red;
             OptionDetailsText = $"ERROR: No filtered data found. AnalyzeAll={AnalyzeAllOptions}, Contract={SelectedSymbol}, filteredContractDataCount={filteredContractData?.Count ?? 0}";
             return;
         }
@@ -229,7 +178,7 @@ public partial class RightPanelViewModel
         bidList = filteredContractData.Where(row => row.BidAsk == true).ToList();
         askList = filteredContractData.Where(row => row.BidAsk == false).ToList();
 
-        StatusIndicator = "Green";
+        StatusIndicatorBrush = Brushes.Green;
     }
 
     private void SetupTimeSliderFromDateRange(DateTime start, DateTime end)
@@ -270,7 +219,7 @@ public partial class RightPanelViewModel
 
     public void RunCalculations()
         {
-            // StatusIndicator.Fill = new SolidColorBrush(Colors.Red);
+            // StatusIndicatorBrush.Fill = new SolidColorBrush(Colors.Red);
             // try
             // {
             //     bool filterBid = BidOnlyCheckbox.IsChecked == true;
@@ -359,7 +308,7 @@ public partial class RightPanelViewModel
 
             //     UpdateKsTestResults(statistic, significance, pValue);
             //     PlotEcdfWithTDistribution(standardizedReturns, tDistArr);
-            //     StatusIndicator.Fill = new SolidColorBrush(Colors.Green);
+            //     StatusIndicatorBrush.Fill = new SolidColorBrush(Colors.Green);
 
             // }
             // catch (Exception ex)

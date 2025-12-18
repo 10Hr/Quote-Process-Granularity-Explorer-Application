@@ -39,7 +39,7 @@
                     <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center">
 
                         <!-- Status indicator -->
-                        <Ellipse x:Name="StatusIndicator" Width="14" Height="14" Fill="{Binding StatusIndicator}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <Ellipse x:Name="StatusIndicator" Width="14" Height="14" Fill="{Binding StatusIndicatorBrush}" VerticalAlignment="Center" Margin="0,0,10,0"/>
 
                         <!-- Remove button -->
                         <Button x:Name="RemoveButton" Content="Remove" Width="Auto" Height="24" FontWeight="Bold" 
@@ -72,9 +72,9 @@
                                 Maximum="{Binding TimeWindowSliderMaximum}"
                                 Value="{Binding TimeWindowSliderValue}"
                                 TickFrequency="1"
-                                IsMoveToPointEnabled="True"
-                                ValueChanged="TimeWindowSlider_ValueChanged"
-                                PreviewMouseDown="TimeWindowSlider_PreviewMouseDown"/>
+                                IsMoveToPointEnabled="True" /> 
+                                <!-- ValueChanged="TimeWindowSlider_ValueChanged"
+                                PreviewMouseDown="TimeWindowSlider_PreviewMouseDown"-->
                         <TextBox x:Name="MicrosecondInputBox"
                                 Width="80"
                                 Margin="10,0,0,0"
@@ -97,13 +97,11 @@
                             x:Name="BidOnlyCheckbox" 
                             Content="Use Bid Ask" 
                             Margin="5" 
-                            Checked="BidOnlyCheckbox_Checked"
-                            Unchecked="BidOnlyCheckbox_Unchecked" />
+                            IsChecked="{Binding UseBidPrices}" />
                         <CheckBox 
                                 x:Name="AnalyzeAllCheckbox" 
                                 Content="Analyze All Call or Put Options" 
                                 Margin="5"
-                                Command="{Binding ToggleAnalyzeAllCommand}" 
                                 IsChecked="{Binding AnalyzeAllOptions}" />
                     </StackPanel>
 
