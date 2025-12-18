@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Import Project="$(NuGetPackageRoot)metalama.compiler\2025.1.10\buildTransitive\Metalama.Compiler.targets" Condition="Exists('$(NuGetPackageRoot)metalama.compiler\2025.1.10\buildTransitive\Metalama.Compiler.targets')" />
+    <Import Project="$(NuGetPackageRoot)metalama.framework\2025.1.16\buildTransitive\Metalama.Framework.targets" Condition="Exists('$(NuGetPackageRoot)metalama.framework\2025.1.16\buildTransitive\Metalama.Framework.targets')" />
+    <Import Project="$(NuGetPackageRoot)accord\3.8.0\build\Accord.targets" Condition="Exists('$(NuGetPackageRoot)accord\3.8.0\build\Accord.targets')" />
+  </ImportGroup>
+</Project>

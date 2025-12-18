@@ -7,46 +7,48 @@
         mc:Ignorable="d"
         Title="ZSExplorer" Height="600" Width="1000">
 
-
-
     <DockPanel>
 
         <!-- Top Panel -->
-    <Grid DockPanel.Dock="Top" Background="{StaticResource PrimaryBrush}"  Height="40">
-         <Grid Width="Auto">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-           
-            <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center" Margin="8,0,10,0">
-                <TextBlock Text="Add Contract: " 
-                           FontWeight="Bold" 
-                           FontSize="14" 
-                           Foreground="{StaticResource ButtonTextBrush}" 
-                           VerticalAlignment="Center" />
-                <ComboBox x:Name="ContractSearchBox"
-                    Width="200"
-                    Margin="8,0,0,0"
-                    Height="26"
-                    IsEditable="False"
-                    IsTextSearchEnabled="True"
-                    StaysOpenOnEdit="True"
-                    IsEnabled="False"
-                    VerticalContentAlignment="Center"
-                    SelectionChanged="ContractSearchBox_SelectionChanged"/>
-            </StackPanel>
+        <Grid DockPanel.Dock="Top" Background="{StaticResource PrimaryBrush}" Height="40">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,8,0">
-                <Button x:Name="AddKsTestButton" Content="Add KS Test" Click="AddKsTest_Click"/>
-            </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center" Margin="8,0,10,0">
+                    <TextBlock Text="Add Contract: "
+                               FontWeight="Bold"
+                               FontSize="14"
+                               Foreground="{StaticResource ButtonTextBrush}"
+                               VerticalAlignment="Center" />
+
+                    <ComboBox
+                        Width="200"
+                        Margin="8,0,0,0"
+                        Height="26"
+                        IsEditable="False"
+                        IsTextSearchEnabled="True"
+                        StaysOpenOnEdit="True"
+                        ItemsSource="{Binding UniqueSymbols}"
+                        SelectedItem="{Binding SelectedSymbol}"
+                        IsEnabled="{Binding FileLoaded}" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,8,0">
+                    <Button Content="Add KS Test"
+                            Command="{Binding AddKsTestCommand}"
+                            IsEnabled="{Binding FileLoaded}" />
+                </StackPanel>
+
+            </Grid>
         </Grid>
-    </Grid>
 
         <!-- Status Bar -->
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBarItem>
-                <TextBlock x:Name="StatusTextBlock" Text="Ready" />
+                <TextBlock Text="{Binding StatusText}" />
             </StatusBarItem>
         </StatusBar>
 
@@ -57,7 +59,7 @@
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Left Panel with Outer Border -->
+            <!-- Left Panel -->
             <Border Grid.Column="0" Margin="10" BorderBrush="Gray" BorderThickness="2" CornerRadius="6" Padding="10">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -68,28 +70,30 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
+                    <!-- Data Summary -->
+                    <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="1" CornerRadius="4" Padding="10" Margin="0,0,0,20">
+                        <StackPanel>
+                            <TextBlock Text="Data Summary" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
 
-                <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="1" CornerRadius="4" Padding="10" Margin="0,0,0,20">
-                    <StackPanel>
-                        <!-- Top Section: Data Summary -->
-                        <TextBlock Text="Data Summary" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
-                        <TextBlock Text="Total Quote Count: 0" x:Name="TotalQuoteCountText"/>
-                        <TextBlock Text="Date Range: N/A" x:Name="DateRangeText"/>
-                        <TextBlock Text="Unique Contract Count: 0" x:Name="UniqueContractCountText"/>
-                        <TextBlock Text="Exchange Count: 0" x:Name="ExchangeCountText"/>
+                            <TextBlock Text="{Binding QuoteCount, StringFormat=Total Quote Count: {0}}"/>
+                            <TextBlock Text="{Binding DateRange, StringFormat=Date Range: {0}}"/>
+                            <TextBlock Text="{Binding UniqueContractCount, StringFormat=Unique Contract Count: {0}}"/>
+                            <TextBlock Text="{Binding ExchangeCount, StringFormat=Exchange Count: {0}}"/>
 
-                        <!-- Spacer -->
-                        <Rectangle Height="20" Fill="Transparent"/>
+                            <Rectangle Height="20" Fill="Transparent"/>
 
-                        <!-- Top Section: File Loading -->
-                        <Button Content="Load Feather Data" Width="150" Height="35" Click="LoadFeatherDataButton_Click"/>
-                        <TextBlock Text="No file loaded." x:Name="FileLoadSummaryText" Margin="0,10,0,0" TextWrapping="Wrap"/>
-                           
-                    </StackPanel>
-                </Border>
+                            <Button Content="Load Feather Data"
+                                    Width="150"
+                                    Height="35"
+                                    Command="{Binding LoadFeatherDataCommand}" />
 
+                            <TextBlock Text="{Binding FileLoadSummary}"
+                                       Margin="0,10,0,0"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
 
-                    <!-- Middle Section: Global Settings -->
+                    <!-- Global Settings -->
                     <Border Grid.Row="2" BorderBrush="LightGray" BorderThickness="1" CornerRadius="4" Padding="10">
                         <StackPanel VerticalAlignment="Top">
                             <TextBlock Text="Global Settings" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
@@ -104,22 +108,28 @@
                                 <TextBlock Text="α = 0.05 (Fixed)" />
                             </StackPanel>
 
-
                         </StackPanel>
                     </Border>
 
-                    <!-- Bottom Section: Export Settings -->
+                    <!-- Export Options -->
                     <Border Grid.Row="3" BorderBrush="LightGray" BorderThickness="1" CornerRadius="4" Padding="10">
                         <StackPanel VerticalAlignment="Top">
                             <TextBlock Text="Export Options" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
 
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0">
-                                <Button x:Name="ExportAllResults" Content="Export All Results (md)" Width="Auto" Height="30" Click="ExportMarkdownButton_Click" Margin="0,0,10,0"/>
-                                <Button x:Name="ExportECDFPlots" Content="Export ECDF Plots (png)" Width="Auto" Height="30" Click="ExportPlotImagesButton_Click"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <Button Content="Export All Results (md)"
+                                        Height="30"
+                                        Command="{Binding ExportMarkdownCommand}"
+                                        Margin="0,0,10,0"/>
+
+                                <Button Content="Export ECDF Plots (png)"
+                                        Height="30"
+                                        Command="{Binding ExportPlotsCommand}" />
                             </StackPanel>
                         </StackPanel>
                     </Border>
 
+                    <!-- Calls & Puts Grids -->
                     <Border Grid.Row="4" BorderBrush="LightGray" BorderThickness="1" CornerRadius="4" Padding="10">
                         <Grid Margin="10">
                             <Grid.ColumnDefinitions>
@@ -131,67 +141,68 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
-                            <!-- Calls Label -->
                             <TextBlock Grid.Column="0" Grid.Row="0"
-                                    Text="Call Data"
-                                    FontSize="16"
-                                    FontWeight="Bold"
-                                    Foreground="#FF2C3E50"
-                                    HorizontalAlignment="Center"
-                                    Margin="0,0,0,5" />
+                                       Text="Call Data"
+                                       FontSize="16"
+                                       FontWeight="Bold"
+                                       Foreground="#FF2C3E50"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,5" />
 
-                            <!-- Puts Label -->
                             <TextBlock Grid.Column="1" Grid.Row="0"
-                                    Text="Put Data"
-                                    FontSize="16"
-                                    FontWeight="Bold"
-                                    Foreground="#FF2C3E50"
-                                    HorizontalAlignment="Center"
-                                    Margin="0,0,0,5" />
+                                       Text="Put Data"
+                                       FontSize="16"
+                                       FontWeight="Bold"
+                                       Foreground="#FF2C3E50"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,5" />
 
+                            <!-- Calls -->
+                            <DataGrid 
+                                Grid.Column="0" Grid.Row="1"
+                                AutoGenerateColumns="False"
+                                AutoGeneratingColumn="MarketDataGridAutoGeneratingColumn"
+                                ItemsSource="{Binding Calls}"
+                                CanUserAddRows="False"
+                                Margin="0,0,10,0">
 
-                            <!-- Calls DataGrid -->
-                            <DataGrid x:Name="CallsDataGrid" 
-                                    Grid.Column="0" Grid.Row="1"
-                                    AutoGenerateColumns="False"
-                                    AutoGeneratingColumn="MarketDataGrid_AutoGeneratingColumn"
-                                    CanUserAddRows="False"
-                                    Margin="0,0,10,0">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Symbol" Binding="{Binding Symbol}" IsReadOnly="True"/>
-                                    <DataGridTextColumn Header="DateTime" Binding="{Binding DateTime, StringFormat=MM/dd/yyyy HH:mm:ss.ffffff}" IsReadOnly="True"/>
-                                    <DataGridTextColumn Header="MMID" Binding="{Binding MMID}" IsReadOnly="True"/>
-                                    <DataGridCheckBoxColumn Header="BidAsk" Binding="{Binding BidAsk}" IsReadOnly="True"/>
-                                    <DataGridTextColumn Header="Price" Binding="{Binding Price}" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="Symbol" Binding="{Binding Symbol}" IsReadOnly="True" />
+                                    <DataGridTextColumn Header="DateTime" Binding="{Binding DateTime, StringFormat=MM/dd/yyyy HH:mm:ss.ffffff}" IsReadOnly="True" />
+                                    <DataGridTextColumn Header="MMID" Binding="{Binding MMID}" IsReadOnly="True" />
+                                    <DataGridCheckBoxColumn Header="BidAsk" Binding="{Binding BidAsk}" IsReadOnly="True" />
+                                    <DataGridTextColumn Header="Price" Binding="{Binding Price}" IsReadOnly="True" />
                                 </DataGrid.Columns>
                             </DataGrid>
 
-                            <!-- Puts DataGrid -->
-                            <DataGrid x:Name="PutsDataGrid" 
-                                    Grid.Column="1" Grid.Row="1"
-                                    AutoGenerateColumns="False"
-                                    AutoGeneratingColumn="MarketDataGrid_AutoGeneratingColumn"
-                                    CanUserAddRows="False">
+                            <!-- Puts -->
+                            <DataGrid 
+                                Grid.Column="1" Grid.Row="1"
+                                ItemsSource="{Binding Puts}"
+                                AutoGenerateColumns="False"
+                                AutoGeneratingColumn="MarketDataGridAutoGeneratingColumn"
+                                CanUserAddRows="False">
+
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Symbol" Binding="{Binding Symbol}" IsReadOnly="True"/>
-                                    <DataGridTextColumn Header="DateTime" Binding="{Binding DateTime, StringFormat=MM/dd/yyyy HH:mm:ss.ffffff}" IsReadOnly="True"/>
-                                    <DataGridTextColumn Header="MMID" Binding="{Binding MMID}" IsReadOnly="True"/>
-                                    <DataGridCheckBoxColumn Header="BidAsk" Binding="{Binding BidAsk}" IsReadOnly="True"/>
-                                    <DataGridTextColumn Header="Price" Binding="{Binding Price}" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="Symbol" Binding="{Binding Symbol}" IsReadOnly="True" />
+                                    <DataGridTextColumn Header="DateTime" Binding="{Binding DateTime, StringFormat=MM/dd/yyyy HH:mm:ss.ffffff}" IsReadOnly="True" />
+                                    <DataGridTextColumn Header="MMID" Binding="{Binding MMID}" IsReadOnly="True" />
+                                    <DataGridCheckBoxColumn Header="BidAsk" Binding="{Binding BidAsk}" IsReadOnly="True" />
+                                    <DataGridTextColumn Header="Price" Binding="{Binding Price}" IsReadOnly="True" />
                                 </DataGrid.Columns>
                             </DataGrid>
 
                         </Grid>
                     </Border>
+
                 </Grid>
             </Border>
 
             <!-- Right Panel -->
-            <ContentControl Name="RightPanelContainer" Grid.Column="1" Margin="10" />
+            <ContentControl Name="RightPanelContainer" Grid.Column="1" Margin="10" Content="{Binding RightPanelContainer}"/>
 
         </Grid>
     </DockPanel>
 
-    
-
 </Window>
+

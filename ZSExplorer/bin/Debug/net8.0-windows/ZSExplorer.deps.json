@@ -11,6 +11,9 @@
           "Accord.Statistics": "3.8.0",
           "Apache.Arrow": "20.0.0",
           "MathNet.Numerics": "5.0.0",
+          "Metalama.Framework": "2025.1.17",
+          "Metalama.Patterns.Observability": "2025.1.17",
+          "Metalama.Patterns.Wpf": "2025.1.17",
           "Microsoft.Data.Analysis": "0.22.2",
           "OxyPlot.SkiaSharp": "2.2.0",
           "OxyPlot.Wpf": "2.2.0"
@@ -110,6 +113,76 @@
           }
         }
       },
+      "Metalama.Compiler/2025.1.11": {},
+      "Metalama.Framework/2025.1.17": {
+        "dependencies": {
+          "Metalama.Compiler": "2025.1.11",
+          "Metalama.Framework.Redist": "2025.1.17",
+          "Microsoft.CSharp": "4.7.0"
+        }
+      },
+      "Metalama.Framework.Redist/2025.1.17": {
+        "dependencies": {
+          "System.Collections.Immutable": "8.0.0"
+        },
+        "runtime": {
+          "lib/net6.0/Metalama.Framework.dll": {
+            "assemblyVersion": "2025.1.17.0",
+            "fileVersion": "2025.1.17.0"
+          },
+          "lib/net6.0/Metalama.SystemTypes.dll": {
+            "assemblyVersion": "2025.1.17.0",
+            "fileVersion": "2025.1.17.0"
+          }
+        }
+      },
+      "Metalama.Patterns.Contracts/2025.1.17": {
+        "dependencies": {
+          "Metalama.Framework": "2025.1.17"
+        },
+        "runtime": {
+          "lib/net6.0/Metalama.Patterns.Contracts.dll": {
+            "assemblyVersion": "2025.1.17.0",
+            "fileVersion": "2025.1.17.0"
+          }
+        }
+      },
+      "Metalama.Patterns.Immutability/2025.1.17": {
+        "dependencies": {
+          "Metalama.Framework": "2025.1.17"
+        },
+        "runtime": {
+          "lib/net6.0/Metalama.Patterns.Immutability.dll": {
+            "assemblyVersion": "2025.1.17.0",
+            "fileVersion": "2025.1.17.0"
+          }
+        }
+      },
+      "Metalama.Patterns.Observability/2025.1.17": {
+        "dependencies": {
+          "Metalama.Framework": "2025.1.17",
+          "Metalama.Patterns.Immutability": "2025.1.17"
+        },
+        "runtime": {
+          "lib/net6.0/Metalama.Patterns.Observability.dll": {
+            "assemblyVersion": "2025.1.17.0",
+            "fileVersion": "2025.1.17.0"
+          }
+        }
+      },
+      "Metalama.Patterns.Wpf/2025.1.17": {
+        "dependencies": {
+          "Metalama.Framework": "2025.1.17",
+          "Metalama.Patterns.Contracts": "2025.1.17"
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Metalama.Patterns.Wpf.dll": {
+            "assemblyVersion": "2025.1.17.0",
+            "fileVersion": "2025.1.17.0"
+          }
+        }
+      },
+      "Microsoft.CSharp/4.7.0": {},
       "Microsoft.Data.Analysis/0.22.2": {
         "dependencies": {
           "Apache.Arrow": "20.0.0",
@@ -304,6 +377,62 @@
       "sha512": "sha512-pg1W2VwaEQMAiTpGK840hZgzavnqjlCMTVSbtVCXVyT+7AX4mc1o89SPv4TBlAjhgCOo9c1Y+jZ5m3ti2YgGgA==",
       "path": "mathnet.numerics/5.0.0",
       "hashPath": "mathnet.numerics.5.0.0.nupkg.sha512"
+    },
+    "Metalama.Compiler/2025.1.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-diOgtLmIWyOO15IQ0ZSuiOe6uWhZpKjlcl7owAseRifJ54spKEYOneOIbhSO59yx4Y10VG43bgASloUAFhjW4w==",
+      "path": "metalama.compiler/2025.1.11",
+      "hashPath": "metalama.compiler.2025.1.11.nupkg.sha512"
+    },
+    "Metalama.Framework/2025.1.17": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-eCC+TyT7XsFTovv11E9pnFLkeB3RACFJDjfG3sPW4K0KiII1hvdJpVbTXmEQbNWNxZGrlKVjZIPUEva0kCIIXw==",
+      "path": "metalama.framework/2025.1.17",
+      "hashPath": "metalama.framework.2025.1.17.nupkg.sha512"
+    },
+    "Metalama.Framework.Redist/2025.1.17": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-rMCjnYrB/tx2pV4uKYgvFk0tz2Qkc6MEmsolgjGOGMUvVkPPPn6NBJ8r2fuIluujODXKbAZCBTrl/iAzErAGBw==",
+      "path": "metalama.framework.redist/2025.1.17",
+      "hashPath": "metalama.framework.redist.2025.1.17.nupkg.sha512"
+    },
+    "Metalama.Patterns.Contracts/2025.1.17": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-P0nVXc6B+nBgP6IyzQldFXJW/+uXqf2ztcli9SwUOwYpYH85ZgtDhVZa3ZMDVqEyD3JUWFpUaPEKTQ83HNUu4A==",
+      "path": "metalama.patterns.contracts/2025.1.17",
+      "hashPath": "metalama.patterns.contracts.2025.1.17.nupkg.sha512"
+    },
+    "Metalama.Patterns.Immutability/2025.1.17": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-DC1I/OLW2Qak5AZ0fJLzY1KtKaXVgAL8fgZBw54OP2csKEtqMdLDNwaNq7KK50MFzBS040jPiK5p0l5hvrLg/g==",
+      "path": "metalama.patterns.immutability/2025.1.17",
+      "hashPath": "metalama.patterns.immutability.2025.1.17.nupkg.sha512"
+    },
+    "Metalama.Patterns.Observability/2025.1.17": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-vYMsoExGfoBnzFTupOAR5YY305th+muUg3Z49rQF+Wxscm7ILWc09TzioTetGWYxae2KJcjhfbJ/F6UmECB9Vw==",
+      "path": "metalama.patterns.observability/2025.1.17",
+      "hashPath": "metalama.patterns.observability.2025.1.17.nupkg.sha512"
+    },
+    "Metalama.Patterns.Wpf/2025.1.17": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-HriP3FV4GZmuXOJPYdmSEhbYYHcEXIStBN50N0esDza36/2gboVasiYH3TpVYxvHs/g0PG0zJRVKMTkyFnUASw==",
+      "path": "metalama.patterns.wpf/2025.1.17",
+      "hashPath": "metalama.patterns.wpf.2025.1.17.nupkg.sha512"
+    },
+    "Microsoft.CSharp/4.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pTj+D3uJWyN3My70i2Hqo+OXixq3Os2D1nJ2x92FFo6sk8fYS1m1WLNTs0Dc1uPaViH0YvEEwvzddQ7y4rhXmA==",
+      "path": "microsoft.csharp/4.7.0",
+      "hashPath": "microsoft.csharp.4.7.0.nupkg.sha512"
     },
     "Microsoft.Data.Analysis/0.22.2": {
       "type": "package",

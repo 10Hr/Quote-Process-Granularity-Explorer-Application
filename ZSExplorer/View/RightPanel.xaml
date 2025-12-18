@@ -22,13 +22,14 @@
 
                     <!-- Left side: Symbol and option details -->
                     <StackPanel Orientation="Vertical" Grid.Column="0">
-                        <TextBlock x:Name="ContractSymbolText" 
-                                   Text="CONTRACT SYMBOL" 
+                        <TextBlock x:Name="ContractSymbolTextBox" 
+                                   TextAlignment="Left"
+                                   Text="{Binding ContractSymbolText}" 
                                    FontWeight="Bold" 
                                    FontSize="16" 
                                    Foreground="White" />
-                        <TextBlock x:Name="OptionDetailsText" 
-                                   Text="Underlying | Expiration | Strike" 
+                        <TextBlock x:Name="OptionDetailsTextBox" 
+                                   Text="{Binding OptionDetailsText}" 
                                    FontSize="12" 
                                    Foreground="White" 
                                    Margin="0,4,0,0" />
@@ -38,12 +39,12 @@
                     <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center">
 
                         <!-- Status indicator -->
-                        <Ellipse x:Name="StatusIndicator" Width="14" Height="14" Fill="Red" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <Ellipse x:Name="StatusIndicator" Width="14" Height="14" Fill="{Binding StatusIndicator}" VerticalAlignment="Center" Margin="0,0,10,0"/>
 
                         <!-- Remove button -->
                         <Button x:Name="RemoveButton" Content="Remove" Width="Auto" Height="24" FontWeight="Bold" 
                                 Foreground="White" Background="{StaticResource PrimaryPressedBrush}" 
-                                BorderThickness="0" Cursor="Hand" Click="RemoveKsTest"/>
+                                BorderThickness="0" Cursor="Hand" Command="{Binding RemoveKsTestCommand}"/>
                     </StackPanel>
 
                 </Grid>
@@ -67,10 +68,10 @@
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,5,0,0">
                         <Slider x:Name="TimeWindowSlider"
                                 Width="300"
-                                Minimum="0"
-                                Maximum="100"
+                                Minimum="{Binding TimeWindowSliderMinimum}"
+                                Maximum="{Binding TimeWindowSliderMaximum}"
+                                Value="{Binding TimeWindowSliderValue}"
                                 TickFrequency="1"
-                                
                                 IsMoveToPointEnabled="True"
                                 ValueChanged="TimeWindowSlider_ValueChanged"
                                 PreviewMouseDown="TimeWindowSlider_PreviewMouseDown"/>
@@ -80,15 +81,15 @@
                                 VerticalContentAlignment="Center"
                                 HorizontalContentAlignment="Center"
                                 TextChanged="MicrosecondInputBox_TextChanged"
-                                Text="0"/>
+                                Text="{Binding MicrosecondInputBoxText}"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Left">
-                        <TextBlock x:Name="TimeLabel0" Text="0s" Width="60" />
-                        <TextBlock x:Name="TimeLabel25" Text="..." Width="60" TextAlignment="Center" />
-                        <TextBlock x:Name="TimeLabel50" Text="..." Width="60" TextAlignment="Center" />
-                        <TextBlock x:Name="TimeLabel75" Text="..." Width="60" TextAlignment="Center" />
-                        <TextBlock x:Name="TimeLabel100" Text="..." Width="60" TextAlignment="Right" />
+                        <TextBlock x:Name="TimeLabel0" Width="60" Text="{Binding TimeLabel0Text}"/>
+                        <TextBlock x:Name="TimeLabel25" Width="60" TextAlignment="Center" Text="{Binding TimeLabel25Text}"/>
+                        <TextBlock x:Name="TimeLabel50" Width="60" TextAlignment="Center" Text="{Binding TimeLabel50Text}"/>
+                        <TextBlock x:Name="TimeLabel75" Width="60" TextAlignment="Center" Text="{Binding TimeLabel75Text}"/>
+                        <TextBlock x:Name="TimeLabel100" Width="60" TextAlignment="Right" Text="{Binding TimeLabel100Text}"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="10">
@@ -99,17 +100,18 @@
                             Checked="BidOnlyCheckbox_Checked"
                             Unchecked="BidOnlyCheckbox_Unchecked" />
                         <CheckBox 
-                            x:Name="AnalyzeAllCheckbox" 
-                            Content="Analyze All Call or Put Options" 
-                            Margin="5" 
-                            Checked="AnalyzeAllCheckbox_Checked" 
-                            Unchecked="AnalyzeAllCheckbox_Unchecked" />
+                                x:Name="AnalyzeAllCheckbox" 
+                                Content="Analyze All Call or Put Options" 
+                                Margin="5"
+                                Command="{Binding ToggleAnalyzeAllCommand}" 
+                                IsChecked="{Binding AnalyzeAllOptions}" />
                     </StackPanel>
 
                     <TextBlock x:Name="TimeWindowValueText"
                             FontWeight="SemiBold"
                             Margin="0,5,0,0"
-                            FontSize="12"/>
+                            FontSize="12"
+                            Text="{Binding TimeWindowValueText}"/>
                 </StackPanel>
 
                     <!-- Sample Statistics Grid -->

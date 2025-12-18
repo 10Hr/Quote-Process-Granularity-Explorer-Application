@@ -8,5 +8,8 @@ namespace ZSExplorer
         public List<string> MMID { get; } = new();
         public List<bool> BidAsk { get; } = new();
         public List<long> Price { get; } = new();
+
     }
+
+    
 }

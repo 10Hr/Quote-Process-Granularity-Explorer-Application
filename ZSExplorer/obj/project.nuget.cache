@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "lT36v3sicKo=",
+  "dgSpecHash": "EKEcFM8LOc0=",
   "success": true,
-  "projectFilePath": "C:\\Users\\tmccl\\Desktop\\ZeroPlusProject\\VSCODE VERSION\\ZSExplorer\\ZSExplorer.csproj",
+  "projectFilePath": "C:\\Users\\tmccl\\Desktop\\Quant Dev Projects\\ZSExplorer\\ZSExplorer\\ZSExplorer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\tmccl\\.nuget\\packages\\accord\\3.8.0\\accord.3.8.0.nupkg.sha512",
     "C:\\Users\\tmccl\\.nuget\\packages\\accord.math\\3.8.0\\accord.math.3.8.0.nupkg.sha512",
@@ -12,6 +12,14 @@
     "C:\\Users\\tmccl\\.nuget\\packages\\harfbuzzsharp.nativeassets.macos\\7.3.0.2\\harfbuzzsharp.nativeassets.macos.7.3.0.2.nupkg.sha512",
     "C:\\Users\\tmccl\\.nuget\\packages\\harfbuzzsharp.nativeassets.win32\\7.3.0.2\\harfbuzzsharp.nativeassets.win32.7.3.0.2.nupkg.sha512",
     "C:\\Users\\tmccl\\.nuget\\packages\\mathnet.numerics\\5.0.0\\mathnet.numerics.5.0.0.nupkg.sha512",
+    "C:\\Users\\tmccl\\.nuget\\packages\\metalama.compiler\\2025.1.11\\metalama.compiler.2025.1.11.nupkg.sha512",
+    "C:\\Users\\tmccl\\.nuget\\packages\\metalama.framework\\2025.1.17\\metalama.framework.2025.1.17.nupkg.sha512",
+    "C:\\Users\\tmccl\\.nuget\\packages\\metalama.framework.redist\\2025.1.17\\metalama.framework.redist.2025.1.17.nupkg.sha512",
+    "C:\\Users\\tmccl\\.nuget\\packages\\metalama.patterns.contracts\\2025.1.17\\metalama.patterns.contracts.2025.1.17.nupkg.sha512",
+    "C:\\Users\\tmccl\\.nuget\\packages\\metalama.patterns.immutability\\2025.1.17\\metalama.patterns.immutability.2025.1.17.nupkg.sha512",
+    "C:\\Users\\tmccl\\.nuget\\packages\\metalama.patterns.observability\\2025.1.17\\metalama.patterns.observability.2025.1.17.nupkg.sha512",
+    "C:\\Users\\tmccl\\.nuget\\packages\\metalama.patterns.wpf\\2025.1.17\\metalama.patterns.wpf.2025.1.17.nupkg.sha512",
+    "C:\\Users\\tmccl\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\tmccl\\.nuget\\packages\\microsoft.data.analysis\\0.22.2\\microsoft.data.analysis.0.22.2.nupkg.sha512",
     "C:\\Users\\tmccl\\.nuget\\packages\\microsoft.ml.dataview\\4.0.2\\microsoft.ml.dataview.4.0.2.nupkg.sha512",
     "C:\\Users\\tmccl\\.nuget\\packages\\oxyplot.core\\2.2.0\\oxyplot.core.2.2.0.nupkg.sha512",
@@ -24,10 +32,7 @@
     "C:\\Users\\tmccl\\.nuget\\packages\\skiasharp.nativeassets.win32\\2.88.8\\skiasharp.nativeassets.win32.2.88.8.nupkg.sha512",
     "C:\\Users\\tmccl\\.nuget\\packages\\system.collections.immutable\\8.0.0\\system.collections.immutable.8.0.0.nupkg.sha512",
     "C:\\Users\\tmccl\\.nuget\\packages\\system.memory\\4.6.0\\system.memory.4.6.0.nupkg.sha512",
-    "C:\\Users\\tmccl\\.nuget\\packages\\system.numerics.tensors\\9.0.0\\system.numerics.tensors.9.0.0.nupkg.sha512",
-    "C:\\Users\\tmccl\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\8.0.8\\microsoft.netcore.app.runtime.win-x64.8.0.8.nupkg.sha512",
-    "C:\\Users\\tmccl\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\8.0.8\\microsoft.windowsdesktop.app.runtime.win-x64.8.0.8.nupkg.sha512",
-    "C:\\Users\\tmccl\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\8.0.8\\microsoft.aspnetcore.app.runtime.win-x64.8.0.8.nupkg.sha512"
+    "C:\\Users\\tmccl\\.nuget\\packages\\system.numerics.tensors\\9.0.0\\system.numerics.tensors.9.0.0.nupkg.sha512"
   ],
   "logs": []
 }

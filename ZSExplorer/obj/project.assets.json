@@ -134,6 +134,131 @@
           }
         }
       },
+      "Metalama.Compiler/2025.1.11": {
+        "type": "package",
+        "contentFiles": {
+          "contentFiles/any/any/_._": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          }
+        },
+        "build": {
+          "buildTransitive/Metalama.Compiler.props": {},
+          "buildTransitive/Metalama.Compiler.targets": {}
+        },
+        "buildMultiTargeting": {
+          "buildMultiTargeting/Metalama.Compiler.props": {}
+        }
+      },
+      "Metalama.Framework/2025.1.17": {
+        "type": "package",
+        "dependencies": {
+          "Metalama.Compiler": "2025.1.11",
+          "Metalama.Framework.Redist": "2025.1.17",
+          "Microsoft.CSharp": "4.7.0"
+        },
+        "build": {
+          "buildTransitive/Metalama.Framework.props": {},
+          "buildTransitive/Metalama.Framework.targets": {}
+        }
+      },
+      "Metalama.Framework.Redist/2025.1.17": {
+        "type": "package",
+        "dependencies": {
+          "System.Collections.Immutable": "6.0.0"
+        },
+        "compile": {
+          "lib/net6.0/Metalama.Framework.dll": {
+            "related": ".xml"
+          },
+          "lib/net6.0/Metalama.SystemTypes.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/Metalama.Framework.dll": {
+            "related": ".xml"
+          },
+          "lib/net6.0/Metalama.SystemTypes.dll": {}
+        }
+      },
+      "Metalama.Patterns.Contracts/2025.1.17": {
+        "type": "package",
+        "dependencies": {
+          "Metalama.Framework": "2025.1.17"
+        },
+        "compile": {
+          "lib/net6.0/Metalama.Patterns.Contracts.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Metalama.Patterns.Contracts.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Metalama.Patterns.Immutability/2025.1.17": {
+        "type": "package",
+        "dependencies": {
+          "Metalama.Framework": "2025.1.17"
+        },
+        "compile": {
+          "lib/net6.0/Metalama.Patterns.Immutability.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Metalama.Patterns.Immutability.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Metalama.Patterns.Observability/2025.1.17": {
+        "type": "package",
+        "dependencies": {
+          "Metalama.Framework": "2025.1.17",
+          "Metalama.Patterns.Immutability": "2025.1.17"
+        },
+        "compile": {
+          "lib/net6.0/Metalama.Patterns.Observability.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Metalama.Patterns.Observability.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Metalama.Patterns.Wpf/2025.1.17": {
+        "type": "package",
+        "dependencies": {
+          "Metalama.Framework": "2025.1.17",
+          "Metalama.Patterns.Contracts": "2025.1.17"
+        },
+        "compile": {
+          "lib/net6.0-windows7.0/Metalama.Patterns.Wpf.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Metalama.Patterns.Wpf.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WPF"
+        ]
+      },
+      "Microsoft.CSharp/4.7.0": {
+        "type": "package",
+        "compile": {
+          "ref/netcoreapp2.0/_._": {}
+        },
+        "runtime": {
+          "lib/netcoreapp2.0/_._": {}
+        }
+      },
       "Microsoft.Data.Analysis/0.22.2": {
         "type": "package",
         "dependencies": {
@@ -309,324 +434,6 @@
             "assetType": "native",
             "rid": "win-x86"
           }
-        }
-      },
-      "System.Collections.Immutable/8.0.0": {
-        "type": "package",
-        "compile": {
-          "lib/net8.0/System.Collections.Immutable.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net8.0/System.Collections.Immutable.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net6.0/_._": {}
-        }
-      },
-      "System.Memory/4.6.0": {
-        "type": "package",
-        "compile": {
-          "lib/netcoreapp2.1/_._": {}
-        },
-        "runtime": {
-          "lib/netcoreapp2.1/_._": {}
-        }
-      },
-      "System.Numerics.Tensors/9.0.0": {
-        "type": "package",
-        "compile": {
-          "lib/net8.0/System.Numerics.Tensors.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net8.0/System.Numerics.Tensors.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      }
-    },
-    "net8.0-windows7.0/win-x64": {
-      "Accord/3.8.0": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/Accord.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/netstandard2.0/Accord.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "build/Accord.targets": {}
-        }
-      },
-      "Accord.Math/3.8.0": {
-        "type": "package",
-        "dependencies": {
-          "Accord": "3.8.0"
-        },
-        "compile": {
-          "lib/netstandard2.0/Accord.Math.Core.dll": {
-            "related": ".xml"
-          },
-          "lib/netstandard2.0/Accord.Math.dll": {
-            "related": ".Core.xml;.xml"
-          }
-        },
-        "runtime": {
-          "lib/netstandard2.0/Accord.Math.Core.dll": {
-            "related": ".xml"
-          },
-          "lib/netstandard2.0/Accord.Math.dll": {
-            "related": ".Core.xml;.xml"
-          }
-        }
-      },
-      "Accord.Statistics/3.8.0": {
-        "type": "package",
-        "dependencies": {
-          "Accord": "3.8.0",
-          "Accord.Math": "3.8.0"
-        },
-        "compile": {
-          "lib/netstandard2.0/Accord.Statistics.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/netstandard2.0/Accord.Statistics.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "Apache.Arrow/20.0.0": {
-        "type": "package",
-        "compile": {
-          "lib/net8.0/Apache.Arrow.dll": {}
-        },
-        "runtime": {
-          "lib/net8.0/Apache.Arrow.dll": {}
-        }
-      },
-      "HarfBuzzSharp/7.3.0.2": {
-        "type": "package",
-        "dependencies": {
-          "HarfBuzzSharp.NativeAssets.Win32": "7.3.0.2",
-          "HarfBuzzSharp.NativeAssets.macOS": "7.3.0.2"
-        },
-        "compile": {
-          "lib/net6.0/HarfBuzzSharp.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net6.0/HarfBuzzSharp.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "HarfBuzzSharp.NativeAssets.macOS/7.3.0.2": {
-        "type": "package",
-        "compile": {
-          "lib/net6.0/_._": {}
-        },
-        "runtime": {
-          "lib/net6.0/_._": {}
-        }
-      },
-      "HarfBuzzSharp.NativeAssets.Win32/7.3.0.2": {
-        "type": "package",
-        "compile": {
-          "lib/net6.0/_._": {}
-        },
-        "runtime": {
-          "lib/net6.0/_._": {}
-        },
-        "native": {
-          "runtimes/win-x64/native/libHarfBuzzSharp.dll": {}
-        }
-      },
-      "MathNet.Numerics/5.0.0": {
-        "type": "package",
-        "compile": {
-          "lib/net6.0/MathNet.Numerics.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net6.0/MathNet.Numerics.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "Microsoft.Data.Analysis/0.22.2": {
-        "type": "package",
-        "dependencies": {
-          "Apache.Arrow": "14.0.2",
-          "Microsoft.ML.DataView": "4.0.2",
-          "System.Numerics.Tensors": "9.0.0"
-        },
-        "compile": {
-          "lib/net8.0/Microsoft.Data.Analysis.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net8.0/Microsoft.Data.Analysis.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "Microsoft.ML.DataView/4.0.2": {
-        "type": "package",
-        "dependencies": {
-          "System.Collections.Immutable": "8.0.0",
-          "System.Memory": "4.6.0"
-        },
-        "compile": {
-          "lib/netstandard2.0/Microsoft.ML.DataView.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.ML.DataView.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "OxyPlot.Core/2.2.0": {
-        "type": "package",
-        "compile": {
-          "lib/net8.0/OxyPlot.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net8.0/OxyPlot.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "OxyPlot.SkiaSharp/2.2.0": {
-        "type": "package",
-        "dependencies": {
-          "OxyPlot.Core": "2.2.0",
-          "SkiaSharp": "2.88.8",
-          "SkiaSharp.HarfBuzz": "2.88.8"
-        },
-        "compile": {
-          "lib/net8.0/OxyPlot.SkiaSharp.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net8.0/OxyPlot.SkiaSharp.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "OxyPlot.Wpf/2.2.0": {
-        "type": "package",
-        "dependencies": {
-          "OxyPlot.Core": "2.2.0",
-          "OxyPlot.Wpf.Shared": "2.2.0"
-        },
-        "compile": {
-          "lib/net8.0-windows7.0/OxyPlot.Wpf.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net8.0-windows7.0/OxyPlot.Wpf.dll": {
-            "related": ".xml"
-          }
-        },
-        "frameworkReferences": [
-          "Microsoft.WindowsDesktop.App.WPF"
-        ]
-      },
-      "OxyPlot.Wpf.Shared/2.2.0": {
-        "type": "package",
-        "dependencies": {
-          "OxyPlot.Core": "2.2.0"
-        },
-        "compile": {
-          "lib/net8.0-windows7.0/OxyPlot.Wpf.Shared.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net8.0-windows7.0/OxyPlot.Wpf.Shared.dll": {
-            "related": ".xml"
-          }
-        },
-        "frameworkReferences": [
-          "Microsoft.WindowsDesktop.App.WPF"
-        ]
-      },
-      "SkiaSharp/2.88.8": {
-        "type": "package",
-        "dependencies": {
-          "SkiaSharp.NativeAssets.Win32": "2.88.8",
-          "SkiaSharp.NativeAssets.macOS": "2.88.8"
-        },
-        "compile": {
-          "lib/net6.0/SkiaSharp.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net6.0/SkiaSharp.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "SkiaSharp.HarfBuzz/2.88.8": {
-        "type": "package",
-        "dependencies": {
-          "HarfBuzzSharp": "7.3.0.2",
-          "SkiaSharp": "2.88.8"
-        },
-        "compile": {
-          "lib/net6.0/SkiaSharp.HarfBuzz.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net6.0/SkiaSharp.HarfBuzz.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "SkiaSharp.NativeAssets.macOS/2.88.8": {
-        "type": "package",
-        "compile": {
-          "lib/net6.0/_._": {}
-        },
-        "runtime": {
-          "lib/net6.0/_._": {}
-        }
-      },
-      "SkiaSharp.NativeAssets.Win32/2.88.8": {
-        "type": "package",
-        "compile": {
-          "lib/net6.0/_._": {}
-        },
-        "runtime": {
-          "lib/net6.0/_._": {}
-        },
-        "native": {
-          "runtimes/win-x64/native/libSkiaSharp.dll": {}
         }
       },
       "System.Collections.Immutable/8.0.0": {
@@ -951,6 +758,583 @@
         "lib/netstandard2.0/MathNet.Numerics.xml",
         "mathnet.numerics.5.0.0.nupkg.sha512",
         "mathnet.numerics.nuspec"
+      ]
+    },
+    "Metalama.Compiler/2025.1.11": {
+      "sha512": "diOgtLmIWyOO15IQ0ZSuiOe6uWhZpKjlcl7owAseRifJ54spKEYOneOIbhSO59yx4Y10VG43bgASloUAFhjW4w==",
+      "type": "package",
+      "path": "metalama.compiler/2025.1.11",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "README.md",
+        "THIRD-PARTY-NOTICES.txt",
+        "analyzers/dotnet/cs/Metalama.Compiler.Interface.dll",
+        "build/Metalama.Compiler.props",
+        "build/Metalama.Compiler.targets",
+        "buildMultiTargeting/Metalama.Compiler.props",
+        "buildTransitive/Metalama.Compiler.props",
+        "buildTransitive/Metalama.Compiler.targets",
+        "content/build/Metalama.Compiler.props",
+        "content/build/Metalama.Compiler.targets",
+        "content/buildMultiTargeting/Metalama.Compiler.props",
+        "contentFiles/any/net472/build/Metalama.Compiler.props",
+        "contentFiles/any/net472/build/Metalama.Compiler.targets",
+        "contentFiles/any/net472/buildMultiTargeting/Metalama.Compiler.props",
+        "contentFiles/any/net8.0/build/Metalama.Compiler.props",
+        "contentFiles/any/net8.0/build/Metalama.Compiler.targets",
+        "contentFiles/any/net8.0/buildMultiTargeting/Metalama.Compiler.props",
+        "contentFiles/any/net9.0/build/Metalama.Compiler.props",
+        "contentFiles/any/net9.0/build/Metalama.Compiler.targets",
+        "contentFiles/any/net9.0/buildMultiTargeting/Metalama.Compiler.props",
+        "metalama.compiler.2025.1.11.nupkg.sha512",
+        "metalama.compiler.nuspec",
+        "metalama.png",
+        "sdkAnalyzers/Microsoft.AspNetCore.Analyzers.dll",
+        "sdkAnalyzers/Microsoft.AspNetCore.App.Analyzers.dll",
+        "sdkAnalyzers/Microsoft.AspNetCore.App.CodeFixes.dll",
+        "sdkAnalyzers/Microsoft.AspNetCore.Components.Analyzers.dll",
+        "sdkAnalyzers/Microsoft.AspNetCore.Components.SdkAnalyzers.dll",
+        "sdkAnalyzers/Microsoft.AspNetCore.Http.RequestDelegateGenerator.dll",
+        "sdkAnalyzers/Microsoft.AspNetCore.Mvc.Analyzers.dll",
+        "sdkAnalyzers/Microsoft.AspNetCore.Mvc.Api.Analyzers.dll",
+        "sdkAnalyzers/Microsoft.AspNetCore.Razor.Utilities.Shared.dll",
+        "sdkAnalyzers/Microsoft.CodeAnalysis.CSharp.NetAnalyzers.dll",
+        "sdkAnalyzers/Microsoft.CodeAnalysis.NetAnalyzers.dll",
+        "sdkAnalyzers/Microsoft.CodeAnalysis.Razor.Compiler.dll",
+        "sdkAnalyzers/Microsoft.CodeAnalysis.VisualBasic.NetAnalyzers.dll",
+        "sdkAnalyzers/Microsoft.Extensions.Configuration.Binder.SourceGeneration.dll",
+        "sdkAnalyzers/Microsoft.Extensions.Logging.Generators.dll",
+        "sdkAnalyzers/Microsoft.Extensions.ObjectPool.dll",
+        "sdkAnalyzers/Microsoft.Extensions.Options.SourceGeneration.dll",
+        "sdkAnalyzers/Microsoft.Interop.ComInterfaceGenerator.dll",
+        "sdkAnalyzers/Microsoft.Interop.JavaScript.JSImportGenerator.dll",
+        "sdkAnalyzers/Microsoft.Interop.LibraryImportGenerator.dll",
+        "sdkAnalyzers/Microsoft.Interop.SourceGeneration.dll",
+        "sdkAnalyzers/System.Text.Json.SourceGeneration.dll",
+        "sdkAnalyzers/System.Text.RegularExpressions.Generator.dll",
+        "sdkAnalyzers/System.Windows.Forms.Analyzers.CSharp.dll",
+        "sdkAnalyzers/System.Windows.Forms.Analyzers.CodeFixes.CSharp.dll",
+        "sdkAnalyzers/System.Windows.Forms.Analyzers.CodeFixes.VisualBasic.dll",
+        "sdkAnalyzers/System.Windows.Forms.Analyzers.VisualBasic.dll",
+        "sdkAnalyzers/System.Windows.Forms.Analyzers.dll",
+        "tasks/net472/Humanizer.dll",
+        "tasks/net472/Metalama.Compiler.Interface.dll",
+        "tasks/net472/Microsoft.Bcl.AsyncInterfaces.dll",
+        "tasks/net472/Microsoft.Build.Tasks.CodeAnalysis.dll",
+        "tasks/net472/Microsoft.CSharp.Core.targets",
+        "tasks/net472/Microsoft.CodeAnalysis.AnalyzerUtilities.dll",
+        "tasks/net472/Microsoft.CodeAnalysis.CSharp.Features.dll",
+        "tasks/net472/Microsoft.CodeAnalysis.CSharp.Scripting.dll",
+        "tasks/net472/Microsoft.CodeAnalysis.CSharp.Workspaces.dll",
+        "tasks/net472/Microsoft.CodeAnalysis.CSharp.dll",
+        "tasks/net472/Microsoft.CodeAnalysis.Elfie.dll",
+        "tasks/net472/Microsoft.CodeAnalysis.ExternalAccess.RazorCompiler.dll",
+        "tasks/net472/Microsoft.CodeAnalysis.Features.dll",
+        "tasks/net472/Microsoft.CodeAnalysis.Scripting.dll",
+        "tasks/net472/Microsoft.CodeAnalysis.VisualBasic.dll",
+        "tasks/net472/Microsoft.CodeAnalysis.Workspaces.dll",
+        "tasks/net472/Microsoft.CodeAnalysis.dll",
+        "tasks/net472/Microsoft.DiaSymReader.Native.amd64.dll",
+        "tasks/net472/Microsoft.DiaSymReader.Native.arm64.dll",
+        "tasks/net472/Microsoft.DiaSymReader.Native.x86.dll",
+        "tasks/net472/Microsoft.DiaSymReader.dll",
+        "tasks/net472/Microsoft.Managed.Core.CurrentVersions.targets",
+        "tasks/net472/Microsoft.Managed.Core.targets",
+        "tasks/net472/Microsoft.VisualBasic.Core.targets",
+        "tasks/net472/Newtonsoft.Json.dll",
+        "tasks/net472/System.Buffers.dll",
+        "tasks/net472/System.Collections.Immutable.dll",
+        "tasks/net472/System.Composition.AttributedModel.dll",
+        "tasks/net472/System.Composition.Convention.dll",
+        "tasks/net472/System.Composition.Hosting.dll",
+        "tasks/net472/System.Composition.Runtime.dll",
+        "tasks/net472/System.Composition.TypedParts.dll",
+        "tasks/net472/System.Memory.dll",
+        "tasks/net472/System.Numerics.Vectors.dll",
+        "tasks/net472/System.Reflection.Metadata.dll",
+        "tasks/net472/System.Runtime.CompilerServices.Unsafe.dll",
+        "tasks/net472/System.Text.Encoding.CodePages.dll",
+        "tasks/net472/System.Threading.Channels.dll",
+        "tasks/net472/System.Threading.Tasks.Extensions.dll",
+        "tasks/net472/System.ValueTuple.dll",
+        "tasks/net472/VBCSCompiler.exe",
+        "tasks/net472/VBCSCompiler.exe.config",
+        "tasks/net472/cs/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net472/cs/Microsoft.CodeAnalysis.CSharp.Scripting.resources.dll",
+        "tasks/net472/cs/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net472/cs/Microsoft.CodeAnalysis.Scripting.resources.dll",
+        "tasks/net472/cs/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net472/cs/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net472/csc.exe",
+        "tasks/net472/csc.exe.config",
+        "tasks/net472/csc.rsp",
+        "tasks/net472/csi.exe",
+        "tasks/net472/csi.exe.config",
+        "tasks/net472/csi.rsp",
+        "tasks/net472/de/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net472/de/Microsoft.CodeAnalysis.CSharp.Scripting.resources.dll",
+        "tasks/net472/de/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net472/de/Microsoft.CodeAnalysis.Scripting.resources.dll",
+        "tasks/net472/de/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net472/de/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net472/es/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net472/es/Microsoft.CodeAnalysis.CSharp.Scripting.resources.dll",
+        "tasks/net472/es/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net472/es/Microsoft.CodeAnalysis.Scripting.resources.dll",
+        "tasks/net472/es/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net472/es/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net472/fr/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net472/fr/Microsoft.CodeAnalysis.CSharp.Scripting.resources.dll",
+        "tasks/net472/fr/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net472/fr/Microsoft.CodeAnalysis.Scripting.resources.dll",
+        "tasks/net472/fr/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net472/fr/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net472/it/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net472/it/Microsoft.CodeAnalysis.CSharp.Scripting.resources.dll",
+        "tasks/net472/it/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net472/it/Microsoft.CodeAnalysis.Scripting.resources.dll",
+        "tasks/net472/it/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net472/it/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net472/ja/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net472/ja/Microsoft.CodeAnalysis.CSharp.Scripting.resources.dll",
+        "tasks/net472/ja/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net472/ja/Microsoft.CodeAnalysis.Scripting.resources.dll",
+        "tasks/net472/ja/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net472/ja/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net472/ko/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net472/ko/Microsoft.CodeAnalysis.CSharp.Scripting.resources.dll",
+        "tasks/net472/ko/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net472/ko/Microsoft.CodeAnalysis.Scripting.resources.dll",
+        "tasks/net472/ko/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net472/ko/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net472/pl/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net472/pl/Microsoft.CodeAnalysis.CSharp.Scripting.resources.dll",
+        "tasks/net472/pl/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net472/pl/Microsoft.CodeAnalysis.Scripting.resources.dll",
+        "tasks/net472/pl/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net472/pl/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net472/pt-BR/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net472/pt-BR/Microsoft.CodeAnalysis.CSharp.Scripting.resources.dll",
+        "tasks/net472/pt-BR/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net472/pt-BR/Microsoft.CodeAnalysis.Scripting.resources.dll",
+        "tasks/net472/pt-BR/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net472/pt-BR/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net472/ru/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net472/ru/Microsoft.CodeAnalysis.CSharp.Scripting.resources.dll",
+        "tasks/net472/ru/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net472/ru/Microsoft.CodeAnalysis.Scripting.resources.dll",
+        "tasks/net472/ru/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net472/ru/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net472/tr/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net472/tr/Microsoft.CodeAnalysis.CSharp.Scripting.resources.dll",
+        "tasks/net472/tr/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net472/tr/Microsoft.CodeAnalysis.Scripting.resources.dll",
+        "tasks/net472/tr/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net472/tr/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net472/vbc.exe",
+        "tasks/net472/vbc.exe.config",
+        "tasks/net472/vbc.rsp",
+        "tasks/net472/zh-Hans/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net472/zh-Hans/Microsoft.CodeAnalysis.CSharp.Scripting.resources.dll",
+        "tasks/net472/zh-Hans/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net472/zh-Hans/Microsoft.CodeAnalysis.Scripting.resources.dll",
+        "tasks/net472/zh-Hans/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net472/zh-Hans/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net472/zh-Hant/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net472/zh-Hant/Microsoft.CodeAnalysis.CSharp.Scripting.resources.dll",
+        "tasks/net472/zh-Hant/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net472/zh-Hant/Microsoft.CodeAnalysis.Scripting.resources.dll",
+        "tasks/net472/zh-Hant/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net472/zh-Hant/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net8.0/Microsoft.Build.Tasks.CodeAnalysis.deps.json",
+        "tasks/net8.0/Microsoft.Build.Tasks.CodeAnalysis.dll",
+        "tasks/net8.0/Microsoft.CSharp.Core.targets",
+        "tasks/net8.0/Microsoft.Managed.Core.CurrentVersions.targets",
+        "tasks/net8.0/Microsoft.Managed.Core.targets",
+        "tasks/net8.0/Microsoft.VisualBasic.Core.targets",
+        "tasks/net8.0/bincore/Humanizer.dll",
+        "tasks/net8.0/bincore/Metalama.Compiler.Interface.dll",
+        "tasks/net8.0/bincore/Microsoft.Bcl.AsyncInterfaces.dll",
+        "tasks/net8.0/bincore/Microsoft.CodeAnalysis.AnalyzerUtilities.dll",
+        "tasks/net8.0/bincore/Microsoft.CodeAnalysis.CSharp.Features.dll",
+        "tasks/net8.0/bincore/Microsoft.CodeAnalysis.CSharp.Workspaces.dll",
+        "tasks/net8.0/bincore/Microsoft.CodeAnalysis.CSharp.dll",
+        "tasks/net8.0/bincore/Microsoft.CodeAnalysis.Elfie.dll",
+        "tasks/net8.0/bincore/Microsoft.CodeAnalysis.Features.dll",
+        "tasks/net8.0/bincore/Microsoft.CodeAnalysis.Scripting.dll",
+        "tasks/net8.0/bincore/Microsoft.CodeAnalysis.VisualBasic.dll",
+        "tasks/net8.0/bincore/Microsoft.CodeAnalysis.Workspaces.dll",
+        "tasks/net8.0/bincore/Microsoft.CodeAnalysis.dll",
+        "tasks/net8.0/bincore/Microsoft.DiaSymReader.dll",
+        "tasks/net8.0/bincore/Newtonsoft.Json.dll",
+        "tasks/net8.0/bincore/System.Collections.Immutable.dll",
+        "tasks/net8.0/bincore/System.Composition.AttributedModel.dll",
+        "tasks/net8.0/bincore/System.Composition.Convention.dll",
+        "tasks/net8.0/bincore/System.Composition.Hosting.dll",
+        "tasks/net8.0/bincore/System.Composition.Runtime.dll",
+        "tasks/net8.0/bincore/System.Composition.TypedParts.dll",
+        "tasks/net8.0/bincore/System.Configuration.ConfigurationManager.dll",
+        "tasks/net8.0/bincore/System.Diagnostics.EventLog.dll",
+        "tasks/net8.0/bincore/System.IO.Pipelines.dll",
+        "tasks/net8.0/bincore/System.Reflection.Metadata.dll",
+        "tasks/net8.0/bincore/System.Security.Cryptography.ProtectedData.dll",
+        "tasks/net8.0/bincore/System.Text.Encodings.Web.dll",
+        "tasks/net8.0/bincore/System.Text.Json.dll",
+        "tasks/net8.0/bincore/VBCSCompiler.deps.json",
+        "tasks/net8.0/bincore/VBCSCompiler.dll",
+        "tasks/net8.0/bincore/VBCSCompiler.runtimeconfig.json",
+        "tasks/net8.0/bincore/cs/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net8.0/bincore/cs/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net8.0/bincore/cs/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net8.0/bincore/csc.deps.json",
+        "tasks/net8.0/bincore/csc.dll",
+        "tasks/net8.0/bincore/csc.runtimeconfig.json",
+        "tasks/net8.0/bincore/de/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net8.0/bincore/de/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net8.0/bincore/de/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net8.0/bincore/es/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net8.0/bincore/es/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net8.0/bincore/es/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net8.0/bincore/fr/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net8.0/bincore/fr/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net8.0/bincore/fr/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net8.0/bincore/it/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net8.0/bincore/it/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net8.0/bincore/it/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net8.0/bincore/ja/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net8.0/bincore/ja/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net8.0/bincore/ja/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net8.0/bincore/ko/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net8.0/bincore/ko/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net8.0/bincore/ko/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net8.0/bincore/pl/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net8.0/bincore/pl/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net8.0/bincore/pl/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net8.0/bincore/pt-BR/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net8.0/bincore/pt-BR/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net8.0/bincore/pt-BR/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net8.0/bincore/ru/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net8.0/bincore/ru/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net8.0/bincore/ru/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net8.0/bincore/runtimes/browser/lib/net8.0/System.Text.Encodings.Web.dll",
+        "tasks/net8.0/bincore/runtimes/win/lib/net8.0/System.Diagnostics.EventLog.Messages.dll",
+        "tasks/net8.0/bincore/runtimes/win/lib/net8.0/System.Diagnostics.EventLog.dll",
+        "tasks/net8.0/bincore/tr/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net8.0/bincore/tr/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net8.0/bincore/tr/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net8.0/bincore/vbc.deps.json",
+        "tasks/net8.0/bincore/vbc.dll",
+        "tasks/net8.0/bincore/vbc.runtimeconfig.json",
+        "tasks/net8.0/bincore/zh-Hans/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net8.0/bincore/zh-Hans/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net8.0/bincore/zh-Hans/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net8.0/bincore/zh-Hant/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net8.0/bincore/zh-Hant/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net8.0/bincore/zh-Hant/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net8.0/cs/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net8.0/de/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net8.0/es/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net8.0/fr/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net8.0/it/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net8.0/ja/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net8.0/ko/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net8.0/pl/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net8.0/pt-BR/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net8.0/ru/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net8.0/tr/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net8.0/zh-Hans/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net8.0/zh-Hant/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net9.0/Microsoft.Build.Tasks.CodeAnalysis.deps.json",
+        "tasks/net9.0/Microsoft.Build.Tasks.CodeAnalysis.dll",
+        "tasks/net9.0/Microsoft.CSharp.Core.targets",
+        "tasks/net9.0/Microsoft.Managed.Core.CurrentVersions.targets",
+        "tasks/net9.0/Microsoft.Managed.Core.targets",
+        "tasks/net9.0/Microsoft.VisualBasic.Core.targets",
+        "tasks/net9.0/bincore/Humanizer.dll",
+        "tasks/net9.0/bincore/Metalama.Compiler.Interface.dll",
+        "tasks/net9.0/bincore/Microsoft.Bcl.AsyncInterfaces.dll",
+        "tasks/net9.0/bincore/Microsoft.CodeAnalysis.AnalyzerUtilities.dll",
+        "tasks/net9.0/bincore/Microsoft.CodeAnalysis.CSharp.Features.dll",
+        "tasks/net9.0/bincore/Microsoft.CodeAnalysis.CSharp.Workspaces.dll",
+        "tasks/net9.0/bincore/Microsoft.CodeAnalysis.CSharp.dll",
+        "tasks/net9.0/bincore/Microsoft.CodeAnalysis.Elfie.dll",
+        "tasks/net9.0/bincore/Microsoft.CodeAnalysis.Features.dll",
+        "tasks/net9.0/bincore/Microsoft.CodeAnalysis.Scripting.dll",
+        "tasks/net9.0/bincore/Microsoft.CodeAnalysis.VisualBasic.dll",
+        "tasks/net9.0/bincore/Microsoft.CodeAnalysis.Workspaces.dll",
+        "tasks/net9.0/bincore/Microsoft.CodeAnalysis.dll",
+        "tasks/net9.0/bincore/Microsoft.DiaSymReader.dll",
+        "tasks/net9.0/bincore/Newtonsoft.Json.dll",
+        "tasks/net9.0/bincore/System.Composition.AttributedModel.dll",
+        "tasks/net9.0/bincore/System.Composition.Convention.dll",
+        "tasks/net9.0/bincore/System.Composition.Hosting.dll",
+        "tasks/net9.0/bincore/System.Composition.Runtime.dll",
+        "tasks/net9.0/bincore/System.Composition.TypedParts.dll",
+        "tasks/net9.0/bincore/System.Configuration.ConfigurationManager.dll",
+        "tasks/net9.0/bincore/System.Diagnostics.EventLog.dll",
+        "tasks/net9.0/bincore/System.Security.Cryptography.ProtectedData.dll",
+        "tasks/net9.0/bincore/VBCSCompiler.deps.json",
+        "tasks/net9.0/bincore/VBCSCompiler.dll",
+        "tasks/net9.0/bincore/VBCSCompiler.runtimeconfig.json",
+        "tasks/net9.0/bincore/cs/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net9.0/bincore/cs/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net9.0/bincore/cs/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net9.0/bincore/csc.deps.json",
+        "tasks/net9.0/bincore/csc.dll",
+        "tasks/net9.0/bincore/csc.runtimeconfig.json",
+        "tasks/net9.0/bincore/de/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net9.0/bincore/de/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net9.0/bincore/de/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net9.0/bincore/es/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net9.0/bincore/es/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net9.0/bincore/es/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net9.0/bincore/fr/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net9.0/bincore/fr/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net9.0/bincore/fr/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net9.0/bincore/it/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net9.0/bincore/it/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net9.0/bincore/it/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net9.0/bincore/ja/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net9.0/bincore/ja/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net9.0/bincore/ja/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net9.0/bincore/ko/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net9.0/bincore/ko/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net9.0/bincore/ko/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net9.0/bincore/pl/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net9.0/bincore/pl/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net9.0/bincore/pl/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net9.0/bincore/pt-BR/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net9.0/bincore/pt-BR/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net9.0/bincore/pt-BR/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net9.0/bincore/ru/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net9.0/bincore/ru/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net9.0/bincore/ru/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net9.0/bincore/runtimes/win/lib/net9.0/System.Diagnostics.EventLog.Messages.dll",
+        "tasks/net9.0/bincore/runtimes/win/lib/net9.0/System.Diagnostics.EventLog.dll",
+        "tasks/net9.0/bincore/tr/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net9.0/bincore/tr/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net9.0/bincore/tr/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net9.0/bincore/vbc.deps.json",
+        "tasks/net9.0/bincore/vbc.dll",
+        "tasks/net9.0/bincore/vbc.runtimeconfig.json",
+        "tasks/net9.0/bincore/zh-Hans/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net9.0/bincore/zh-Hans/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net9.0/bincore/zh-Hans/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net9.0/bincore/zh-Hant/Microsoft.CodeAnalysis.CSharp.resources.dll",
+        "tasks/net9.0/bincore/zh-Hant/Microsoft.CodeAnalysis.VisualBasic.resources.dll",
+        "tasks/net9.0/bincore/zh-Hant/Microsoft.CodeAnalysis.resources.dll",
+        "tasks/net9.0/cs/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net9.0/de/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net9.0/es/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net9.0/fr/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net9.0/it/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net9.0/ja/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net9.0/ko/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net9.0/pl/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net9.0/pt-BR/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net9.0/ru/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net9.0/tr/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net9.0/zh-Hans/Microsoft.Build.Tasks.CodeAnalysis.resources.dll",
+        "tasks/net9.0/zh-Hant/Microsoft.Build.Tasks.CodeAnalysis.resources.dll"
+      ]
+    },
+    "Metalama.Framework/2025.1.17": {
+      "sha512": "eCC+TyT7XsFTovv11E9pnFLkeB3RACFJDjfG3sPW4K0KiII1hvdJpVbTXmEQbNWNxZGrlKVjZIPUEva0kCIIXw==",
+      "type": "package",
+      "path": "metalama.framework/2025.1.17",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "README.md",
+        "THIRD-PARTY-NOTICES.md",
+        "analyzers/dotnet/cs/Metalama.Framework.CompilerExtensions.dll",
+        "analyzers/dotnet/cs/Metalama.Framework.EditorExtensions.dll",
+        "build/Metalama.CompilerVisibleProperties.props",
+        "build/Metalama.Framework.props",
+        "build/Metalama.Framework.targets",
+        "buildTransitive/Metalama.Framework.props",
+        "buildTransitive/Metalama.Framework.targets",
+        "metalama.framework.2025.1.17.nupkg.sha512",
+        "metalama.framework.nuspec",
+        "metalama.png",
+        "tools/install.ps1",
+        "tools/uninstall.ps1"
+      ]
+    },
+    "Metalama.Framework.Redist/2025.1.17": {
+      "sha512": "rMCjnYrB/tx2pV4uKYgvFk0tz2Qkc6MEmsolgjGOGMUvVkPPPn6NBJ8r2fuIluujODXKbAZCBTrl/iAzErAGBw==",
+      "type": "package",
+      "path": "metalama.framework.redist/2025.1.17",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "README.md",
+        "THIRD-PARTY-NOTICES.md",
+        "lib/net6.0/Metalama.Framework.dll",
+        "lib/net6.0/Metalama.Framework.xml",
+        "lib/net6.0/Metalama.SystemTypes.dll",
+        "lib/netstandard2.0/Metalama.Framework.dll",
+        "lib/netstandard2.0/Metalama.Framework.xml",
+        "lib/netstandard2.0/Metalama.SystemTypes.dll",
+        "metalama.framework.redist.2025.1.17.nupkg.sha512",
+        "metalama.framework.redist.nuspec",
+        "metalama.png"
+      ]
+    },
+    "Metalama.Patterns.Contracts/2025.1.17": {
+      "sha512": "P0nVXc6B+nBgP6IyzQldFXJW/+uXqf2ztcli9SwUOwYpYH85ZgtDhVZa3ZMDVqEyD3JUWFpUaPEKTQ83HNUu4A==",
+      "type": "package",
+      "path": "metalama.patterns.contracts/2025.1.17",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "README.md",
+        "THIRD-PARTY-NOTICES.md",
+        "lib/net471/Metalama.Patterns.Contracts.dll",
+        "lib/net471/Metalama.Patterns.Contracts.xml",
+        "lib/net6.0/Metalama.Patterns.Contracts.dll",
+        "lib/net6.0/Metalama.Patterns.Contracts.xml",
+        "lib/netstandard2.0/Metalama.Patterns.Contracts.dll",
+        "lib/netstandard2.0/Metalama.Patterns.Contracts.xml",
+        "metalama.patterns.contracts.2025.1.17.nupkg.sha512",
+        "metalama.patterns.contracts.nuspec",
+        "metalama.png"
+      ]
+    },
+    "Metalama.Patterns.Immutability/2025.1.17": {
+      "sha512": "DC1I/OLW2Qak5AZ0fJLzY1KtKaXVgAL8fgZBw54OP2csKEtqMdLDNwaNq7KK50MFzBS040jPiK5p0l5hvrLg/g==",
+      "type": "package",
+      "path": "metalama.patterns.immutability/2025.1.17",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "README.md",
+        "THIRD-PARTY-NOTICES.md",
+        "lib/net471/Metalama.Patterns.Immutability.dll",
+        "lib/net471/Metalama.Patterns.Immutability.xml",
+        "lib/net6.0/Metalama.Patterns.Immutability.dll",
+        "lib/net6.0/Metalama.Patterns.Immutability.xml",
+        "lib/netstandard2.0/Metalama.Patterns.Immutability.dll",
+        "lib/netstandard2.0/Metalama.Patterns.Immutability.xml",
+        "metalama.patterns.immutability.2025.1.17.nupkg.sha512",
+        "metalama.patterns.immutability.nuspec",
+        "metalama.png"
+      ]
+    },
+    "Metalama.Patterns.Observability/2025.1.17": {
+      "sha512": "vYMsoExGfoBnzFTupOAR5YY305th+muUg3Z49rQF+Wxscm7ILWc09TzioTetGWYxae2KJcjhfbJ/F6UmECB9Vw==",
+      "type": "package",
+      "path": "metalama.patterns.observability/2025.1.17",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "README.md",
+        "THIRD-PARTY-NOTICES.md",
+        "lib/net471/Metalama.Patterns.Observability.dll",
+        "lib/net471/Metalama.Patterns.Observability.xml",
+        "lib/net6.0/Metalama.Patterns.Observability.dll",
+        "lib/net6.0/Metalama.Patterns.Observability.xml",
+        "lib/netstandard2.0/Metalama.Patterns.Observability.dll",
+        "lib/netstandard2.0/Metalama.Patterns.Observability.xml",
+        "metalama.patterns.observability.2025.1.17.nupkg.sha512",
+        "metalama.patterns.observability.nuspec",
+        "metalama.png"
+      ]
+    },
+    "Metalama.Patterns.Wpf/2025.1.17": {
+      "sha512": "HriP3FV4GZmuXOJPYdmSEhbYYHcEXIStBN50N0esDza36/2gboVasiYH3TpVYxvHs/g0PG0zJRVKMTkyFnUASw==",
+      "type": "package",
+      "path": "metalama.patterns.wpf/2025.1.17",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "README.md",
+        "THIRD-PARTY-NOTICES.md",
+        "lib/net471/Metalama.Patterns.Wpf.dll",
+        "lib/net471/Metalama.Patterns.Wpf.xml",
+        "lib/net6.0-windows7.0/Metalama.Patterns.Wpf.dll",
+        "lib/net6.0-windows7.0/Metalama.Patterns.Wpf.xml",
+        "metalama.patterns.wpf.2025.1.17.nupkg.sha512",
+        "metalama.patterns.wpf.nuspec",
+        "metalama.png"
+      ]
+    },
+    "Microsoft.CSharp/4.7.0": {
+      "sha512": "pTj+D3uJWyN3My70i2Hqo+OXixq3Os2D1nJ2x92FFo6sk8fYS1m1WLNTs0Dc1uPaViH0YvEEwvzddQ7y4rhXmA==",
+      "type": "package",
+      "path": "microsoft.csharp/4.7.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/MonoAndroid10/_._",
+        "lib/MonoTouch10/_._",
+        "lib/net45/_._",
+        "lib/netcore50/Microsoft.CSharp.dll",
+        "lib/netcoreapp2.0/_._",
+        "lib/netstandard1.3/Microsoft.CSharp.dll",
+        "lib/netstandard2.0/Microsoft.CSharp.dll",
+        "lib/netstandard2.0/Microsoft.CSharp.xml",
+        "lib/portable-net45+win8+wp8+wpa81/_._",
+        "lib/uap10.0.16299/_._",
+        "lib/win8/_._",
+        "lib/wp80/_._",
+        "lib/wpa81/_._",
+        "lib/xamarinios10/_._",
+        "lib/xamarinmac20/_._",
+        "lib/xamarintvos10/_._",
+        "lib/xamarinwatchos10/_._",
+        "microsoft.csharp.4.7.0.nupkg.sha512",
+        "microsoft.csharp.nuspec",
+        "ref/MonoAndroid10/_._",
+        "ref/MonoTouch10/_._",
+        "ref/net45/_._",
+        "ref/netcore50/Microsoft.CSharp.dll",
+        "ref/netcore50/Microsoft.CSharp.xml",
+        "ref/netcore50/de/Microsoft.CSharp.xml",
+        "ref/netcore50/es/Microsoft.CSharp.xml",
+        "ref/netcore50/fr/Microsoft.CSharp.xml",
+        "ref/netcore50/it/Microsoft.CSharp.xml",
+        "ref/netcore50/ja/Microsoft.CSharp.xml",
+        "ref/netcore50/ko/Microsoft.CSharp.xml",
+        "ref/netcore50/ru/Microsoft.CSharp.xml",
+        "ref/netcore50/zh-hans/Microsoft.CSharp.xml",
+        "ref/netcore50/zh-hant/Microsoft.CSharp.xml",
+        "ref/netcoreapp2.0/_._",
+        "ref/netstandard1.0/Microsoft.CSharp.dll",
+        "ref/netstandard1.0/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/de/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/es/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/fr/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/it/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/ja/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/ko/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/ru/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/zh-hans/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/zh-hant/Microsoft.CSharp.xml",
+        "ref/netstandard2.0/Microsoft.CSharp.dll",
+        "ref/netstandard2.0/Microsoft.CSharp.xml",
+        "ref/portable-net45+win8+wp8+wpa81/_._",
+        "ref/uap10.0.16299/_._",
+        "ref/win8/_._",
+        "ref/wp80/_._",
+        "ref/wpa81/_._",
+        "ref/xamarinios10/_._",
+        "ref/xamarinmac20/_._",
+        "ref/xamarintvos10/_._",
+        "ref/xamarinwatchos10/_._",
+        "useSharedDesignerContext.txt",
+        "version.txt"
       ]
     },
     "Microsoft.Data.Analysis/0.22.2": {
@@ -1307,6 +1691,9 @@
       "Accord.Statistics >= 3.8.0",
       "Apache.Arrow >= 20.0.0",
       "MathNet.Numerics >= 5.0.0",
+      "Metalama.Framework >= 2025.1.17",
+      "Metalama.Patterns.Observability >= 2025.1.17",
+      "Metalama.Patterns.Wpf >= 2025.1.17",
       "Microsoft.Data.Analysis >= 0.22.2",
       "OxyPlot.SkiaSharp >= 2.2.0",
       "OxyPlot.Wpf >= 2.2.0"
@@ -1318,11 +1705,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\tmccl\\Desktop\\ZeroPlusProject\\VSCODE VERSION\\ZSExplorer\\ZSExplorer.csproj",
+      "projectUniqueName": "C:\\Users\\tmccl\\Desktop\\Quant Dev Projects\\ZSExplorer\\ZSExplorer\\ZSExplorer.csproj",
       "projectName": "ZSExplorer",
-      "projectPath": "C:\\Users\\tmccl\\Desktop\\ZeroPlusProject\\VSCODE VERSION\\ZSExplorer\\ZSExplorer.csproj",
+      "projectPath": "C:\\Users\\tmccl\\Desktop\\Quant Dev Projects\\ZSExplorer\\ZSExplorer\\ZSExplorer.csproj",
       "packagesPath": "C:\\Users\\tmccl\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\tmccl\\Desktop\\ZeroPlusProject\\VSCODE VERSION\\ZSExplorer\\obj\\",
+      "outputPath": "C:\\Users\\tmccl\\Desktop\\Quant Dev Projects\\ZSExplorer\\ZSExplorer\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\tmccl\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -1368,6 +1755,18 @@
             "target": "Package",
             "version": "[5.0.0, )"
           },
+          "Metalama.Framework": {
+            "target": "Package",
+            "version": "[2025.1.17, )"
+          },
+          "Metalama.Patterns.Observability": {
+            "target": "Package",
+            "version": "[2025.1.17, )"
+          },
+          "Metalama.Patterns.Wpf": {
+            "target": "Package",
+            "version": "[2025.1.17, )"
+          },
           "Microsoft.Data.Analysis": {
             "target": "Package",
             "version": "[0.22.2, )"
@@ -1392,20 +1791,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
-            "version": "[8.0.8, 8.0.8]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Runtime.win-x64",
-            "version": "[8.0.8, 8.0.8]"
-          },
-          {
-            "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
-            "version": "[8.0.8, 8.0.8]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
@@ -1415,11 +1800,6 @@
           }
         },
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
-      }
-    },
-    "runtimes": {
-      "win-x64": {
-        "#import": []
       }
     }
   }
