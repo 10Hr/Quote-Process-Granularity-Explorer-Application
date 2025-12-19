@@ -307,17 +307,6 @@ namespace ZSExplorer;
 
 public partial class MainWindow : Window
 {
-    bool fileLoaded;
-
-    public ArrowData callData, putData;
-    long quoteCount;
-
-    HashSet<string> uniqueSymbols;
-    HashSet<string> uniqueExchanges;
-
-    List<MarketDataRow> callsItems;
-    List<MarketDataRow> putsItems;
-
     public MainViewModel VM { get; } = new();
 
     public MainWindow()

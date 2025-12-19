@@ -1,165 +1,206 @@
 <UserControl x:Class="ZSExplorer.RightPanel"
-            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-            xmlns:oxy="http://oxyplot.org/wpf"
-
-             xmlns:local="clr-namespace:ZSExplorer"
-             MinWidth="350" MinHeight="600"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:oxy="http://oxyplot.org/wpf"
+             mc:Ignorable="d"
+             MinWidth="350"
              Background="White">
 
-    <Border BorderBrush="{StaticResource PrimaryBrush}" BorderThickness="2" CornerRadius="8" Padding="10" Margin="5">
-        <StackPanel Orientation="Vertical" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+    <Border BorderBrush="{StaticResource PrimaryBrush}"
+            BorderThickness="2"
+            CornerRadius="8"
+            Padding="10"
+            Margin="5">
 
-            <!-- Header -->
-            <Border Background="{StaticResource PrimaryBrush}" CornerRadius="6" Padding="8" Margin="0 0 0 10">
-                <Grid>
+        <!-- ENTIRE PANEL SCROLLS -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
+
+            <StackPanel>
+
+                <!-- ================= HEADER ================= -->
+                <Border Background="{StaticResource PrimaryBrush}"
+                        CornerRadius="6"
+                        Padding="8"
+                        Margin="0,0,0,10">
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel>
+                            <TextBlock Text="{Binding ContractSymbolText}"
+                                       FontWeight="Bold"
+                                       FontSize="16"
+                                       Foreground="White"/>
+
+                            <TextBlock Text="{Binding OptionDetailsText}"
+                                       FontSize="12"
+                                       Foreground="White"
+                                       Margin="0,4,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center">
+
+                            <Ellipse Width="14"
+                                     Height="14"
+                                     Fill="{Binding StatusIndicatorBrush}"
+                                     Margin="0,0,10,0"/>
+
+                            <Button Content="Remove"
+                                    Padding="10,2"
+                                    FontWeight="Bold"
+                                    Foreground="White"
+                                    Background="{StaticResource PrimaryPressedBrush}"
+                                    BorderThickness="0"
+                                    Cursor="Hand"
+                                    Command="{Binding RemoveKsTestCommand}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- ================= CONTROLS ================= -->
+                <Grid Margin="0,0,0,10" Grid.IsSharedSizeScope="True">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" SharedSizeGroup="Col"/>
+                        <ColumnDefinition Width="*" SharedSizeGroup="Col"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Left side: Symbol and option details -->
-                    <StackPanel Orientation="Vertical" Grid.Column="0">
-                        <TextBlock x:Name="ContractSymbolTextBox" 
-                                   TextAlignment="Left"
-                                   Text="{Binding ContractSymbolText}" 
-                                   FontWeight="Bold" 
-                                   FontSize="16" 
-                                   Foreground="White" />
-                        <TextBlock x:Name="OptionDetailsTextBox" 
-                                   Text="{Binding OptionDetailsText}" 
-                                   FontSize="12" 
-                                   Foreground="White" 
-                                   Margin="0,4,0,0" />
-                    </StackPanel>
+                    <!-- LEFT -->
+                    <StackPanel Grid.Column="0" Margin="0,0,10,0">
 
-                    <!-- Right side: Status and Remove button -->
-                    <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock Text="Log Return Time Window"
+                                   FontWeight="Bold"
+                                   FontSize="15"/>
 
-                        <!-- Status indicator -->
-                        <Ellipse x:Name="StatusIndicator" Width="14" Height="14" Fill="{Binding StatusIndicatorBrush}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <TextBlock Text="Return Calculation Window (Seconds)"
+                                   FontWeight="SemiBold"
+                                   Margin="0,4,0,6"/>
 
-                        <!-- Remove button -->
-                        <Button x:Name="RemoveButton" Content="Remove" Width="Auto" Height="24" FontWeight="Bold" 
-                                Foreground="White" Background="{StaticResource PrimaryPressedBrush}" 
-                                BorderThickness="0" Cursor="Hand" Command="{Binding RemoveKsTestCommand}"/>
-                    </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Slider Width="220"
+                                    Minimum="{Binding TimeWindowSliderMinimum}"
+                                    Maximum="{Binding TimeWindowSliderMaximum}"
+                                    Value="{Binding TimeWindowSliderValue,
+                                            Mode=TwoWay,
+                                            UpdateSourceTrigger=PropertyChanged}"
+                                    TickFrequency="1"
+                                    IsMoveToPointEnabled="True"/>
 
-                </Grid>
-            </Border>
-
-            <!-- Control Body: Two-column grid -->
-            <Grid Margin="0 0 0 10" VerticalAlignment="Top" HorizontalAlignment="Stretch" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="1*" />
-                </Grid.ColumnDefinitions>
-
-                <!-- Left column: Time window config & sample statistics -->
-                <StackPanel Grid.Column="0" Margin="0,0,10,0" VerticalAlignment="Top">
-
-                <!-- Time Window Configuration -->
-                <StackPanel Orientation="Vertical" Margin="0,0,0,10">
-                    <TextBlock Text="📉 Log Return Time Window" FontWeight="Bold" FontSize="16" />
-                    <TextBlock Text="Return Calculation Window (Seconds)" FontWeight="Bold" />
-
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,5,0,0">
-                        <Slider x:Name="TimeWindowSlider"
-                                Width="300"
-                                Minimum="{Binding TimeWindowSliderMinimum}"
-                                Maximum="{Binding TimeWindowSliderMaximum}"
-                                Value="{Binding TimeWindowSliderValue}"
-                                TickFrequency="1"
-                                IsMoveToPointEnabled="True" /> 
-                                <!-- ValueChanged="TimeWindowSlider_ValueChanged"
-                                PreviewMouseDown="TimeWindowSlider_PreviewMouseDown"-->
-                        <TextBox x:Name="MicrosecondInputBox"
-                                Width="80"
-                                Margin="10,0,0,0"
-                                VerticalContentAlignment="Center"
-                                HorizontalContentAlignment="Center"
-                                TextChanged="MicrosecondInputBox_TextChanged"
-                                Text="{Binding MicrosecondInputBoxText}"/>
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Left">
-                        <TextBlock x:Name="TimeLabel0" Width="60" Text="{Binding TimeLabel0Text}"/>
-                        <TextBlock x:Name="TimeLabel25" Width="60" TextAlignment="Center" Text="{Binding TimeLabel25Text}"/>
-                        <TextBlock x:Name="TimeLabel50" Width="60" TextAlignment="Center" Text="{Binding TimeLabel50Text}"/>
-                        <TextBlock x:Name="TimeLabel75" Width="60" TextAlignment="Center" Text="{Binding TimeLabel75Text}"/>
-                        <TextBlock x:Name="TimeLabel100" Width="60" TextAlignment="Right" Text="{Binding TimeLabel100Text}"/>
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" Margin="10">
-                        <CheckBox 
-                            x:Name="BidOnlyCheckbox" 
-                            Content="Use Bid Ask" 
-                            Margin="5" 
-                            IsChecked="{Binding UseBidPrices}" />
-                        <CheckBox 
-                                x:Name="AnalyzeAllCheckbox" 
-                                Content="Analyze All Call or Put Options" 
-                                Margin="5"
-                                IsChecked="{Binding AnalyzeAllOptions}" />
-                    </StackPanel>
-
-                    <TextBlock x:Name="TimeWindowValueText"
-                            FontWeight="SemiBold"
-                            Margin="0,5,0,0"
-                            FontSize="12"
-                            Text="{Binding TimeWindowValueText}"/>
-                </StackPanel>
-
-                    <!-- Sample Statistics Grid -->
-                    <TextBlock Text="Sample Statistics" FontWeight="Bold" Margin="0,0,0,6" />
-                    <UniformGrid Columns="2" Rows="3" Margin="0,0,0,10">
-                        <TextBlock Text="Sample Size:" />
-                        <TextBlock x:Name="SampleSizeText" Text="-" />
-
-                        <TextBlock Text="Mean Return:" />
-                        <TextBlock x:Name="MeanReturnText" Text="-" />
-
-                        <TextBlock Text="Standard Deviation:" />
-                        <TextBlock x:Name="StdDevText" Text="-" />
-                    </UniformGrid>
-                </StackPanel>
-
-                <!-- Right column: Fitted distribution & KS test -->
-                <StackPanel x:Name="StatisticalTestResults" Grid.Column="1" VerticalAlignment="Top">
-
-                    <!-- Fitted Distribution Parameters -->
-                    <TextBlock Text="Fitted Distribution Parameters" FontWeight="Bold" Margin="0,0,0,6" />
-                    <UniformGrid Columns="2" Rows="4" Margin="0,0,0,10">
-                        <TextBlock Text="Location Param:" />
-                        <TextBlock x:Name="LocationParamText" Text="-" />
-
-                        <TextBlock Text="Scale Param:" />
-                        <TextBlock x:Name="ScaleParamText" Text="-" />
-
-                        <TextBlock Text="Degrees of Freedom:" />
-                        <TextBlock x:Name="DegreesFreedomText" Text="-" />
-                    </UniformGrid>
-
-                    <!-- KS Test Results -->
-                    <Border BorderBrush="{StaticResource SecondaryBrush}" BorderThickness="1" CornerRadius="6" Padding="8" Background="#FFF9F2D6" >
-                        <StackPanel>
-                            <TextBlock x:Name="InsufficientDataText" Foreground="Red" FontWeight="Bold" Margin="5"/>
-                            <TextBlock Text="KS Test Results" FontWeight="Bold" Margin="0,0,0,6" />
-                            <TextBlock x:Name="KsTestStatText" Text="Test Statistic: -" FontSize="18" FontWeight="Bold" />
-                            <TextBlock x:Name="StatDecisionText" Text="Decision: -" FontWeight="Bold" Margin="0,2,0,6" />
-                            <TextBlock x:Name="PValueText" Text="P-value: -" FontSize="12" />
+                            <TextBox Width="70"
+                                     Margin="8,0,0,0"
+                                     TextAlignment="Center"
+                                     VerticalContentAlignment="Center"
+                                     Text="{Binding MicrosecondInputText,
+                                            Mode=TwoWay,
+                                            UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
-                    </Border>
 
-                </StackPanel>
-            </Grid>
+                        <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                            <TextBlock Width="50" Text="{Binding TimeLabel0Text}"/>
+                            <TextBlock Width="50" TextAlignment="Center" Text="{Binding TimeLabel25Text}"/>
+                            <TextBlock Width="50" TextAlignment="Center" Text="{Binding TimeLabel50Text}"/>
+                            <TextBlock Width="50" TextAlignment="Center" Text="{Binding TimeLabel75Text}"/>
+                            <TextBlock Width="50" TextAlignment="Right" Text="{Binding TimeLabel100Text}"/>
+                        </StackPanel>
 
-            <!-- ECDF Plot Area -->
-            <Border BorderBrush="{StaticResource PrimaryBrush}" BorderThickness="1" CornerRadius="6" Background="White" Height="Auto" Margin="0,0,0,10">
-                <oxy:PlotView x:Name="EcdfPlot" Height="500" Margin="10"/>
-            </Border>
-        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                            <CheckBox Content="Use Bid Ask"
+                                      Margin="0,0,10,0"
+                                      IsChecked="{Binding UseBidPrices}"/>
+
+                            <CheckBox Content="Analyze All Call or Put Options"
+                                      IsChecked="{Binding AnalyzeAllOptions}"/>
+                        </StackPanel>
+
+                        <TextBlock Margin="0,6,0,10"
+                                   FontSize="12"
+                                   FontWeight="SemiBold"
+                                   Text="{Binding TimeWindowValueText}"/>
+
+                        <TextBlock Text="Sample Statistics"
+                                   FontWeight="Bold"
+                                   Margin="0,10,0,6"/>
+
+                        <UniformGrid Columns="2" Rows="3">
+                            <TextBlock Text="Sample Size:"/>
+                            <TextBlock Text="{Binding SampleSizeText}"/>
+
+                            <TextBlock Text="Mean Return:"/>
+                            <TextBlock Text="{Binding MeanReturnText}"/>
+
+                            <TextBlock Text="Std Dev:"/>
+                            <TextBlock Text="{Binding StdDevText}"/>
+                        </UniformGrid>
+                    </StackPanel>
+
+                    <!-- RIGHT -->
+                    <StackPanel Grid.Column="1">
+
+                        <TextBlock Text="Fitted Distribution Parameters"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,6"/>
+
+                        <UniformGrid Columns="2" Rows="3">
+                            <TextBlock Text="Location:"/>
+                            <TextBlock Text="{Binding LocationParamText}"/>
+
+                            <TextBlock Text="Scale:"/>
+                            <TextBlock Text="{Binding ScaleParamText}"/>
+
+                            <TextBlock Text="DoF:"/>
+                            <TextBlock Text="{Binding DegreesFreedomText}"/>
+                        </UniformGrid>
+
+                        <Border Margin="0,10,0,0"
+                                Padding="8"
+                                Background="#FFF9F2D6"
+                                BorderBrush="{StaticResource SecondaryBrush}"
+                                BorderThickness="1"
+                                CornerRadius="6">
+
+                            <StackPanel>
+                                <TextBlock Foreground="Red"
+                                           FontWeight="Bold"
+                                           Text="{Binding InsufficientDataText}"/>
+
+                                <TextBlock Text="KS Test Results"
+                                           FontWeight="Bold"
+                                           Margin="0,6,0,4"/>
+
+                                <TextBlock Text="{Binding KsTestStatText}"
+                                           FontSize="18"
+                                           FontWeight="Bold"/>
+
+                                <TextBlock Text="{Binding StatDecisionText}"
+                                           FontWeight="Bold"/>
+
+                                <TextBlock Text="{Binding PValueText}"
+                                           FontSize="12"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+
+                <!-- ================= PLOT (FIXED, VIEWABLE) ================= -->
+                <Border BorderBrush="{StaticResource PrimaryBrush}"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Background="White"
+                        Margin="0,0,0,10">
+
+                    <oxy:PlotView Height="420"
+                                  Margin="10"
+                                  Model="{Binding ECDFPlotModel}"/>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
     </Border>
 </UserControl>

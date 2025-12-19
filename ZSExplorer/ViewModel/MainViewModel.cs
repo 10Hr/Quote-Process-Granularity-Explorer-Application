@@ -201,27 +201,6 @@ public partial class MainViewModel
         panel.RequestClose += () => RightPanelContainer = null;
 
         RightPanelContainer = panel;
-
-        // if (RightPanelContainer == null)
-        // {
-            
-        //     OptionInfo info = ParseOptionsSymbol.Parse(SelectedSymbol);
-
-        //     if (info.OptionType == "Call")
-        //     {
-        //         //RVM = new(Calls, info, SelectedSymbol);
-        //         RightPanelContainer = new RightPanel(Calls, info, SelectedSymbol);
-        //     }
-        //     else if (info.OptionType == "Put")
-        //     {
-        //         //RVM = new(Puts, info, SelectedSymbol);
-        //         RightPanelContainer = new RightPanel(Puts, info, SelectedSymbol);
-        //     }
-        //     else
-        //     {
-        //         throw new ArgumentException("Invalid contract type. Expected 'Call' or 'Put'.");
-        //     }
-        // }
     }
 
     [Command]

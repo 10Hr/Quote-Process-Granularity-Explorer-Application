@@ -24,82 +24,141 @@ namespace ZSExplorer;
 public partial class RightPanelViewModel
 {
 
-        private List<MarketDataRow> bidList;
-        private List<MarketDataRow> askList;
+    private List<MarketDataRow> bidList;
+    private List<MarketDataRow> askList;
 
 
-        private List<MarketDataRow> filteredContractData;
-        private int _maxMicroseconds;
-        private string _currentTimeUnit = "s";
-        private double _timeScale = 1.0;          
-        // List<double> logReturn;
-        //public PlotModel ECDFPlotModel => EcdfPlot.Model;
+    private List<MarketDataRow> filteredContractData;
+    private int _maxMicroseconds;
+    private string _currentTimeUnit = "s";
+    private double _timeScale = 1.0;
+    List<double> logReturn;
+    public PlotModel ECDFPlotModel { get; set; }
 
-        // public double[] ValidReturns { get; private set; }
-        // public List<MarketDataRow> SelectedList { get; private set; }
-        // public double KSTestStatistic { get; private set; }
-        // public double KSTestPValue { get; private set; }
-        
-        public string SelectedSymbol { get; set; }
+    public double[] ValidReturns { get; private set; }
+    public List<MarketDataRow> SelectedList { get; private set; } = new();
+    public double KSTestStatistic { get; private set; }
+    public double KSTestPValue { get; private set; }
 
-        List<MarketDataRow> Data { get; set; } = new();
-        OptionInfo info { get; set; } = new();
+    public string SelectedSymbol { get; set; }
 
-        public event Action? RequestClose;
+    List<MarketDataRow> Data { get; set; } = new();
+    OptionInfo info { get; set; } = new();
 
-        // UI Bindings
-        public string ContractSymbolText { get; set; } = "CONTRACT SYMBOL";
-        public string OptionDetailsText { get; set; } = "Underlying | Expiration | Strike";
+    public event Action? RequestClose;
 
-        public Brush StatusIndicatorBrush { get; set; } = Brushes.Red; 
-        
-        public bool AnalyzeAllOptions { get; set; } = false;
-        public bool UseBidPrices { get; set; } = false;
+    // UI Bindings
+    public string ContractSymbolText { get; set; } = "CONTRACT SYMBOL";
+    public string OptionDetailsText { get; set; } = "Underlying | Expiration | Strike";
 
-        public double TimeWindowSliderMinimum { get; set; } = 0.0;
-        public double TimeWindowSliderMaximum { get; set; } = 100.0;
-        public double TimeWindowSliderValue { get; set; } = 0.0;
+    public Brush StatusIndicatorBrush { get; set; } = Brushes.Red;
 
-        public string MicrosecondInputBoxText { get; set; } = "0";
-        public string TimeWindowValueText { get; set; } = "0s";
-        public string TimeLabel0Text { get; set; } = "0s";
-        public string TimeLabel25Text { get; set; } = "...";
-        public string TimeLabel50Text { get; set; } = "...";
-        public string TimeLabel75Text { get; set; } = "...";
-        public string TimeLabel100Text { get; set; } = "...";
+    public bool AnalyzeAllOptions { get; set; } = false;
+    public bool UseBidPrices { get; set; } = false;
+
+    public string TimeWindowValueText { get; set; } = "0s";
+    public string TimeLabel0Text { get; set; } = "0s";
+    public string TimeLabel25Text { get; set; } = "...";
+    public string TimeLabel50Text { get; set; } = "...";
+    public string TimeLabel75Text { get; set; } = "...";
+    public string TimeLabel100Text { get; set; } = "...";
+
+    public string SampleSizeText { get; set; } = "-";
+    public string MeanReturnText { get; set; } = "-";
+    public string StdDevText { get; set; } = "-";
+
+    public string LocationParamText { get; set; } = "-";
+    public string ScaleParamText { get; set; } = "-";
+    public string DegreesFreedomText { get; set; } = "-";
+
+    public string KsTestStatText { get; set; } = "Test Statistic: -";
+    public string StatDecisionText { get; set; } = "Decision: -";
+    public string PValueText { get; set; } = "P-value: -";
+
+    public double TimeWindowSliderMinimum { get; set; } = 0.0;
+    public double TimeWindowSliderMaximum { get; set; } = 100.0;
+
+    private bool _isInternalUpdate;
+
+    private string _microsecondInputText = "0";
+    public string MicrosecondInputText
+    {
+        get => _microsecondInputText;
+        set
+        {
+            if (_microsecondInputText == value)
+                return;
+
+            _microsecondInputText = value;
+
+            // Ignore updates coming from slider
+            if (_isInternalUpdate)
+                return;
+
+            if (!int.TryParse(value, out int parsed))
+                return;
+
+            // Clamp / expand slider range (matches old behavior)
+            if (parsed > TimeWindowSliderMaximum)
+                TimeWindowSliderMaximum = parsed;
+
+            // This triggers everything else
+            TimeWindowSliderValue = parsed;
+        }
+    }
+
+    private double _timeWindowSliderValue;
+    public double TimeWindowSliderValue
+    {
+        get => _timeWindowSliderValue;
+        set
+        {
+            if (Math.Abs(_timeWindowSliderValue - value) < 1e-9)
+                return;
+
+            _timeWindowSliderValue = value;
+
+            // Prevent feedback loop
+            _isInternalUpdate = true;
+            MicrosecondInputText = ((int)value).ToString();
+            _isInternalUpdate = false;
+
+
+            RunCalculations();
+        }
+    }
 
     // Constructors
 
-    public RightPanelViewModel() {}
+    public RightPanelViewModel() { }
 
-    public RightPanelViewModel(List<MarketDataRow> data, OptionInfo info, string selectedSymbol) 
+    public RightPanelViewModel(List<MarketDataRow> data, OptionInfo info, string selectedSymbol)
     {
 
         this.Data = data;
         this.SelectedSymbol = selectedSymbol;
         this.info = info;
 
-        
-        UpdateUIFromLists();
+        MicrosecondInputText = "0";
 
-        //await Task.Delay(100); // Let UI elements fully initialize
-        //RunCalculations();
+        UpdateUIFromLists();
+        RunCalculations();
     }
 
     [Command]
     public void RemoveKsTest()
     {
-         var result = MessageBox.Show("Are you sure you want to remove the KS test and reset the panel?",
-                                "Confirm Removal",
-                                MessageBoxButton.YesNo,
-                                MessageBoxImage.Question);
+        var result = MessageBox.Show("Are you sure you want to remove the KS test and reset the panel?",
+                               "Confirm Removal",
+                               MessageBoxButton.YesNo,
+                               MessageBoxImage.Question);
 
         if (result == MessageBoxResult.Yes)
         {
-            RequestClose?.Invoke();  
+            RequestClose?.Invoke();
         }
     }
-    
+
     public void OnAnalyzeAllOptionsChanged()
     {
         UpdateUIFromLists();
@@ -162,7 +221,7 @@ public partial class RightPanelViewModel
             OptionDetailsText = $"ERROR: No filtered data found. AnalyzeAll={AnalyzeAllOptions}, Contract={SelectedSymbol}, filteredContractDataCount={filteredContractData?.Count ?? 0}";
             return;
         }
-        
+
 
         var startTime = filteredContractData[0].DateTime;
         var endTime = filteredContractData[filteredContractData.Count - 1].DateTime;
@@ -193,15 +252,16 @@ public partial class RightPanelViewModel
         unitValue = totalSeconds;
 
         TimeWindowSliderMinimum = 0;
-        TimeWindowSliderMaximum = unitValue;
         TimeWindowSliderValue = 0;
+        TimeWindowSliderMaximum = unitValue;
+
 
         _maxMicroseconds = (int)(unitValue * (unit == "s" ? 1000000 : 60000000));
         _currentTimeUnit = unit;
         _timeScale = (unit == "s") ? 1 : 60;
 
         TimeWindowValueText = $"0 {unit}";
-        MicrosecondInputBoxText = "0";
+        MicrosecondInputText = "0";
 
         if (filteredContractData == null || filteredContractData.Count < 2) return;
 
@@ -218,104 +278,181 @@ public partial class RightPanelViewModel
     }
 
     public void RunCalculations()
+    {
+        StatusIndicatorBrush = Brushes.Red;
+        try
         {
-            // StatusIndicatorBrush.Fill = new SolidColorBrush(Colors.Red);
-            // try
-            // {
-            //     bool filterBid = BidOnlyCheckbox.IsChecked == true;
-            //     SelectedList = filterBid ? bidList : askList;
+            SelectedList = UseBidPrices ? bidList : askList;
 
-            //     // Time filtering based on slider
-            //     double sliderValue = TimeWindowSlider.Value;
-            //     if (sliderValue > 0)
-            //     {
-            //         // Calculate cutoff time
-            //         TimeSpan timeWindow = TimeSpan.FromSeconds(sliderValue * _timeScale);
-            //         DateTime endTime = SelectedList.Last().DateTime;
-            //         DateTime cutoffTime = endTime - timeWindow;
+            // Time filtering based on slider
+            double sliderValue = TimeWindowSliderValue;
+            if (sliderValue > 0)
+            {
+                // Calculate cutoff time
+                TimeSpan timeWindow = TimeSpan.FromSeconds(sliderValue * _timeScale);
+                DateTime endTime = SelectedList.Last().DateTime;
+                DateTime cutoffTime = endTime - timeWindow;
 
-            //         SelectedList = SelectedList
-            //             .Where(row => row.DateTime >= cutoffTime)
-            //             .ToList();
-            //     }
+                SelectedList = SelectedList
+                    .Where(row => row.DateTime >= cutoffTime)
+                    .ToList();
+            }
 
-            //     var priceChangedRows = new List<MarketDataRow> { SelectedList[0] };
-            //     for (int i = 1; i < SelectedList.Count; i++)
-            //     {
-            //         if (SelectedList[i].Price != SelectedList[i - 1].Price)
-            //         {
-            //             priceChangedRows.Add(SelectedList[i]);
-            //         }
-            //     }
-            //     SelectedList = priceChangedRows;
+            var priceChangedRows = new List<MarketDataRow> { SelectedList[0] };
+            for (int i = 1; i < SelectedList.Count; i++)
+            {
+                if (SelectedList[i].Price != SelectedList[i - 1].Price)
+                {
+                    priceChangedRows.Add(SelectedList[i]);
+                }
+            }
+            SelectedList = priceChangedRows;
 
-            //     // Compute log returns
-            //     logReturn = new List<double>();
-            //     for (int i = 1; i < SelectedList.Count; i++)
-            //     {
-            //         var prev = SelectedList[i - 1];
-            //         var curr = SelectedList[i];
+            // Compute log returns
+            logReturn = new List<double>();
+            for (int i = 1; i < SelectedList.Count; i++)
+            {
+                var prev = SelectedList[i - 1];
+                var curr = SelectedList[i];
 
-            //         if (prev.Price > 0 && curr.Price > 0)
-            //         {
-            //             double logRet = Math.Log((double)curr.Price / prev.Price);
-            //             logReturn.Add(logRet);
-            //         }
+                if (prev.Price > 0 && curr.Price > 0)
+                {
+                    double logRet = Math.Log((double)curr.Price / prev.Price);
+                    logReturn.Add(logRet);
+                }
 
-            //     }
+            }
 
-            //     // Remove NaN and Infinity values
-            //     ValidReturns = logReturn
-            //     .Where(x => !double.IsNaN(x) && !double.IsInfinity(x))
-            //     .ToArray();
+            // Remove NaN and Infinity values
+            ValidReturns = logReturn
+            .Where(x => !double.IsNaN(x) && !double.IsInfinity(x))
+            .ToArray();
 
-            //     // Perform t-distribution fitting and KS test
-            //     StudentTDistributionZeroMean tDist = new StudentTDistributionZeroMean();
+            // Perform t-distribution fitting and KS test
+            StudentTDistributionZeroMean tDist = new StudentTDistributionZeroMean();
 
-            //     StudentTResult tDistResult = tDist.StudentT(ValidReturns);
+            StudentTResult tDistResult = tDist.StudentT(ValidReturns);
 
-            //     double location = tDistResult.Location;
-            //     double std = tDistResult.Scale;
-            //     double degreesFreedom = tDistResult.DegreesFreedom;
+            double location = tDistResult.Location;
+            double std = tDistResult.Scale;
+            double degreesFreedom = tDistResult.DegreesFreedom;
 
-            //     var tDistArr = new TDistribution(degreesFreedom);
+            var tDistArr = new TDistribution(degreesFreedom);
 
-            //     double[] standardizedReturns = ValidReturns
-            //     .Select(x => x / std)
-            //     .Where(x => !double.IsNaN(x) && !double.IsInfinity(x))
-            //     .ToArray();
+            double[] standardizedReturns = ValidReturns
+            .Select(x => x / std)
+            .Where(x => !double.IsNaN(x) && !double.IsInfinity(x))
+            .ToArray();
 
-            //     KolmogorovSmirnovTest ks = new KolmogorovSmirnovTest(standardizedReturns, tDistArr);
+            KolmogorovSmirnovTest ks = new KolmogorovSmirnovTest(standardizedReturns, tDistArr);
 
 
-            //     // Sample statistics
-            //     SampleSizeText.Text = ValidReturns.Length.ToString("N0");
-            //     MeanReturnText.Text = ValidReturns.Average().ToString("F6");
-            //     StdDevText.Text = MathNet.Numerics.Statistics.Statistics.StandardDeviation(ValidReturns).ToString("F6");
+            // Sample statistics
+            SampleSizeText = ValidReturns.Length.ToString("N0");
+            MeanReturnText = ValidReturns.Average().ToString("F6");
+            StdDevText = MathNet.Numerics.Statistics.Statistics.StandardDeviation(ValidReturns).ToString("F6");
 
-            //     // Fitted t-distribution parameters
-            //     LocationParamText.Text = location.ToString("F6");
-            //     ScaleParamText.Text = std.ToString("F6");
-            //     DegreesFreedomText.Text = degreesFreedom.ToString("F2");
+            // // Fitted t-distribution parameters
+            LocationParamText = location.ToString("F6");
+            ScaleParamText = std.ToString("F6");
+            DegreesFreedomText = degreesFreedom.ToString("F2");
 
-            //     KSTestStatistic = ks.Statistic;
-            //     KSTestPValue = ks.PValue;
+            KSTestStatistic = ks.Statistic;
+            KSTestPValue = ks.PValue;
 
-            //     // KS test results
-            //     string statistic = $"Test Statistic: {ks.Statistic:F4}";
-            //     string significance = $"Decision: {(ks.Significant ? "Reject H0 (Significant)" : "Fail to Reject H0")}";
-            //     string pValue = $"P-value: {ks.PValue:E4} ";
+            // // KS test results
+            string statistic = $"Test Statistic: {ks.Statistic:F4}";
+            string significance = $"Decision: {(ks.Significant ? "Reject H0 (Significant)" : "Fail to Reject H0")}";
+            string pValue = $"P-value: {ks.PValue:E4} ";
 
-            //     UpdateKsTestResults(statistic, significance, pValue);
-            //     PlotEcdfWithTDistribution(standardizedReturns, tDistArr);
-            //     StatusIndicatorBrush.Fill = new SolidColorBrush(Colors.Green);
+            UpdateKsTestResults(statistic, significance, pValue);
+            PlotEcdfWithTDistribution(standardizedReturns, tDistArr);
+            StatusIndicatorBrush = Brushes.Green;
 
-            // }
-            // catch (Exception ex)
-            // {
-            //     throw new InvalidOperationException($"Error during calculations: {ex.Message}\n{ex.StackTrace}");
-            // }
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Error during calculations: {ex.Message}\n{ex.StackTrace}");
+        }
+    }
+
+    public void UpdateKsTestResults(string testStatistic, string decision, string pValue)
+    {
+        KsTestStatText = testStatistic;
+        StatDecisionText = decision;
+        PValueText = pValue;
+    }
+        
+    public void PlotEcdfWithTDistribution(double[] standardizedReturns, TDistribution tDist)
+    {
+        var sortedReturns = standardizedReturns.OrderBy(x => x).ToArray();
+        int n = sortedReturns.Length;
+
+        var ecdfPoints = new List<DataPoint>();
+        var tCdfPoints = new List<DataPoint>();
+
+        for (int i = 0; i < n; i++)
+        {
+            double x = sortedReturns[i];
+            double y = (i + 1.0) / n;
+            ecdfPoints.Add(new DataPoint(x, y));
+            tCdfPoints.Add(new DataPoint(x, tDist.DistributionFunction(x)));
         }
 
+        var plotModel = new PlotModel
+        {
+            Title = "Empirical CDF vs Fitted t-Distribution",
+            IsLegendVisible = true
+        };
+
+        plotModel.Legends.Add(new Legend
+        {
+            LegendPosition = LegendPosition.TopRight,
+            LegendPlacement = LegendPlacement.Outside,
+            LegendOrientation = LegendOrientation.Vertical,
+            LegendBorderThickness = 0,
+            LegendBackground = OxyColors.White
+        });
+
+        plotModel.Axes.Add(new LinearAxis
+        {
+            Position = AxisPosition.Bottom,
+            Title = "Standardized Log Return",
+            IsZoomEnabled = false,
+            IsPanEnabled = false
+        });
+
+        plotModel.Axes.Add(new LinearAxis
+        {
+            Position = AxisPosition.Left,
+            Title = "CDF",
+            Minimum = 0,
+            Maximum = 1,
+            IsZoomEnabled = false,
+            IsPanEnabled = false
+        });
+
+        var ecdfSeries = new LineSeries
+        {
+            Title = "Empirical CDF",
+            StrokeThickness = 2,
+            Color = OxyColors.Blue
+        };
+        ecdfSeries.Points.AddRange(ecdfPoints);
+
+        var tCdfSeries = new LineSeries
+        {
+            Title = "Fitted t-Distribution CDF",
+            StrokeThickness = 2,
+            Color = OxyColors.Red
+        };
+        tCdfSeries.Points.AddRange(tCdfPoints);
+
+        plotModel.Series.Add(ecdfSeries);
+        plotModel.Series.Add(tCdfSeries);
+
+        ECDFPlotModel = plotModel;
+        plotModel.InvalidatePlot(true);
+    }
 
 }

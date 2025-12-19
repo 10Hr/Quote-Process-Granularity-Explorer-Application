@@ -1705,11 +1705,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\tmccl\\Desktop\\Quant Dev Projects\\ZSExplorer\\ZSExplorer\\ZSExplorer.csproj",
+      "projectUniqueName": "C:\\Users\\tmccl\\Desktop\\Quant dev projects\\ZSExplorer\\ZSExplorer\\ZSExplorer.csproj",
       "projectName": "ZSExplorer",
-      "projectPath": "C:\\Users\\tmccl\\Desktop\\Quant Dev Projects\\ZSExplorer\\ZSExplorer\\ZSExplorer.csproj",
+      "projectPath": "C:\\Users\\tmccl\\Desktop\\Quant dev projects\\ZSExplorer\\ZSExplorer\\ZSExplorer.csproj",
       "packagesPath": "C:\\Users\\tmccl\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\tmccl\\Desktop\\Quant Dev Projects\\ZSExplorer\\ZSExplorer\\obj\\",
+      "outputPath": "C:\\Users\\tmccl\\Desktop\\Quant dev projects\\ZSExplorer\\ZSExplorer\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\tmccl\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -1799,7 +1799,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

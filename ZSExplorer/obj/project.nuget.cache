@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "EKEcFM8LOc0=",
+  "dgSpecHash": "jZVqESwCH05+QgOB+wHtbmGWLs1BPYAD/BMdaqRc5ojj7WjrewLjFJDZmNb56A+sbLOmfCn6V3CohRSznoh2Vg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\tmccl\\Desktop\\Quant Dev Projects\\ZSExplorer\\ZSExplorer\\ZSExplorer.csproj",
+  "projectFilePath": "C:\\Users\\tmccl\\Desktop\\Quant dev projects\\ZSExplorer\\ZSExplorer\\ZSExplorer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\tmccl\\.nuget\\packages\\accord\\3.8.0\\accord.3.8.0.nupkg.sha512",
     "C:\\Users\\tmccl\\.nuget\\packages\\accord.math\\3.8.0\\accord.math.3.8.0.nupkg.sha512",
