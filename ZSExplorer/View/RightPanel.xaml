@@ -119,10 +119,10 @@
                                       IsChecked="{Binding AnalyzeAllOptions}"/>
                         </StackPanel>
 
-                        <TextBlock Margin="0,6,0,10"
+                        <!-- <TextBlock Margin="0,6,0,10"
                                    FontSize="12"
                                    FontWeight="SemiBold"
-                                   Text="{Binding TimeWindowValueText}"/>
+                                   Text="{Binding TimeWindowValueText}"/> -->
 
                         <TextBlock Text="Sample Statistics"
                                    FontWeight="Bold"
@@ -165,7 +165,7 @@
                                 BorderThickness="1"
                                 CornerRadius="6">
 
-                            <StackPanel>
+                            <StackPanel HorizontalAlignment="Left">
                                 <TextBlock Foreground="Red"
                                            FontWeight="Bold"
                                            Text="{Binding InsufficientDataText}"/>

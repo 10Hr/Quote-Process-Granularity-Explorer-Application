@@ -56,7 +56,7 @@ public partial class RightPanelViewModel
     public bool AnalyzeAllOptions { get; set; } = false;
     public bool UseBidPrices { get; set; } = false;
 
-    public string TimeWindowValueText { get; set; } = "0s";
+    public string TimeWindowValueText { get; set; } = "0s"; // extra 0s in the ui????????????????
     public string TimeLabel0Text { get; set; } = "0s";
     public string TimeLabel25Text { get; set; } = "...";
     public string TimeLabel50Text { get; set; } = "...";
@@ -282,7 +282,14 @@ public partial class RightPanelViewModel
         StatusIndicatorBrush = Brushes.Red;
         try
         {
+
             SelectedList = UseBidPrices ? bidList : askList;
+
+            if (SelectedList == null || SelectedList.Count < 2)
+            {
+                SetInsufficientData("Not enough price observations.");
+                return;
+            }
 
             // Time filtering based on slider
             double sliderValue = TimeWindowSliderValue;
@@ -296,6 +303,12 @@ public partial class RightPanelViewModel
                 SelectedList = SelectedList
                     .Where(row => row.DateTime >= cutoffTime)
                     .ToList();
+            }
+
+            if (SelectedList.Count < 2)
+            {
+                SetInsufficientData("Time window too small.");
+                return;
             }
 
             var priceChangedRows = new List<MarketDataRow> { SelectedList[0] };
@@ -323,10 +336,17 @@ public partial class RightPanelViewModel
 
             }
 
+
             // Remove NaN and Infinity values
             ValidReturns = logReturn
             .Where(x => !double.IsNaN(x) && !double.IsInfinity(x))
             .ToArray();
+
+            if (ValidReturns.Length < 2)
+            {
+                SetInsufficientData("Insufficient returns for statistics.");
+                return;
+            }
 
             // Perform t-distribution fitting and KS test
             StudentTDistributionZeroMean tDist = new StudentTDistributionZeroMean();
@@ -372,9 +392,36 @@ public partial class RightPanelViewModel
         }
         catch (Exception ex)
         {
-            throw new InvalidOperationException($"Error during calculations: {ex.Message}\n{ex.StackTrace}");
+            StatusIndicatorBrush = Brushes.Red;
+            SetInsufficientData($"Error during calculations: {ex.Message}\n{ex.StackTrace}");
+            return;
         }
     }
+
+    public string InsufficientDataText { get; set; } = "";
+
+    private void SetInsufficientData(string reason)
+    {
+        InsufficientDataText = reason;
+
+        SampleSizeText = "-";
+        MeanReturnText = "-";
+        StdDevText = "-";
+        LocationParamText = "-";
+        ScaleParamText = "-";
+        DegreesFreedomText = "-";
+        KsTestStatText = "Test Statistic: -";
+        StatDecisionText = "Decision: -";
+        PValueText = "P-value: -";
+        ECDFPlotModel = new PlotModel
+        {
+            Title = "Insufficient data"
+        };
+
+        MessageBox.Show($"Insufficient Data: {reason}");
+        InsufficientDataText = "";
+    }
+
 
     public void UpdateKsTestResults(string testStatistic, string decision, string pValue)
     {
