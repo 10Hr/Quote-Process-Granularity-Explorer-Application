@@ -31,8 +31,8 @@
                         IsEditable="False"
                         IsTextSearchEnabled="True"
                         StaysOpenOnEdit="True"
-                        ItemsSource="{Binding UniqueSymbols}"
-                        SelectedItem="{Binding SelectedSymbol}"
+                        ItemsSource="{Binding FormattedSymbols}"
+                        SelectedItem="{Binding SelectedSymbolText}"
                         IsEnabled="{Binding FileLoaded}" />
                 </StackPanel>
 

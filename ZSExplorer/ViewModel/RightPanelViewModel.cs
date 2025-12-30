@@ -12,11 +12,13 @@ using OxyPlot.Series;
 using OxyPlot.Axes;
 using OxyPlot.Legends;
 using Accord.Statistics.Distributions.Univariate;
+using Accord.Statistics.Distributions;
 using Accord.Statistics.Testing;
 using Metalama.Patterns.Wpf;
 using Metalama.Patterns.Observability;
 using ZSExplorer.Services;
 using System.Windows.Threading;
+using ZSExplorer.Tests;
 
 namespace ZSExplorer;
 
@@ -141,8 +143,17 @@ public partial class RightPanelViewModel
 
         MicrosecondInputText = "0";
 
+        //RunValidationTests();
         UpdateUIFromLists();
         RunCalculations();
+    }
+
+    [Command]
+    public void RunValidationTests()
+    {
+        TestSuite.RunAllTests();
+    
+        MessageBox.Show("Validation tests complete. Check Debug output.");
     }
 
     [Command]
@@ -277,6 +288,7 @@ public partial class RightPanelViewModel
         TimeLabel100Text = $"{Math.Round(totalUnits)}{unit}";
     }
 
+/*
     public void RunCalculations()
     {
         StatusIndicatorBrush = Brushes.Red;
@@ -351,21 +363,50 @@ public partial class RightPanelViewModel
             // Perform t-distribution fitting and KS test
             StudentTDistributionZeroMean tDist = new StudentTDistributionZeroMean();
 
+            // StudentTResult tDistResult = tDist.StudentT(ValidReturns);
+
+            // double location = tDistResult.Location;
+            // double std = tDistResult.Scale;
+            // double degreesFreedom = tDistResult.DegreesFreedom;
+
+            // var tDistArr = new TDistribution(degreesFreedom);
+
+            // double[] standardizedReturns = ValidReturns
+            // .Select(x => x / std)
+            // .Where(x => !double.IsNaN(x) && !double.IsInfinity(x))
+            // .ToArray();
+
+            // KolmogorovSmirnovTest ks = new KolmogorovSmirnovTest(standardizedReturns, tDistArr);
+
             StudentTResult tDistResult = tDist.StudentT(ValidReturns);
 
             double location = tDistResult.Location;
-            double std = tDistResult.Scale;
+            double scale = tDistResult.Scale;
             double degreesFreedom = tDistResult.DegreesFreedom;
 
-            var tDistArr = new TDistribution(degreesFreedom);
+            double[] standardizedReturns;
+            KolmogorovSmirnovTest ks;
+            
+            standardizedReturns = ValidReturns
+                .Select(x => x / scale) 
+                .Where(x => !double.IsNaN(x) && !double.IsInfinity(x))
+                .ToArray();
 
-            double[] standardizedReturns = ValidReturns
-            .Select(x => x / std)
-            .Where(x => !double.IsNaN(x) && !double.IsInfinity(x))
-            .ToArray();
+            // Handle effectively normal case
+            if (double.IsInfinity(degreesFreedom))
+            {
+                var standardNormal = new NormalDistribution(0, 1);
+                ks = new KolmogorovSmirnovTest(standardizedReturns, standardNormal);
+                PlotEcdfWithTDistribution(standardizedReturns, tDistArr);
 
-            KolmogorovSmirnovTest ks = new KolmogorovSmirnovTest(standardizedReturns, tDistArr);
-
+            }
+            else
+            {
+                var tDistArr = new TDistribution(degreesFreedom);
+                ks = new KolmogorovSmirnovTest(standardizedReturns, tDistArr);
+                PlotEcdfWithTDistribution(standardizedReturns, tDistArr);
+            
+            }
 
             // Sample statistics
             SampleSizeText = ValidReturns.Length.ToString("N0");
@@ -374,8 +415,8 @@ public partial class RightPanelViewModel
 
             // // Fitted t-distribution parameters
             LocationParamText = location.ToString("F6");
-            ScaleParamText = std.ToString("F6");
-            DegreesFreedomText = degreesFreedom.ToString("F2");
+            ScaleParamText = scale.ToString("F6");
+            DegreesFreedomText = double.IsInfinity(degreesFreedom) ? "∞" : degreesFreedom.ToString("F2");
 
             KSTestStatistic = ks.Statistic;
             KSTestPValue = ks.PValue;
@@ -386,7 +427,8 @@ public partial class RightPanelViewModel
             string pValue = $"P-value: {ks.PValue:E4} ";
 
             UpdateKsTestResults(statistic, significance, pValue);
-            PlotEcdfWithTDistribution(standardizedReturns, tDistArr);
+            
+
             StatusIndicatorBrush = Brushes.Green;
 
         }
@@ -398,57 +440,168 @@ public partial class RightPanelViewModel
         }
     }
 
-    public string InsufficientDataText { get; set; } = "";
-
-    private void SetInsufficientData(string reason)
+    */
+    public void RunCalculations()
     {
-        InsufficientDataText = reason;
-
-        SampleSizeText = "-";
-        MeanReturnText = "-";
-        StdDevText = "-";
-        LocationParamText = "-";
-        ScaleParamText = "-";
-        DegreesFreedomText = "-";
-        KsTestStatText = "Test Statistic: -";
-        StatDecisionText = "Decision: -";
-        PValueText = "P-value: -";
-        ECDFPlotModel = new PlotModel
-        {
-            Title = "Insufficient data"
-        };
-
-        MessageBox.Show($"Insufficient Data: {reason}");
         InsufficientDataText = "";
+        StatusIndicatorBrush = Brushes.Red;
+        try
+        {
+            SelectedList = UseBidPrices ? bidList : askList;
+
+            if (SelectedList == null || SelectedList.Count < 2)
+            {
+                SetInsufficientData("Not enough price observations.");
+                return;
+            }
+
+            // Time filtering based on slider
+            double sliderValue = TimeWindowSliderValue;
+            if (sliderValue > 0)
+            {
+                TimeSpan timeWindow = TimeSpan.FromSeconds(sliderValue * _timeScale);
+                DateTime endTime = SelectedList.Last().DateTime;
+                DateTime cutoffTime = endTime - timeWindow;
+
+                SelectedList = SelectedList
+                    .Where(row => row.DateTime >= cutoffTime)
+                    .ToList();
+            }
+
+            if (SelectedList.Count < 2)
+            {
+                SetInsufficientData("Time window too small.");
+                return;
+            }
+
+            var priceChangedRows = new List<MarketDataRow> { SelectedList[0] };
+            for (int i = 1; i < SelectedList.Count; i++)
+            {
+                if (SelectedList[i].Price != SelectedList[i - 1].Price)
+                {
+                    priceChangedRows.Add(SelectedList[i]);
+                }
+            }
+            SelectedList = priceChangedRows;
+
+            // Compute log returns
+            logReturn = new List<double>();
+            for (int i = 1; i < SelectedList.Count; i++)
+            {
+                var prev = SelectedList[i - 1];
+                var curr = SelectedList[i];
+
+                if (prev.Price > 0 && curr.Price > 0)
+                {
+                    double logRet = Math.Log((double)curr.Price / prev.Price);
+                    logReturn.Add(logRet);
+                }
+            }
+
+            // Remove NaN and Infinity values
+            ValidReturns = logReturn
+                .Where(x => !double.IsNaN(x) && !double.IsInfinity(x))
+                .ToArray();
+
+            if (ValidReturns.Length < 2)
+            {
+                SetInsufficientData("Insufficient returns for statistics.");
+                return;
+            }
+
+            // Perform t-distribution fitting and KS test
+            StudentTDistributionZeroMean tDist = new StudentTDistributionZeroMean();
+            StudentTResult tDistResult = tDist.StudentT(ValidReturns);
+
+            double location = tDistResult.Location;
+            double scale = tDistResult.Scale;
+            double degreesFreedom = tDistResult.DegreesFreedom;
+
+            // Standardize returns (location is 0, so just divide by scale)
+            double[] standardizedReturns = ValidReturns
+                .Select(x => x / scale)
+                .Where(x => !double.IsNaN(x) && !double.IsInfinity(x))
+                .ToArray();
+
+            // Handle effectively normal case vs t-distribution
+            KolmogorovSmirnovTest ks;
+            IUnivariateDistribution distributionForPlot;
+            
+            if (double.IsInfinity(degreesFreedom) || degreesFreedom > 10000)
+            {
+                // Data is effectively normal
+                var standardNormal = new NormalDistribution(0, 1);
+                ks = new KolmogorovSmirnovTest(standardizedReturns, standardNormal);
+                distributionForPlot = standardNormal;
+                
+                // Cap for display
+                if (double.IsInfinity(degreesFreedom))
+                {
+                    DegreesFreedomText = "∞ (Normal)";
+                }
+                else
+                {
+                    DegreesFreedomText = $"{degreesFreedom:F0} (≈ Normal)";
+                }
+            }
+            else
+            {
+                // Use t-distribution
+                var tDistribution = new TDistribution(degreesFreedom);
+                ks = new KolmogorovSmirnovTest(standardizedReturns, tDistribution);
+                distributionForPlot = tDistribution;
+                DegreesFreedomText = degreesFreedom.ToString("F2");
+            }
+
+            // Sample statistics
+            SampleSizeText = ValidReturns.Length.ToString("N0");
+            MeanReturnText = ValidReturns.Average().ToString("F6");
+            StdDevText = MathNet.Numerics.Statistics.Statistics.StandardDeviation(ValidReturns).ToString("F6");
+
+            // Fitted t-distribution parameters
+            LocationParamText = location.ToString("F6");
+            ScaleParamText = scale.ToString("F6");
+
+            KSTestStatistic = ks.Statistic;
+            KSTestPValue = ks.PValue;
+
+            // KS test results
+            string statistic = $"Test Statistic: {ks.Statistic:F4}";
+            string significance = $"Decision: {(ks.Significant ? "Reject H0 (Significant)" : "Fail to Reject H0")}";
+            string pValue = $"P-value: {ks.PValue:E4}";
+
+            UpdateKsTestResults(statistic, significance, pValue);
+            PlotEcdfWithDistribution(standardizedReturns, distributionForPlot, degreesFreedom);
+
+            StatusIndicatorBrush = Brushes.Green;
+        }
+        catch (Exception ex)
+        {
+            StatusIndicatorBrush = Brushes.Red;
+            SetInsufficientData($"Error during calculations: Insufficient Data");
+            return;
+        }
     }
 
-
-    public void UpdateKsTestResults(string testStatistic, string decision, string pValue)
-    {
-        KsTestStatText = testStatistic;
-        StatDecisionText = decision;
-        PValueText = pValue;
-    }
-        
-    public void PlotEcdfWithTDistribution(double[] standardizedReturns, TDistribution tDist)
+    public void PlotEcdfWithDistribution(double[] standardizedReturns, IUnivariateDistribution dist, double degreesFreedom)
     {
         var sortedReturns = standardizedReturns.OrderBy(x => x).ToArray();
         int n = sortedReturns.Length;
 
         var ecdfPoints = new List<DataPoint>();
-        var tCdfPoints = new List<DataPoint>();
+        var distCdfPoints = new List<DataPoint>();
 
         for (int i = 0; i < n; i++)
         {
             double x = sortedReturns[i];
             double y = (i + 1.0) / n;
             ecdfPoints.Add(new DataPoint(x, y));
-            tCdfPoints.Add(new DataPoint(x, tDist.DistributionFunction(x)));
+            distCdfPoints.Add(new DataPoint(x, dist.DistributionFunction(x)));
         }
 
         var plotModel = new PlotModel
         {
-            Title = "Empirical CDF vs Fitted t-Distribution",
+            Title = "Empirical CDF vs Fitted Distribution",
             IsLegendVisible = true
         };
 
@@ -487,19 +640,58 @@ public partial class RightPanelViewModel
         };
         ecdfSeries.Points.AddRange(ecdfPoints);
 
-        var tCdfSeries = new LineSeries
+        // Dynamic label based on distribution type
+        string distLabel;
+        if (double.IsInfinity(degreesFreedom) || degreesFreedom > 10000)
         {
-            Title = "Fitted t-Distribution CDF",
+            distLabel = "Fitted Distribution (Normal)";
+        }
+        else
+        {
+            distLabel = $"Fitted t-Distribution (ν={degreesFreedom:F2})";
+        }
+
+        var distCdfSeries = new LineSeries
+        {
+            Title = distLabel,
             StrokeThickness = 2,
             Color = OxyColors.Red
         };
-        tCdfSeries.Points.AddRange(tCdfPoints);
+        distCdfSeries.Points.AddRange(distCdfPoints);
 
         plotModel.Series.Add(ecdfSeries);
-        plotModel.Series.Add(tCdfSeries);
+        plotModel.Series.Add(distCdfSeries);
 
         ECDFPlotModel = plotModel;
         plotModel.InvalidatePlot(true);
     }
 
+    public string InsufficientDataText { get; set; } = "";
+
+    private void SetInsufficientData(string reason)
+    {
+        InsufficientDataText = reason;
+
+        SampleSizeText = "-";
+        MeanReturnText = "-";
+        StdDevText = "-";
+        LocationParamText = "-";
+        ScaleParamText = "-";
+        DegreesFreedomText = "-";
+        KsTestStatText = "Test Statistic: -";
+        StatDecisionText = "Decision: -";
+        PValueText = "P-value: -";
+        ECDFPlotModel = new PlotModel
+        {
+            Title = "Insufficient data"
+        };
+    }
+
+
+    public void UpdateKsTestResults(string testStatistic, string decision, string pValue)
+    {
+        KsTestStatText = testStatistic;
+        StatDecisionText = decision;
+        PValueText = pValue;
+    }
 }

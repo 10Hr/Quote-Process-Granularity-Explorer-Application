@@ -66,10 +66,10 @@
                 </Border>
 
                 <!-- ================= CONTROLS ================= -->
-                <Grid Margin="0,0,0,10" Grid.IsSharedSizeScope="True">
+                <Grid Margin="0,0,0,10">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" SharedSizeGroup="Col"/>
-                        <ColumnDefinition Width="*" SharedSizeGroup="Col"/>
+                        <ColumnDefinition Width="*" MaxWidth="350"/>
+                        <ColumnDefinition Width="*" MaxWidth="350"/>
                     </Grid.ColumnDefinitions>
 
                     <!-- LEFT -->
@@ -119,25 +119,33 @@
                                       IsChecked="{Binding AnalyzeAllOptions}"/>
                         </StackPanel>
 
-                        <!-- <TextBlock Margin="0,6,0,10"
-                                   FontSize="12"
-                                   FontWeight="SemiBold"
-                                   Text="{Binding TimeWindowValueText}"/> -->
-
                         <TextBlock Text="Sample Statistics"
                                    FontWeight="Bold"
                                    Margin="0,10,0,6"/>
 
-                        <UniformGrid Columns="2" Rows="3">
-                            <TextBlock Text="Sample Size:"/>
-                            <TextBlock Text="{Binding SampleSizeText}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
 
-                            <TextBlock Text="Mean Return:"/>
-                            <TextBlock Text="{Binding MeanReturnText}"/>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Sample Size:"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SampleSizeText}" 
+                                       TextAlignment="Left" TextTrimming="CharacterEllipsis"/>
 
-                            <TextBlock Text="Std Dev:"/>
-                            <TextBlock Text="{Binding StdDevText}"/>
-                        </UniformGrid>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Mean Return:"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding MeanReturnText}"
+                                       TextAlignment="Left" TextTrimming="CharacterEllipsis"/>
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Std Dev:"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding StdDevText}"
+                                       TextAlignment="Left" TextTrimming="CharacterEllipsis"/>
+                        </Grid>
                     </StackPanel>
 
                     <!-- RIGHT -->
@@ -147,16 +155,29 @@
                                    FontWeight="Bold"
                                    Margin="0,0,0,6"/>
 
-                        <UniformGrid Columns="2" Rows="3">
-                            <TextBlock Text="Location:"/>
-                            <TextBlock Text="{Binding LocationParamText}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="65"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
 
-                            <TextBlock Text="Scale:"/>
-                            <TextBlock Text="{Binding ScaleParamText}"/>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Location:"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding LocationParamText}"
+                                       TextAlignment="Left" TextTrimming="CharacterEllipsis"/>
 
-                            <TextBlock Text="DoF:"/>
-                            <TextBlock Text="{Binding DegreesFreedomText}"/>
-                        </UniformGrid>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Scale:"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ScaleParamText}"
+                                       TextAlignment="Left" TextTrimming="CharacterEllipsis"/>
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="DoF:"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding DegreesFreedomText}"
+                                       TextAlignment="Left" TextTrimming="CharacterEllipsis"/>
+                        </Grid>
 
                         <Border Margin="0,10,0,0"
                                 Padding="8"
@@ -165,10 +186,11 @@
                                 BorderThickness="1"
                                 CornerRadius="6">
 
-                            <StackPanel HorizontalAlignment="Left">
+                            <StackPanel HorizontalAlignment="Stretch">
                                 <TextBlock Foreground="Red"
                                            FontWeight="Bold"
-                                           Text="{Binding InsufficientDataText}"/>
+                                           Text="{Binding InsufficientDataText}"
+                                           TextWrapping="Wrap"/>
 
                                 <TextBlock Text="KS Test Results"
                                            FontWeight="Bold"
@@ -176,13 +198,16 @@
 
                                 <TextBlock Text="{Binding KsTestStatText}"
                                            FontSize="18"
-                                           FontWeight="Bold"/>
+                                           FontWeight="Bold"
+                                           TextTrimming="CharacterEllipsis"/>
 
                                 <TextBlock Text="{Binding StatDecisionText}"
-                                           FontWeight="Bold"/>
+                                           FontWeight="Bold"
+                                           TextTrimming="CharacterEllipsis"/>
 
                                 <TextBlock Text="{Binding PValueText}"
-                                           FontSize="12"/>
+                                           FontSize="12"
+                                           TextTrimming="CharacterEllipsis"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>

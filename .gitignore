@@ -1,0 +1,13 @@
+# Visual Studio files
+*.suo
+*.user
+*.userosscache
+*.sln
+
+# Rider / VS Code
+.idea/
+.vscode/
+
+# OS junk
+.DS_Store
+Thumbs.db

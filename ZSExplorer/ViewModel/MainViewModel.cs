@@ -22,6 +22,7 @@ public partial class MainViewModel
     public long QuoteCount { get; set; }  = 0;
 
     private string _selectedSymbol = "";
+    private string _selectedSymbolText = "";
     
     public string SelectedSymbol 
     { 
@@ -36,6 +37,19 @@ public partial class MainViewModel
         }
     }
 
+    public string SelectedSymbolText 
+    { 
+        get => _selectedSymbolText;
+        set
+        {
+            if (_selectedSymbolText != value)
+            {
+                _selectedSymbolText = value;
+                StatusText = $"Selected Contract: {value}";
+            }
+        }
+     }
+
     public string DateRange { get; set; } = "";
 
     public string FileLoadSummary { get; set; } = "";
@@ -49,6 +63,8 @@ public partial class MainViewModel
     // Dropdown list
     public ObservableCollection<string> UniqueSymbols { get; set; } = new();
     public ObservableCollection<string> UniqueExchanges { get; set; } = new();
+
+    public ObservableCollection<string> FormattedSymbols { get; set; } = new();
 
     // DataGrids
     public ObservableCollection<MarketDataRow> Calls { get; } = new();
@@ -160,19 +176,25 @@ public partial class MainViewModel
                 UniqueSymbols.Clear();
                 UniqueExchanges.Clear();
 
-                foreach (var symbol in tempSymbols.OrderBy(s => s))
+                foreach (var symbol in tempSymbols.OrderBy(s => s)) {
                     UniqueSymbols.Add(symbol);
+                    OptionInfo info = ParseOptionsSymbol.Parse(symbol);
+
+                    //.AAPL240726C215 -> AAPL | Call $215 | 7/26/24
+                    FormattedSymbols.Add($"{info.OptionType} ${info.StrikePrice} | {info.Symbol} | {info.ExpirationDate:M/d/yy}");
+                }
                 
                 foreach (var exchange in tempExchanges.OrderBy(e => e))
-                    UniqueExchanges.Add(exchange);
+                    UniqueExchanges.Add(exchange);  
 
+                SelectedSymbolText = FormattedSymbols.FirstOrDefault() ?? "";
                 SelectedSymbol = UniqueSymbols.FirstOrDefault() ?? "";
                 UniqueContractCount = UniqueSymbols.Count;
                 ExchangeCount = callData.MMID.Concat(putData.MMID).Select(m => m.ToString()).Distinct().Count();
 
                 FileLoaded = true;
 
-                StatusText = $"Selected Contract: {SelectedSymbol}";//$"Loaded {Path.GetFileName(openFileDialog.FileName)} ({QuoteCount:N0} rows in {seconds:F2}s)";
+                StatusText = $"Selected Contract: {SelectedSymbolText}";//$"Loaded {Path.GetFileName(openFileDialog.FileName)} ({QuoteCount:N0} rows in {seconds:F2}s)";
             }
             catch (Exception ex)
             {
