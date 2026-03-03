@@ -2,7 +2,7 @@
 
 The Quote Process Granularity Explorer is a specialized analytical tool designed for quantitative researchers and market microstructure analysts working with high-frequency options quote data. Its primary objective is to provide insights into how quote processes vary across different time scales, evaluate the granularity of price discovery mechanisms, and examine temporal characteristics of quote arrival processes in options markets.
 
-This WPF desktop application allows users to load `.arrow` or `.feather` files containing high-frequency option quotes, provides statistical summaries, and performs a **Kolmogorov–Smirnov (KS) test** on the log returns of selected option contracts against a fitted Student’s t-distribution. Users can dynamically configure analyses and export results.
+This WPF desktop application allows users to load `.arrow` files containing high-frequency option quotes, provides statistical summaries, and performs a **Kolmogorov–Smirnov (KS) test** on the log returns of selected option contracts against a fitted Student’s t-distribution. Users can dynamically configure analyses and export results.
 
 ---
 
@@ -18,7 +18,7 @@ This project has recently undergone an **observability rework** using the [Metal
 
 ## 📁 Features
 
-- **Load Arrow/Feather Data**: High-frequency options quote data loading.
+- **Load Arrow Data**: High-frequency options quote data loading.
 - **Summary Statistics**: Displays total quote count, date range, unique contracts, and exchange counts.
 - **Contract Filtering**: Select specific contracts by symbol to run tests.
 - **Log Return Analysis & KS Test**: Calculates log returns and uses the Regula Falsi method to fit a Student’s t-distribution to the data. 
