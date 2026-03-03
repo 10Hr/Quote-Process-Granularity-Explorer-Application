@@ -32,7 +32,6 @@ public partial class MainViewModel
             if (_selectedSymbol != value)
             {
                 _selectedSymbol = value;
-                StatusText = $"Selected Contract: {value}";
             }
         }
     }
@@ -46,6 +45,13 @@ public partial class MainViewModel
             {
                 _selectedSymbolText = value;
                 StatusText = $"Selected Contract: {value}";
+
+                // Sync SelectedSymbol with SelectedSymbolText
+                int index = FormattedSymbols.IndexOf(value);
+                if (index >= 0 && index < UniqueSymbols.Count)
+                {
+                    SelectedSymbol = UniqueSymbols[index];
+                }
             }
         }
      }
@@ -239,101 +245,104 @@ public partial class MainViewModel
         }
     }
 
-    private void ExportMarkdownButton_Click(object sender, RoutedEventArgs e)
+    [Command]
+    public void ExportMarkdown()
     {
+        if (RightPanelContainer?.RVM == null)
+        {
+            MessageBox.Show("No data to export. Please run an analysis first.", "Export", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
 
-        // if (RightPanelContainer.Content is not RightPanel panel)
-        // {
-        //     MessageBox.Show("No data to export. Please run an analysis first.", "Export", MessageBoxButton.OK, MessageBoxImage.Warning);
-        //     return;
-        // }
+        var panelVm = RightPanelContainer.RVM;
 
-        // var saveFileDialog = new SaveFileDialog
-        // {
-        //     Filter = "Markdown Files (*.md)|*.md",
-        //     DefaultExt = "md",
-        //     FileName = "AllOptionsLogReturnData.md"
-        // };
+        var saveFileDialog = new SaveFileDialog
+        {
+            Filter = "Markdown Files (*.md)|*.md",
+            DefaultExt = "md",
+            FileName = "AllOptionsLogReturnData.md"
+        };
 
-        // if (saveFileDialog.ShowDialog() == true)
-        // {
-        //     var sb = new StringBuilder();
+        if (saveFileDialog.ShowDialog() == true)
+        {
+            var sb = new StringBuilder();
 
-        //     int nPrices = panel.SelectedList.Count;
-        //     int nReturns = panel.ValidReturns.Length;
+            int nPrices = panelVm.SelectedList.Count;
+            int nReturns = panelVm.ValidReturns?.Length ?? 0;
 
-        //     sb.AppendLine("# Exported Option Quotes\n");
+            sb.AppendLine("# Exported Option Quotes\n");
 
-        //     // Add summary
-        //     sb.AppendLine($"- Export Date: {DateTime.Now:G}");
-        //     sb.AppendLine($"- Total Quotes: {nPrices}\n");
-        //     sb.AppendLine();
-        //     sb.AppendLine("# KS Test Results");
-        //     sb.AppendLine();
-        //     sb.AppendLine($"- KS Statistic: {panel.KSTestStatistic:F4}");
-        //     sb.AppendLine($"- P-Value: {panel.KSTestPValue:E4}");
-        //     sb.AppendLine();
+            // Add summary
+            sb.AppendLine($"- Export Date: {DateTime.Now:G}");
+            sb.AppendLine($"- Total Quotes: {nPrices}\n");
+            sb.AppendLine();
+            sb.AppendLine("# KS Test Results");
+            sb.AppendLine();
+            sb.AppendLine($"- KS Statistic: {panelVm.KSTestStatistic:F4}");
+            sb.AppendLine($"- P-Value: {panelVm.KSTestPValue:E4}");
+            sb.AppendLine();
 
-        //     sb.AppendLine("## Prices and Log Returns");
-        //     sb.AppendLine();
-        //     sb.AppendLine("| Index | Price    | Log Return |");
-        //     sb.AppendLine("|-------|----------|------------|");
+            sb.AppendLine("## Prices and Log Returns");
+            sb.AppendLine();
+            sb.AppendLine("| Index | Price    | Log Return |");
+            sb.AppendLine("|-------|----------|------------|");
 
+            for (int i = 0; i < nPrices; i++)
+            {
+                string indexStr = i.ToString().PadLeft(6);
+                string priceStr = panelVm.SelectedList[i].Price.ToString("G6").PadLeft(8).PadRight(1);
+                string logReturnStr = (i == 0 || i - 1 >= nReturns) ? "".PadLeft(13) : panelVm.ValidReturns[i - 1].ToString("G6").PadLeft(10);
 
+                sb.AppendLine($"|{indexStr} |{priceStr} |{logReturnStr} |");
+            }
 
-        //     for (int i = 0; i < nPrices; i++)
-        //     {
-        //         string indexStr = i.ToString().PadLeft(6);
-        //         string priceStr = panel.SelectedList[i].Price.ToString("G6").PadLeft(8).PadRight(1);
-        //         string logReturnStr = (i == 0 || i - 1 >= nReturns) ? "".PadLeft(13) : panel.ValidReturns[i - 1].ToString("G6").PadLeft(10);
-
-        //         sb.AppendLine($"|{indexStr} |{priceStr} |{logReturnStr} |");
-        //     }
-
-        //     try
-        //     {
-        //         File.WriteAllText(saveFileDialog.FileName, sb.ToString());
-        //         MessageBox.Show("Markdown export completed successfully.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         MessageBox.Show($"Failed to save file: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        //     }
-        // }
+            try
+            {
+                File.WriteAllText(saveFileDialog.FileName, sb.ToString());
+                MessageBox.Show("Markdown export completed successfully.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to save file: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
 
 
-    private void ExportPlotImagesButton_Click(object sender, RoutedEventArgs e)
+    [Command]
+    public void ExportPlots()
     {
-        // if (RightPanelContainer.Content is not RightPanel panel)
-        // {
-        //     MessageBox.Show("No plots to export. Please run an analysis first.", "Export", MessageBoxButton.OK, MessageBoxImage.Warning);
-        //     return;
-        // }
+        if (RightPanelContainer?.RVM == null)
+        {
+            MessageBox.Show("No plots to export. Please run an analysis first.", "Export", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
 
-        // var saveFileDialog = new SaveFileDialog
-        // {
-        //     Filter = "PNG Image (*.png)|*.png",
-        //     DefaultExt = "png",
-        //     FileName = "ECDFPlot.png"
-        // };
+        var panelVm = RightPanelContainer.RVM;
 
-        // if (saveFileDialog.ShowDialog() == true)
-        // {
-        //     try
-        //     {
-        //         var plotModel = panel.ECDFPlotModel; 
-        //         plotModel.Background = OxyColors.White;
-        //         using var stream = File.Create(saveFileDialog.FileName);
-        //         var exporter = new PngExporter { Width = 600, Height = 400};
-        //         exporter.Export(plotModel, stream);
+        var saveFileDialog = new SaveFileDialog
+        {
+            Filter = "PNG Image (*.png)|*.png",
+            DefaultExt = "png",
+            FileName = "ECDFPlot.png"
+        };
 
-        //         MessageBox.Show("Plot exported successfully.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         MessageBox.Show($"Failed to export plot: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        //     }
-        // }
+        if (saveFileDialog.ShowDialog() == true)
+        {
+            try
+            {
+                var plotModel = panelVm.ECDFPlotModel; 
+                plotModel.Background = OxyColors.White;
+                using var stream = File.Create(saveFileDialog.FileName);
+                var exporter = new PngExporter { Width = 600, Height = 400};
+                exporter.Export(plotModel, stream);
+
+                MessageBox.Show("Plot exported successfully.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to export plot: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
 }
