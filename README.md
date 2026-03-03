@@ -1,4 +1,4 @@
-# ZeroPlus Quote Process Granularity Explorer
+# Quote Process Granularity Explorer
 
 The Quote Process Granularity Explorer is a specialized analytical tool designed for quantitative researchers and market microstructure analysts working with high-frequency options quote data. Its primary objective is to provide insights into how quote processes vary across different time scales, evaluate the granularity of price discovery mechanisms, and examine temporal characteristics of quote arrival processes in options markets.
 
@@ -63,7 +63,7 @@ This project has recently undergone an **observability rework** using the [Metal
 
 1. Download zip file
 2. Extract to folder
-3. Open **/ZSExplorer** and open **ZSExplorer.exe**
+3. Open **ZSExplorer.exe**
 3. Click **"Load Feather Data"** to select a `.arrow` option quote dataset.
 4. Using the top **Add Contract** dropdown, search and select an options contract by symbol and strike. 
 5. Click **"Add KS Test"** to generate an analysis panel.
