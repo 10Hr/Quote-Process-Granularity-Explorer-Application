@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-c:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\obj\Debug\net8.0-windows\
+C:\Users\Tyler\Desktop\quant dev projects\ZSExplorer\ZSExplorer\obj\Debug\net8.0-windows\
 ZSExplorer
 none
 false
-TRACE;DEBUG;NET;NET8_0;NETCOREAPP
-c:\Users\tmccl\Desktop\ZeroPlusProject\VSCODE VERSION\ZSExplorer\App.xaml
+TRACE;METALAMA;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
+C:\Users\Tyler\Desktop\quant dev projects\ZSExplorer\ZSExplorer\App.xaml
 2-1640773647
-1-263590010
-12999471450
-214328737698
+1-486428744
+15-1545570663
+220-1694673395
 MainWindow.xaml;View\RightPanel.xaml;
 
 False

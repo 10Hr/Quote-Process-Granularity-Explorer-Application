@@ -11,6 +11,9 @@
           "Accord.Statistics": "3.8.0",
           "Apache.Arrow": "20.0.0",
           "MathNet.Numerics": "5.0.0",
+          "Metalama.Framework": "2025.1.17",
+          "Metalama.Patterns.Observability": "2025.1.17",
+          "Metalama.Patterns.Wpf": "2025.1.17",
           "Microsoft.Data.Analysis": "0.22.2",
           "OxyPlot.SkiaSharp": "2.2.0",
           "OxyPlot.Wpf": "2.2.0"
@@ -110,6 +113,69 @@
           }
         }
       },
+      "Metalama.Framework/2025.1.17": {
+        "dependencies": {
+          "Metalama.Framework.Redist": "2025.1.17"
+        }
+      },
+      "Metalama.Framework.Redist/2025.1.17": {
+        "runtime": {
+          "lib/net6.0/Metalama.Framework.dll": {
+            "assemblyVersion": "2025.1.17.0",
+            "fileVersion": "2025.1.17.0"
+          },
+          "lib/net6.0/Metalama.SystemTypes.dll": {
+            "assemblyVersion": "2025.1.17.0",
+            "fileVersion": "2025.1.17.0"
+          }
+        }
+      },
+      "Metalama.Patterns.Contracts/2025.1.17": {
+        "dependencies": {
+          "Metalama.Framework": "2025.1.17"
+        },
+        "runtime": {
+          "lib/net6.0/Metalama.Patterns.Contracts.dll": {
+            "assemblyVersion": "2025.1.17.0",
+            "fileVersion": "2025.1.17.0"
+          }
+        }
+      },
+      "Metalama.Patterns.Immutability/2025.1.17": {
+        "dependencies": {
+          "Metalama.Framework": "2025.1.17"
+        },
+        "runtime": {
+          "lib/net6.0/Metalama.Patterns.Immutability.dll": {
+            "assemblyVersion": "2025.1.17.0",
+            "fileVersion": "2025.1.17.0"
+          }
+        }
+      },
+      "Metalama.Patterns.Observability/2025.1.17": {
+        "dependencies": {
+          "Metalama.Framework": "2025.1.17",
+          "Metalama.Patterns.Immutability": "2025.1.17"
+        },
+        "runtime": {
+          "lib/net6.0/Metalama.Patterns.Observability.dll": {
+            "assemblyVersion": "2025.1.17.0",
+            "fileVersion": "2025.1.17.0"
+          }
+        }
+      },
+      "Metalama.Patterns.Wpf/2025.1.17": {
+        "dependencies": {
+          "Metalama.Framework": "2025.1.17",
+          "Metalama.Patterns.Contracts": "2025.1.17"
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Metalama.Patterns.Wpf.dll": {
+            "assemblyVersion": "2025.1.17.0",
+            "fileVersion": "2025.1.17.0"
+          }
+        }
+      },
       "Microsoft.Data.Analysis/0.22.2": {
         "dependencies": {
           "Apache.Arrow": "20.0.0",
@@ -124,10 +190,6 @@
         }
       },
       "Microsoft.ML.DataView/4.0.2": {
-        "dependencies": {
-          "System.Collections.Immutable": "8.0.0",
-          "System.Memory": "4.6.0"
-        },
         "runtime": {
           "lib/netstandard2.0/Microsoft.ML.DataView.dll": {
             "assemblyVersion": "1.0.0.0",
@@ -231,8 +293,6 @@
           }
         }
       },
-      "System.Collections.Immutable/8.0.0": {},
-      "System.Memory/4.6.0": {},
       "System.Numerics.Tensors/9.0.0": {
         "runtime": {
           "lib/net8.0/System.Numerics.Tensors.dll": {
@@ -305,6 +365,48 @@
       "path": "mathnet.numerics/5.0.0",
       "hashPath": "mathnet.numerics.5.0.0.nupkg.sha512"
     },
+    "Metalama.Framework/2025.1.17": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-eCC+TyT7XsFTovv11E9pnFLkeB3RACFJDjfG3sPW4K0KiII1hvdJpVbTXmEQbNWNxZGrlKVjZIPUEva0kCIIXw==",
+      "path": "metalama.framework/2025.1.17",
+      "hashPath": "metalama.framework.2025.1.17.nupkg.sha512"
+    },
+    "Metalama.Framework.Redist/2025.1.17": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-rMCjnYrB/tx2pV4uKYgvFk0tz2Qkc6MEmsolgjGOGMUvVkPPPn6NBJ8r2fuIluujODXKbAZCBTrl/iAzErAGBw==",
+      "path": "metalama.framework.redist/2025.1.17",
+      "hashPath": "metalama.framework.redist.2025.1.17.nupkg.sha512"
+    },
+    "Metalama.Patterns.Contracts/2025.1.17": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-P0nVXc6B+nBgP6IyzQldFXJW/+uXqf2ztcli9SwUOwYpYH85ZgtDhVZa3ZMDVqEyD3JUWFpUaPEKTQ83HNUu4A==",
+      "path": "metalama.patterns.contracts/2025.1.17",
+      "hashPath": "metalama.patterns.contracts.2025.1.17.nupkg.sha512"
+    },
+    "Metalama.Patterns.Immutability/2025.1.17": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-DC1I/OLW2Qak5AZ0fJLzY1KtKaXVgAL8fgZBw54OP2csKEtqMdLDNwaNq7KK50MFzBS040jPiK5p0l5hvrLg/g==",
+      "path": "metalama.patterns.immutability/2025.1.17",
+      "hashPath": "metalama.patterns.immutability.2025.1.17.nupkg.sha512"
+    },
+    "Metalama.Patterns.Observability/2025.1.17": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-vYMsoExGfoBnzFTupOAR5YY305th+muUg3Z49rQF+Wxscm7ILWc09TzioTetGWYxae2KJcjhfbJ/F6UmECB9Vw==",
+      "path": "metalama.patterns.observability/2025.1.17",
+      "hashPath": "metalama.patterns.observability.2025.1.17.nupkg.sha512"
+    },
+    "Metalama.Patterns.Wpf/2025.1.17": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-HriP3FV4GZmuXOJPYdmSEhbYYHcEXIStBN50N0esDza36/2gboVasiYH3TpVYxvHs/g0PG0zJRVKMTkyFnUASw==",
+      "path": "metalama.patterns.wpf/2025.1.17",
+      "hashPath": "metalama.patterns.wpf.2025.1.17.nupkg.sha512"
+    },
     "Microsoft.Data.Analysis/0.22.2": {
       "type": "package",
       "serviceable": true,
@@ -374,20 +476,6 @@
       "sha512": "sha512-O9QXoWEXA+6cweR4h3BOnwMz+pO9vL9mXdjLrpDd0w1QzCgWmLQBxa1VgySDITiH7nQndrDG1h6937zm9pLj1Q==",
       "path": "skiasharp.nativeassets.win32/2.88.8",
       "hashPath": "skiasharp.nativeassets.win32.2.88.8.nupkg.sha512"
-    },
-    "System.Collections.Immutable/8.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-AurL6Y5BA1WotzlEvVaIDpqzpIPvYnnldxru8oXJU2yFxFUy3+pNXjXd1ymO+RA0rq0+590Q8gaz2l3Sr7fmqg==",
-      "path": "system.collections.immutable/8.0.0",
-      "hashPath": "system.collections.immutable.8.0.0.nupkg.sha512"
-    },
-    "System.Memory/4.6.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-OEkbBQoklHngJ8UD8ez2AERSk2g+/qpAaSWWCBFbpH727HxDq5ydVkuncBaKcKfwRqXGWx64dS6G1SUScMsitg==",
-      "path": "system.memory/4.6.0",
-      "hashPath": "system.memory.4.6.0.nupkg.sha512"
     },
     "System.Numerics.Tensors/9.0.0": {
       "type": "package",

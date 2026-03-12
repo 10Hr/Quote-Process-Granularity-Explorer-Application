@@ -12,6 +12,9 @@
     <PackageReference Include="Accord.Statistics" Version="3.8.0" />
     <PackageReference Include="Apache.Arrow" Version="20.0.0" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
+    <PackageReference Include="Metalama.Framework" Version="2025.1.17" />
+    <PackageReference Include="Metalama.Patterns.Observability" Version="2025.1.17" />
+    <PackageReference Include="Metalama.Patterns.Wpf" Version="2025.1.17" />
     <PackageReference Include="OxyPlot.SkiaSharp" Version="2.2.0" />
     <PackageReference Include="OxyPlot.Wpf" Version="2.2.0" />
     <PackageReference Include="Microsoft.Data.Analysis" Version="0.22.2" />
